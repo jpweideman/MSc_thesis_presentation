@@ -1,0 +1,61 @@
+% Section 4. Experiments
+% Goal. One setup slide, two results for single labels, three for repeated labels.
+% Each result slide has one table extract or one figure. See STORY.md.
+
+\section{Experiments}
+
+% Slide 4.1. Source: Experiments 5.1 (sec:exp-setup, sec:exp-models-training,
+% sec:exp-training-setup, sec:exp-count-training-setup, sec:exp-metrics-single,
+% eq:realised-total-concentration, sec:exp-metrics-count, eq:count-nll,
+% eq:majority-label-accuracy, sec:exp-reporting).
+\begin{frame}{Experimental Setup}
+	\textbf{Message.} We compare the Cat-eBNN with the Cat-BNN on Fashion-MNIST and CIFAR-10, and the DM-eBNN with the M-BNN on CIFAR-10H.
+
+	\medskip
+	\textbf{TODO: content.} Two columns, single labels and repeated labels. Datasets, models, SGLD with one chain and a fixed budget, initialisation, prior sweeps, metrics, mean matched controls.
+\end{frame}
+
+% Slide 4.2. Source: Experiments 5.2.2 (sec:exp-prior-mode, tab:e2-mode-sweep),
+% 5.2.3 (sec:exp-prior-sd, tab:e2-sd-sweep). Discussion 6.2.
+\begin{frame}{Single Labels. The Prior Sets the Split}
+	\textbf{Message.} The realised total concentration follows the prior mode. A narrower prior keeps it closer. A higher realised total concentration gives a higher aleatoric share and a lower distributional share.
+
+	\medskip
+	\textbf{TODO: content.} Extracts of the prior mode sweep and the prior sd sweep. One line on the fixed mean effect.
+\end{frame}
+
+% Slide 4.3. Source: Experiments 5.2.4 (sec:exp-predictive, tab:e2-predictive),
+% 5.2.5 (sec:exp-decomposition, tab:e2-terms). Discussion 6.2.
+\begin{frame}{Single Labels. Predictive Performance}
+	\textbf{Message.} The Cat-eBNN has competitive accuracy but no consistent predictive improvement over the Cat-BNN. Its contribution is the complete uncertainty representation and the explicit assumption.
+
+	\medskip
+	\textbf{TODO: content.} Extract of the predictive table. One line on the decomposition table.
+\end{frame}
+
+% Slide 4.4. Source: Experiments 5.3.1 (sec:exp-count-prediction, tab:e2-count-prediction).
+% Discussion 6.3.
+\begin{frame}{Repeated Labels. Count Prediction}
+	\textbf{Message.} The DM-eBNN has lower count NLL than the M-BNN under both initialisations and both prior modes, with competitive majority label accuracy. The mean matched controls show that the additional count variance drives the better fit.
+
+	\medskip
+	\textbf{TODO: content.} Extract of the count prediction table. Rows M-BNN, DM-eBNN, mean matched control.
+\end{frame}
+
+% Slide 4.5. Source: Experiments 5.3.2 (sec:exp-count-prior-sensitivity,
+% tab:e2-count-prior-sensitivity, fig:count-cold-collapse). Discussion 6.3.
+\begin{frame}{Repeated Labels. Prior Sensitivity}
+	\textbf{Message.} The count data inform the realised total concentration, but the prior mode and the initial checkpoint still affect it within the sampling budget. Without the Gamma prior, every cold initialisation fit reaches the boundary $\alpha_0 = C$.
+
+	\medskip
+	\textbf{TODO: content.} Extract of the prior sensitivity table. One panel of the cold collapse figure.
+\end{frame}
+
+% Slide 4.6. Source: Experiments 5.3.3 (sec:exp-count-decomposition, tab:e2-count-terms).
+% Methods 4.4.5. Discussion 6.3.
+\begin{frame}{Repeated Labels. Decomposition for Class Labels}
+	\textbf{Message.} The DM-eBNN reports all three terms, and count data inform the split between aleatoric and distributional uncertainty.
+
+	\medskip
+	\textbf{TODO: content.} Extract of the count terms table.
+\end{frame}
