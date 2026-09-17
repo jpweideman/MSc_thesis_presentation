@@ -1,0 +1,126 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND THEMES (LMU beamer template)
+%----------------------------------------------------------------------------------------
+
+\documentclass[aspectratio=169]{beamer}
+\mode<presentation> {
+	\usetheme{Boadilla}
+}
+\definecolor{lmugreen}{RGB}{0, 136, 58}
+\usecolortheme[named=lmugreen]{structure}
+\usepackage{graphicx} % Allows including images
+\usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb} % math symbols
+\usepackage{float}
+\usepackage{hyperref} % for URLs
+\newcommand{\gray}{\rowcolor[gray]{.90}}
+\usepackage{verbatim}
+\usepackage{textpos} % logo position
+% Font of the template. Loaded only when the TeX installation has it.
+\IfFileExists{sourcesanspro.sty}{\usepackage[default]{sourcesanspro}}{}
+\usepackage{cases} % math cases
+
+% Citations follow the thesis: natbib with round brackets and commas.
+\usepackage[round, comma]{natbib}
+
+% Frame numbers restart after \appendix, so the main talk shows its own total.
+\IfFileExists{appendixnumberbeamer.sty}{\usepackage{appendixnumberbeamer}}{}
+
+% Caption
+\usepackage{caption}
+\DeclareCaptionFont{tiny}{\tiny}
+\captionsetup{font=scriptsize,labelfont=scriptsize,justification=centering}
+
+% ToC. One outline frame at the start of each section.
+\AtBeginSection[]{
+	\begin{frame}[noframenumbering, plain]
+	\frametitle{Outline}
+	\setcounter{tocdepth}{1}
+	\tableofcontents[currentsection]
+\end{frame}
+}
+
+% Remove navigation
+\beamertemplatenavigationsymbolsempty
+
+%----------------------------------------------------------------------------------------
+%	TITLE DATA
+%----------------------------------------------------------------------------------------
+
+\newcommand{\mytitle}{Evidential Bayesian Neural Networks for Uncertainty-Aware Classification}
+\newcommand{\myshorttitle}{Evidential BNNs}
+\newcommand{\myname}{John-Pierre Weideman}
+\newcommand{\mydate}{TODO: defence date}
+
+\addtobeamertemplate{frametitle}{}{%
+	\begin{textblock*}{100mm}(0.88\textwidth,-0.5cm)
+		\includegraphics[height=1cm,width=2cm]{lmu_logo}
+\end{textblock*}}
+
+\title[\myshorttitle]{\mytitle}
+\author{\myname}
+\institute[LMU]{Department of Statistics, LMU Munich}
+\date{\mydate}
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	TITLE FRAME
+%----------------------------------------------------------------------------------------
+
+{
+\usebackgroundtemplate{\includegraphics[width=\paperwidth]{lmu-background.pdf}}
+\begin{frame}[noframenumbering, plain]
+\begin{columns}[onlytextwidth]
+	\begin{column}{0.38\textwidth}
+		\vspace{2.5cm}
+
+		\textbf{\textcolor{white}{\large \mytitle}}
+		\vspace{1cm}
+
+		\textcolor{white}{\footnotesize \myname \\
+			Master's Thesis Defence \\
+			\mydate}
+	\end{column}
+	\hfill
+	\begin{column}{0.48\textwidth}
+		\vspace{2cm}
+		\begin{center}
+			% TODO: replace the template figure with one thesis figure (STORY.md, Title).
+			\includegraphics[width=1\textwidth]{showcase_figure.png}
+		\end{center}
+	\end{column}
+\end{columns}
+\end{frame}
+}
+
+%----------------------------------------------------------------------------------------
+%	SECTIONS. One file per section, see STORY.md.
+%----------------------------------------------------------------------------------------
+
+\input{sections/01-representations}
+\input{sections/02-cat-ebnn}
+\input{sections/03-dm-ebnn}
+\input{sections/04-conclusion}
+
+%----------------------------------------------------------------------------------------
+%	REFERENCES
+%----------------------------------------------------------------------------------------
+
+\begin{frame}[allowframebreaks]
+	\frametitle{References}
+	\scriptsize
+	\bibliographystyle{plainnat}
+	\bibliography{literature}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+%	BACKUP. Shown only on request.
+%----------------------------------------------------------------------------------------
+
+\appendix
+\input{sections/05-backup}
+
+\end{document}

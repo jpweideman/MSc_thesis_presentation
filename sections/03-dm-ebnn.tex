@@ -1,0 +1,68 @@
+% Section 3. Dirichlet Multinomial Evidential Bayesian Neural Network
+% Backbone: Discussion 6.3 (sec:discussion-counts). See STORY.md.
+
+\section{Dirichlet Multinomial Evidential Bayesian Neural Network}
+
+% Slide 3.1. Source: Experiments 5.1.1 (datasets). Background 2.5
+% (sec:bg-count-models, eq:count-vector).
+\begin{frame}{Repeated Labels and Count Vectors}
+	\textbf{Message.} Repeated labels per input, aggregated by class into count vectors, carry information that single labels do not.
+
+	\medskip
+	\textbf{TODO: content.} One CIFAR-10H image with its count vector $n$ and count total $R$. Definition in one line.
+\end{frame}
+
+% Slide 3.2. Source: Methods 4.4.1 (sec:mbnn-model, eq:mbnn-observation),
+% 4.4.2 (sec:dm-ebnn-model, eq:dm-ebnn-observation).
+\begin{frame}{The DM-eBNN and the M-BNN}
+	\textbf{Message.} The DM-eBNN models count vectors with a Dirichlet multinomial likelihood. The M-BNN is the Bayesian baseline with a multinomial likelihood.
+
+	\medskip
+	\textbf{TODO: content.} The two observation models side by side.
+\end{frame}
+
+% Slide 3.3. Source: Background 2.5.2 (eq:dm-moments). Methods 4.4.3
+% (sec:dm-ebnn-concentration-information), 4.4.4 (sec:count-comparison,
+% eq:count-variance-ratio).
+\begin{frame}{Count Data Can Inform the Total Concentration Parameter}
+	\textbf{Message.} At a fixed mean vector and a count total above one, the count variance depends on the total concentration parameter. So the count likelihood can inform it. The M-BNN has a fixed count variance.
+
+	\medskip
+	\textbf{TODO: content.} Dirichlet multinomial variance in one line. Variance ratio. The Gamma prior stays part of the posterior.
+\end{frame}
+
+% Slide 3.4. Source: Experiments 5.1.4 (sec:exp-count-training-setup),
+% 5.1.6 (sec:exp-metrics-count, eq:count-nll, eq:majority-label-accuracy).
+\begin{frame}{Experimental Setup with Repeated Labels}
+	\textbf{Message.} We compare the DM-eBNN and the M-BNN on CIFAR-10H.
+
+	\medskip
+	\textbf{TODO: content.} Two initialisations, two prior modes. Mean matched controls. Count NLL and majority label accuracy.
+\end{frame}
+
+% Slide 3.5. Source: Experiments 5.3.1 (sec:exp-count-prediction,
+% tab:e2-count-prediction). Discussion 6.3.
+\begin{frame}{Count Prediction}
+	\textbf{Message.} The DM-eBNN has lower count NLL than the M-BNN under both initialisations and both prior modes, with competitive majority label accuracy. The mean matched controls show that the additional count variance drives the better fit.
+
+	\medskip
+	\textbf{TODO: content.} Extract of the count prediction table.
+\end{frame}
+
+% Slide 3.6. Source: Experiments 5.3.2 (sec:exp-count-prior-sensitivity,
+% tab:e2-count-prior-sensitivity, fig:count-cold-collapse).
+\begin{frame}{Prior Sensitivity}
+	\textbf{Message.} The realised total concentration follows the prior mode and the initial checkpoint within the sampling budget. Every cold initialisation fit without the Gamma prior reaches the boundary $\alpha_0 = C$.
+
+	\medskip
+	\textbf{TODO: content.} Extract of the prior sensitivity table. Optionally one panel of the cold collapse figure.
+\end{frame}
+
+% Slide 3.7. Source: Methods 4.4.5 (sec:count-uncertainty-decomposition).
+% Experiments 5.3.3 (sec:exp-count-decomposition, tab:e2-count-terms). Discussion 6.3.
+\begin{frame}{Decomposition of Predictive Uncertainty for Class Labels}
+	\textbf{Message.} The DM-eBNN reports all three uncertainty terms, and count data inform the allocation between aleatoric and distributional uncertainty. The interpretation and practical value are future work.
+
+	\medskip
+	\textbf{TODO: content.} Extract of the count terms table.
+\end{frame}

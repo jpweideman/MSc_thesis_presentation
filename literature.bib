@@ -1,0 +1,1633 @@
+@book{bishop2006pattern,
+author = {Bishop, Christopher},
+title = {Pattern Recognition and Machine Learning},
+year = {2006},
+month = {January},
+abstract = {This leading textbook provides a comprehensive introduction to the fields of pattern recognition and machine learning. It is aimed at advanced undergraduates or first-year PhD students, as well as researchers and practitioners. No previous knowledge of pattern recognition or machine learning concepts is assumed. This is the first machine learning textbook to include a comprehensive coverage of recent developments such as probabilistic graphical models and deterministic inference methods, and to emphasize a modern Bayesian perspective. It is suitable for courses on machine learning, statistics, computer science, signal processing, computer vision, data mining, and bioinformatics. This hard cover book has 738 pages in full colour, and there are 431 graded exercises.
+
+Solutions for these exercises and extensive support for course instructors are provided on Christopher Bishop's page.
+
+Now available to download in full as a PDF.},
+publisher = {Springer},}
+
+
+@book{murphy2012,
+author = {Murphy, Kevin P. },
+title = {Machine Learning: A Probabilistic Perspective},
+year = {2012},
+publisher = {The MIT Press},
+}
+
+@inproceedings{minka2000estimating,
+author = {Minka, Tom},
+title = {Estimating a {Dirichlet} Distribution},
+year = {2000},
+month = {September},
+abstract = {The Dirichlet distribution and its compound variant, the Dirichlet-multinomial, are two of the most basic models for proportional data, such as the mix of vocabulary words in a text document. Yet the maximum-likelihood estimate of these distributions is not available in closed-form. This paper describes simple and efficient iterative schemes for obtaining parameter estimates in these models. In each case, a fixed-point iteration and a Newton-Raphson (or generalized Newton-Raphson) iteration is provided.},
+url = {https://www.microsoft.com/en-us/research/publication/estimating-dirichlet-distribution/},
+}
+
+@misc{adlam2020coldposteriorsaleatoricuncertainty,
+      title={Cold Posteriors and Aleatoric Uncertainty}, 
+      author={Ben Adlam and Jasper Snoek and Samuel L. Smith},
+      year={2020},
+      eprint={2008.00029},
+      archivePrefix={arXiv},
+      primaryClass={stat.ML},
+}
+
+@inproceedings{uncertaintyTempering_Kapoor,
+author = {Kapoor, Sanyam and Maddox, Wesley J. and Izmailov, Pavel and Wilson, Andrew Gordon},
+title = {On uncertainty, tempering, and data augmentation in {Bayesian} classification},
+year = {2022},
+isbn = {9781713871088},
+publisher = {Curran Associates Inc.},
+address = {Red Hook, NY, USA},
+abstract = {Aleatoric uncertainty captures the inherent randomness of the data, such as measurement noise. In Bayesian regression, we often use a Gaussian observation model, where we control the level of aleatoric uncertainty with a noise variance parameter. By contrast, for Bayesian classification we use a categorical distribution with no mechanism to represent our beliefs about aleatoric uncertainty. Our work shows that explicitly accounting for aleatoric uncertainty significantly improves the performance of Bayesian neural networks. We note that many standard benchmarks, such as CIFAR-10, have essentially no aleatoric uncertainty. Moreover, we show that data augmentation in approximate inference softens the likelihood, leading to underconfidence and misrepresenting our beliefs about aleatoric uncertainty. Accordingly, we find that a cold posterior, tempered by a power greater than one, often more honestly reflects our beliefs about aleatoric uncertainty than no tempering — providing an explicit link between data augmentation and cold posteriors. We further show that we can match or exceed the performance of posterior tempering by using a Dirichlet observation model, where we explicitly control the level of aleatoric uncertainty, without any need for tempering.},
+booktitle = {Proceedings of the 36th International Conference on Neural Information Processing Systems},
+articleno = {1324},
+numpages = {15},
+location = {New Orleans, LA, USA},
+series = {NIPS '22},
+url={https://papers.neurips.cc/paper\_files/paper/2022/file/73e018a0123b35a3e64269526f9096c9-Paper-Conference.pdf}
+}
+
+
+
+@InProceedings{wenzel20a,
+author = {Wenzel, Florian and Roth, Kevin and Veeling, Bastiaan S. and {\'S}wi{\k a}tkowski, Jakub and Tran, Linh and Mandt, Stephan and Snoek, Jasper and Salimans, Tim and Jenatton, Rodolphe and Nowozin, Sebastian},
+title = {How good is the {Bayes} posterior in deep neural networks really?},
+year = {2020},
+publisher = {JMLR.org},
+abstract = {During the past five years the Bayesian deep learning community has developed increasingly accurate and efficient approximate inference procedures that allow for Bayesian inference in deep neural networks. However, despite this algorithmic progress and the promise of improved uncertainty quantification and sample efficiency there are--as of early 2020--no publicized deployments of Bayesian neural networks in industrial practice. In this work we cast doubt on the current understanding of Bayes posteriors in popular deep neural networks: we demonstrate through careful MCMC sampling that the posterior predictive induced by the Bayes posterior yields systematically worse predictions compared to simpler methods including point estimates obtained from SGD. Furthermore, we demonstrate that predictive performance is improved significantly through the use of a "cold posterior" that overcounts evidence. Such cold posteriors sharply deviate from the Bayesian paradigm but are commonly used as heuristic in Bayesian deep learning papers. We put forward several hypotheses that could explain cold posteriors and evaluate the hypotheses through experiments. Our work questions the goal of accurate posterior approximations in Bayesian deep learning: If the true Bayes posterior is poor, what is the use of more accurate approximations? Instead, we argue that it is timely to focus on understanding the origin of the improved performance of cold posteriors.},
+booktitle = {Proceedings of the 37th International Conference on Machine Learning},
+articleno = {949},
+numpages = {12},
+series = {ICML'20}
+}
+
+
+# uncertainty decomposition
+
+@misc{houlsby2011bayesianactivelearningclassification,
+      title={Bayesian Active Learning for Classification and Preference Learning}, 
+      author={Neil Houlsby and Ferenc Huszár and Zoubin Ghahramani and Máté Lengyel},
+      year={2011},
+      eprint={1112.5745},
+      archivePrefix={arXiv},
+      primaryClass={stat.ML},
+      url={https://arxiv.org/abs/1112.5745}, 
+}
+
+@phdthesis{gal2016,
+  author = {Yarin Gal},
+  school = {University of Cambridge},
+  title = {Uncertainty in Deep Learning},
+  year = {2016}
+}
+
+@inproceedings{622400,
+  title = 	 {Decomposition of Uncertainty in {B}ayesian Deep Learning for Efficient and Risk-sensitive Learning},
+  author =       {Depeweg, Stefan and Hernandez-Lobato, Jose-Miguel and Doshi-Velez, Finale and Udluft, Steffen},
+  booktitle = 	 {Proceedings of the 35th International Conference on Machine Learning},
+  pages = 	 {1184--1193},
+  year = 	 {2018},
+  editor = 	 {Dy, Jennifer and Krause, Andreas},
+  volume = 	 {80},
+  series = 	 {Proceedings of Machine Learning Research},
+  month = 	 {10--15 Jul},
+  publisher =    {PMLR},
+  pdf = 	 {http://proceedings.mlr.press/v80/depeweg18a/depeweg18a.pdf},
+  url = 	 {https://proceedings.mlr.press/v80/depeweg18a.html},
+  abstract = 	 {Bayesian neural networks with latent variables are scalable and flexible probabilistic models: they account for uncertainty in the estimation of the network weights and, by making use of latent variables, can capture complex noise patterns in the data. Using these models we show how to perform and utilize a decomposition of uncertainty in aleatoric and epistemic components for decision making purposes. This allows us to successfully identify informative points for active learning of functions with heteroscedastic and bimodal noise. Using the decomposition we further define a novel risk-sensitive criterion for reinforcement learningto identify policies that balance expected cost, model-bias and noise aversion.}
+}
+
+
+@inproceedings{SmithGal2018Understanding,
+  author       = {Lewis Smith and
+                  Yarin Gal},
+  editor       = {Amir Globerson and
+                  Ricardo Silva},
+  title        = {Understanding Measures of Uncertainty for Adversarial Example Detection},
+  booktitle    = {Proceedings of the Thirty-Fourth Conference on Uncertainty in Artificial
+                  Intelligence, {UAI} 2018, Monterey, California, USA, August 6-10,
+                  2018},
+  pages        = {560--569},
+  publisher    = {{AUAI} Press},
+  year         = {2018},
+  url          = {http://auai.org/uai2018/proceedings/papers/207.pdf},
+  timestamp    = {Wed, 05 Feb 2025 17:14:18 +0100},
+  biburl       = {https://dblp.org/rec/conf/uai/SmithG18.bib},
+  bibsource    = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{mobiny2021,
+  author = {
+Mobiny, Aryan
+and Yuan, Pengyu
+and Moulik, Supratik K.
+and Garg, Naveen
+and Wu, Carol C.
+and Van Nguyen, Hien},
+  journal = {Scientific Reports},
+  number = {5458},
+  title = {DropConnect is effective in modeling uncertainty of {Bayesian} deep networks.},
+  volume = {11},
+  year = {2021}
+}
+
+@article{shannon1948,
+  author = {C. E. Shannon},
+  journal = {Bell System Technical Journal},
+  number = {3--4},
+  pages = {379--423, 623--656},
+  title = {A Mathematical Theory of Communication},
+  volume = {27},
+  year = {1948}
+}
+
+@book{ash1965,
+  author = {Robert B. Ash},
+  publisher = {Interscience Publishers},
+  title = {Information Theory},
+  year = {1965}
+}
+
+
+
+### Tempering:
+
+@misc{aitchison2021statisticaltheorycoldposteriors,
+      title={A statistical theory of cold posteriors in deep neural networks}, 
+      author={Laurence Aitchison},
+      year={2021},
+      eprint={2008.05912},
+      archivePrefix={arXiv},
+      primaryClass={stat.ML},
+      url={https://arxiv.org/abs/2008.05912}, 
+}iu
+
+@misc{bachmann2022temperingfixesdataaugmentation,
+      title={How Tempering Fixes Data Augmentation in {Bayesian} Neural Networks}, 
+      author={Gregor Bachmann and Lorenzo Noci and Thomas Hofmann},
+      year={2022},
+      eprint={2205.13900},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2205.13900}, 
+}       ###See also their experiment section for details on experiments
+
+@inproceedings{geiping2023augmentations,
+  author = {Geiping, Jonas and Goldblum, Micah and Somepalli, Gowthami and
+    Shwartz-Ziv, Ravid and Goldstein, Tom and Wilson, Andrew Gordon},
+  title = {How Much Data Are Augmentations Worth? An Investigation into
+    Scaling Laws, Invariance, and Implicit Regularization},
+  booktitle = {International Conference on Learning Representations},
+  year = {2023},
+  url = {https://openreview.net/forum?id=3aQs3MCSexD}
+}
+
+@article{grunwald2007misspecificationBayes,
+    author = {Grünwald, Peter and Langford, John},
+    title = {Suboptimal behavior of {Bayes} and {MDL} in classification under misspecification},
+    journal = {Machine Learning},
+    year = {2007},
+    volume = {66}
+}
+
+
+@inproceedings{
+zeno2021why,
+title={Why Cold Posteriors?  On the Suboptimal Generalization of Optimal {Bayes} Estimates},
+author={Chen Zeno and Itay Golan and Ari Pakman and Daniel Soudry},
+booktitle={Third Symposium on Advances in Approximate Bayesian Inference},
+year={2021},
+url={https://openreview.net/forum?id=cu6zDHCfhZx}
+}
+
+
+@inproceedings{
+fortuin2022bayesian,
+title={Bayesian Neural Network Priors Revisited},
+author={Vincent Fortuin and Adri{\`a} Garriga-Alonso and Sebastian W. Ober and Florian Wenzel and Gunnar Ratsch and Richard E Turner and Mark van der Wilk and Laurence Aitchison},
+booktitle={International Conference on Learning Representations (ICLR)},
+year={2022},
+url={https://openreview.net/forum?id=xkjqJYqRJy}
+}
+
+@InProceedings{izmailov21a,
+  title = 	 {What Are {Bayesian} Neural Network Posteriors Really Like?},
+  author =       {Izmailov, Pavel and Vikram, Sharad and Hoffman, Matthew D and Wilson, Andrew Gordon},
+  booktitle = 	 {Proceedings of the 38th International Conference on Machine Learning},
+  pages = 	 {4629--4640},
+  year = 	 {2021},
+  volume = 	 {139},
+  series = 	 {Proceedings of Machine Learning Research},
+  month = 	 {18--24 Jul},
+  publisher =    {PMLR},
+  pdf = 	 {http://proceedings.mlr.press/v139/izmailov21a/izmailov21a.pdf},
+  url = 	 {https://proceedings.mlr.press/v139/izmailov21a.html},
+  abstract = 	 {The posterior over Bayesian neural network (BNN) parameters is extremely high-dimensional and non-convex. For computational reasons, researchers approximate this posterior using inexpensive mini-batch methods such as mean-field variational inference or stochastic-gradient Markov chain Monte Carlo (SGMCMC). To investigate foundational questions in Bayesian deep learning, we instead use full batch Hamiltonian Monte Carlo (HMC) on modern architectures. We show that (1) BNNs can achieve significant performance gains over standard training and deep ensembles; (2) a single long HMC chain can provide a comparable representation of the posterior to multiple shorter chains; (3) in contrast to recent studies, we find posterior tempering is not needed for near-optimal performance, with little evidence for a “cold posterior” effect, which we show is largely an artifact of data augmentation; (4) BMA performance is robust to the choice of prior scale, and relatively similar for diagonal Gaussian, mixture of Gaussian, and logistic priors; (5) Bayesian neural networks show surprisingly poor generalization under domain shift; (6) while cheaper alternatives such as deep ensembles and SGMCMC can provide good generalization, their predictive distributions are distinct from HMC. Notably, deep ensemble predictive distributions are similarly close to HMC as standard SGLD, and closer than standard variational inference.}
+}
+@article{jospin2022hands,
+  author={Jospin, Laurent Valentin and Laga, Hamid and Boussaid, Farid and Buntine, Wray and Bennamoun, Mohammed},
+  journal={IEEE Computational Intelligence Magazine}, 
+  title={Hands-On {Bayesian} Neural Networks—A Tutorial for Deep Learning Users}, 
+  year={2022},
+  volume={17},
+  number={2},
+  pages={29-48},
+  keywords={Deep learning;Training data;Uncertainty;Design methodology;Computational modeling;Stochastic processes;Bayes methods;Neural networks;Tutorials},
+  doi={10.1109/MCI.2022.3155327}}
+
+
+@article{fortuin2021bnnpriors,
+  author  = {Fortuin, Vincent and Garriga-Alonso, Adri{\`a}
+             and van der Wilk, Mark and Aitchison, Laurence},
+  title   = {{BNNpriors}: A Library for {Bayesian} Neural Network Inference
+             with Different Prior Distributions},
+  journal = {Software Impacts},
+  year    = {2021},
+  volume  = {9},
+  pages   = {100079},
+  doi     = {10.1016/j.simpa.2021.100079}
+}
+
+@inproceedings{noci2021,
+author = {Noci, Lorenzo and Roth, Kevin and Bachmann, Gregor and Nowozin, Sebastian and Hofmann, Thomas},
+title = {Disentangling the roles of curation, data-augmentation and the prior in the cold posterior effect},
+year = {2021},
+isbn = {9781713845393},
+publisher = {Curran Associates Inc.},
+address = {Red Hook, NY, USA},
+abstract = {The "cold posterior effect" (CPE) in Bayesian deep learning describes the uncom-forting observation that the predictive performance of Bayesian neural networks can be significantly improved if the Bayes posterior is artificially sharpened using a temperature parameter T < 1. The CPE is problematic in theory and practice and since the effect was identified many researchers have proposed hypotheses to explain the phenomenon. However, despite this intensive research effort the effect remains poorly understood. In this work we provide novel and nuanced evidence relevant to existing explanations for the cold posterior effect, disentangling three hypotheses: 1. The dataset curation hypothesis of Aitchison (2020): we show empirically that the CPE does not arise in a real curated data set but can be produced in a controlled experiment with varying curation strength. 2. The data augmentation hypothesis of Izmailov et al. (2021) and Fortuin et al. (2021): we show empirically that data augmentation is sufficient but not necessary for the CPE to be present. 3. The bad prior hypothesis of Wenzel et al. (2020): we use a simple experiment evaluating the relative importance of the prior and the likelihood, strongly linking the CPE to the prior. Our results demonstrate how the CPE can arise in isolation from synthetic curation, data augmentation, and bad priors. Cold posteriors observed "in the wild" are therefore unlikely to arise from a single simple cause; as a result, we do not expect a simple "fix" for cold posteriors.},
+booktitle = {Proceedings of the 35th International Conference on Neural Information Processing Systems},
+articleno = {975},
+numpages = {11},
+series = {NIPS '21}
+}
+
+
+@InProceedings{nabarro22a,
+  title = 	 {Data augmentation in {Bayesian} neural networks and the cold posterior effect},
+  author =       {Nabarro, Seth and Ganev, Stoil and Garriga-Alonso, Adri\`a and Fortuin, Vincent and van der Wilk, Mark and Aitchison, Laurence},
+  booktitle = 	 {Proceedings of the Thirty-Eighth Conference on Uncertainty in Artificial Intelligence},
+  pages = 	 {1434--1444},
+  year = 	 {2022},
+  editor = 	 {Cussens, James and Zhang, Kun},
+  volume = 	 {180},
+  series = 	 {Proceedings of Machine Learning Research},
+  month = 	 {01--05 Aug},
+  publisher =    {PMLR},
+  pdf = 	 {https://proceedings.mlr.press/v180/nabarro22a/nabarro22a.pdf},
+  url = 	 {https://proceedings.mlr.press/v180/nabarro22a.html},
+  abstract = 	 {Bayesian neural networks that incorporate data augmentation implicitly use a “randomly perturbed log-likelihood [which] does not have a clean interpretation as a valid likelihood function” (Izmailov et al. 2021). Here, we provide several approaches to developing principled Bayesian neural networks incorporating data augmentation. We introduce a “finite orbit” setting which allows valid likelihoods to be computed exactly, and for the more usual “full orbit” setting we derive multi-sample bounds tighter than those used previously. These models cast light on the origin of the cold posterior effect. In particular, we find that the cold posterior effect persists even in these principled models incorporating data augmentation. This suggests that the cold posterior effect cannot be dismissed as an artifact of data augmentation using incorrect likelihoods.}
+}
+
+
+@article{
+zhang2024the,
+title={The Cold Posterior Effect Indicates Underfitting, and Cold Posteriors Represent a Fully {Bayesian} Method to Mitigate It},
+author={Yijie Zhang and Yi-Shan Wu and Luis A. Ortega and Andres R Masegosa},
+journal={Transactions on Machine Learning Research},
+issn={2835-8856},
+year={2024},
+url={https://openreview.net/forum?id=GZORXGxHHT},
+note={}
+}
+
+
+
+
+##### EDL
+
+@inproceedings{sensoy2018edl,
+author = {Sensoy, Murat and Kaplan, Lance and Kandemir, Melih},
+title = {Evidential deep learning to quantify classification uncertainty},
+year = {2018},
+publisher = {Curran Associates Inc.},
+address = {Red Hook, NY, USA},
+abstract = {Deterministic neural nets have been shown to learn effective predictors on a wide range of machine learning problems. However, as the standard approach is to train the network to minimize a prediction loss, the resultant model remains ignorant to its prediction confidence. Orthogonally to Bayesian neural nets that indirectly infer prediction uncertainty through weight uncertainties, we propose explicit modeling of the same using the theory of subjective logic. By placing a Dirichlet distribution on the class probabilities, we treat predictions of a neural net as subjective opinions and learn the function that collects the evidence leading to these opinions by a deterministic neural net from data. The resultant predictor for a multi-class classification problem is another Dirichlet distribution whose parameters are set by the continuous output of a neural net. We provide a preliminary analysis on how the peculiarities of our new loss function drive improved uncertainty estimation. We observe that our method achieves unprecedented success on detection of out-of-distribution queries and endurance against adversarial perturbations.},
+booktitle = {Proceedings of the 32nd International Conference on Neural Information Processing Systems},
+pages = {3183–3193},
+numpages = {11},
+location = {Montr\'{e}al, Canada},
+series = {NIPS'18}
+}
+
+
+##### Entries below added during Methods-chapter revision (all verified against arXiv/publisher pages)
+
+# BNN foundations
+
+@article{mackay1992practical,
+  author = {MacKay, David J. C.},
+  title = {A Practical {Bayesian} Framework for Backpropagation Networks},
+  journal = {Neural Computation},
+  volume = {4},
+  number = {3},
+  pages = {448--472},
+  year = {1992}
+}
+
+@book{neal1996bayesian,
+  author = {Neal, Radford M.},
+  title = {Bayesian Learning for Neural Networks},
+  series = {Lecture Notes in Statistics},
+  volume = {118},
+  publisher = {Springer},
+  address = {New York},
+  year = {1996}
+}
+
+@InProceedings{blundell2015weight,
+author = {Blundell, Charles and Cornebise, Julien and Kavukcuoglu, Koray and Wierstra, Daan},
+title = {Weight uncertainty in neural networks},
+year = {2015},
+publisher = {JMLR.org},
+abstract = {We introduce a new, efficient, principled and backpropagation-compatible algorithm for learning a probability distribution on the weights of a neural network, called Bayes by Backprop. It regularises the weights by minimising a compression cost, known as the variational free energy or the expected lower bound on the marginal likelihood. We show that this principled kind of regularisation yields comparable performance to dropout on MNIST classification. We then demonstrate how the learnt uncertainty in the weights can be used to improve generalisation in non-linear regression problems, and how this weight uncertainty can be used to drive the exploration-exploitation trade-off in reinforcement learning.},
+booktitle = {Proceedings of the 32nd International Conference on Machine Learning - Volume 37},
+pages = {1613–1622},
+numpages = {10},
+location = {Lille, France},
+series = {ICML'15}
+}
+
+
+@InProceedings{galghahramani2016dropout,
+  title = 	 {Dropout as a {Bayesian} Approximation: Representing Model Uncertainty in Deep Learning},
+  author = 	 {Gal, Yarin and Ghahramani, Zoubin},
+  booktitle = 	 {Proceedings of The 33rd International Conference on Machine Learning},
+  pages = 	 {1050--1059},
+  year = 	 {2016},
+  editor = 	 {Balcan, Maria Florina and Weinberger, Kilian Q.},
+  volume = 	 {48},
+  series = 	 {Proceedings of Machine Learning Research},
+  address = 	 {New York, New York, USA},
+  month = 	 {20--22 Jun},
+  publisher =    {PMLR},
+  pdf = 	 {http://proceedings.mlr.press/v48/gal16.pdf},
+  url = 	 {https://proceedings.mlr.press/v48/gal16.html},
+  abstract = 	 {Deep learning tools have gained tremendous attention in applied machine learning. However such tools for regression and classification do not capture model uncertainty. In comparison, Bayesian models offer a mathematically grounded framework to reason about model uncertainty, but usually come with a prohibitive computational cost. In this paper we develop a new theoretical framework casting dropout training in deep neural networks (NNs) as approximate Bayesian inference in deep Gaussian processes. A direct result of this theory gives us tools to model uncertainty with dropout NNs – extracting information from existing models that has been thrown away so far. This mitigates the problem of representing uncertainty in deep learning without sacrificing either computational complexity or test accuracy. We perform an extensive study of the properties of dropout’s uncertainty. Various network architectures and non-linearities are assessed on tasks of regression and classification, using MNIST as an example. We show a considerable improvement in predictive log-likelihood and RMSE compared to existing state-of-the-art methods, and finish by using dropout’s uncertainty in deep reinforcement learning.}
+}
+
+
+# Aleatoric/epistemic uncertainty
+
+@inproceedings{kendall2017uncertainties,
+author = {Kendall, Alex and Gal, Yarin},
+title = {What uncertainties do we need in {Bayesian} deep learning for computer vision?},
+year = {2017},
+isbn = {9781510860964},
+publisher = {Curran Associates Inc.},
+address = {Red Hook, NY, USA},
+abstract = {There are two major types of uncertainty one can model. Aleatoric uncertainty captures noise inherent in the observations. On the other hand, epistemic uncertainty accounts for uncertainty in the model - uncertainty which can be explained away given enough data. Traditionally it has been difficult to model epistemic uncertainty in computer vision, but with new Bayesian deep learning tools this is now possible. We study the benefits of modeling epistemic vs. aleatoric uncertainty in Bayesian deep learning models for vision tasks. For this we present a Bayesian deep learning framework combining input-dependent aleatoric uncertainty together with epistemic uncertainty. We study models under the framework with per-pixel semantic segmentation and depth regression tasks. Further, our explicit uncertainty formulation leads to new loss functions for these tasks, which can be interpreted as learned attenuation. This makes the loss more robust to noisy data, also giving new state-of-the-art results on segmentation and depth regression benchmarks.},
+booktitle = {Proceedings of the 31st International Conference on Neural Information Processing Systems},
+pages = {5580--5590},
+numpages = {11},
+location = {Long Beach, California, USA},
+series = {NIPS'17},
+url = {https://papers.neurips.cc/paper/7141-what-uncertainties-do-we-need-in-bayesian-deep-learning-for-computer-vision}
+}
+
+@article{huellermeier2021aleatoric,
+  author = {H{\"u}llermeier, Eyke and Waegeman, Willem},
+  title = {Aleatoric and Epistemic Uncertainty in Machine Learning: An Introduction to Concepts and Methods},
+  journal = {Machine Learning},
+  volume = {110},
+  pages = {457--506},
+  year = {2021},
+  doi = {10.1007/s10994-021-05946-3},
+  url = {https://link.springer.com/article/10.1007/s10994-021-05946-3}
+}
+
+@InProceedings{wimmer2023quantifying,
+  author = {Wimmer, Lisa and Sale, Yusuf and Hofman, Paul and Bischl, Bernd and H{\"u}llermeier, Eyke},
+  title = {Quantifying Aleatoric and Epistemic Uncertainty in Machine Learning: Are Conditional Entropy and Mutual Information Appropriate Measures?},
+  booktitle = {Proceedings of the Thirty-Ninth Conference on Uncertainty in Artificial Intelligence},
+  pages = {2282--2292},
+  year = {2023},
+  volume = {216},
+  series = {Proceedings of Machine Learning Research},
+  publisher = {PMLR},
+  url = {https://proceedings.mlr.press/v216/wimmer23a.html}
+}
+
+@article{derkiureghian2009aleatory,
+  author = {Der Kiureghian, Armen and Ditlevsen, Ove},
+  title = {Aleatory or Epistemic? {D}oes It Matter?},
+  journal = {Structural Safety},
+  volume = {31},
+  number = {2},
+  pages = {105--112},
+  year = {2009},
+  doi = {10.1016/j.strusafe.2008.06.020},
+  url = {https://doi.org/10.1016/j.strusafe.2008.06.020}
+}
+
+@book{cover2006elements,
+  author    = {Cover, Thomas M. and Thomas, Joy A.},
+  title     = {Elements of Information Theory},
+  edition   = {2},
+  publisher = {Wiley-Interscience},
+  year      = {2006},
+  doi       = {10.1002/047174882X}
+}
+
+# Cold posterior effect / generalized Bayes
+
+@article{grunwald2017inconsistency,
+  author = {Gr{\"u}nwald, Peter and van Ommen, Thijs},
+  title = {Inconsistency of {B}ayesian Inference for Misspecified Linear Models, and a Proposal for Repairing It},
+  journal = {Bayesian Analysis},
+  volume = {12},
+  number = {4},
+  pages = {1069--1103},
+  year = {2017}
+}
+
+@inproceedings{izmailov2021dangers,
+ author = {Izmailov, Pavel and Nicholson, Patrick and Lotfi, Sanae and Wilson, Andrew G},
+ booktitle = {Advances in Neural Information Processing Systems},
+ editor = {M. Ranzato and A. Beygelzimer and Y. Dauphin and P.S. Liang and J. Wortman Vaughan},
+ pages = {3309--3322},
+ publisher = {Curran Associates, Inc.},
+ title = {Dangers of {Bayesian} Model Averaging under Covariate Shift},
+ volume = {34},
+ year = {2021}
+}
+
+# Noisy-Dirichlet origin
+
+@inproceedings{milios2018dirichletGP,
+  author = {Milios, Dimitrios and Camoriano, Raffaello and Michiardi, Pietro and Rosasco, Lorenzo and Filippone, Maurizio},
+  title = {Dirichlet-based {G}aussian Processes for Large-scale Calibrated Classification},
+  booktitle = {Advances in Neural Information Processing Systems 31 (NeurIPS)},
+  pages = {6008--6018},
+  year = {2018},
+  eprint = {1805.10915},
+  archivePrefix = {arXiv}
+}
+
+# EDL / Dirichlet-output family
+
+@article{simeone2018brief,
+    author  = {Simeone, Osvaldo},
+    title   = {A Brief Introduction to Machine Learning for Engineers},
+    journal = {Foundations and Trends in Signal Processing},
+    year    = {2018},
+    volume  = {12},
+    number  = {3--4},
+    pages   = {200--431},
+    doi     = {10.1561/2000000102},
+}
+
+@inproceedings{malinin2018priornetworks,
+author = {Malinin, Andrey and Gales, Mark},
+title = {Predictive uncertainty estimation via prior networks},
+year = {2018},
+publisher = {Curran Associates Inc.},
+address = {Red Hook, NY, USA},
+abstract = {Estimating how uncertain an AI system is in its predictions is important to improve the safety of such systems. Uncertainty in predictive can result from uncertainty in model parameters, irreducible data uncertainty and uncertainty due to distributional mismatch between the test and training data distributions. Different actions might be taken depending on the source of the uncertainty so it is important to be able to distinguish between them. Recently, baseline tasks and metrics have been defined and several practical methods to estimate uncertainty developed. These methods, however, attempt to model uncertainty due to distributional mismatch either implicitly through model uncertainty or as data uncertainty. This work proposes a new framework for modeling predictive uncertainty called Prior Networks (PNs) which explicitly models distributional uncertainty. PNs do this by parameterizing a prior distribution over predictive distributions. This work focuses on uncertainty for classification and evaluates PNs on the tasks of identifying out-of-distribution (OOD) samples and detecting misclassification on the MNIST and CIFAR-10 datasets, where they are found to outperform previous methods. Experiments on synthetic and MNIST and CIFAR-10 data show that unlike previous non-Bayesian methods PNs are able to distinguish between data and distributional uncertainty.},
+booktitle = {Proceedings of the 32nd International Conference on Neural Information Processing Systems},
+pages = {7047–7058},
+numpages = {12},
+location = {Montr\'{e}al, Canada},
+series = {NIPS'18}
+}
+
+@inproceedings{malinin2019reverseKL,
+author = {Malinin, Andrey and Gales, Mark}, title = {Reverse {KL}-divergence training of prior networks: improved uncertainty and adversarial robustness}, year = {2019}, publisher = {Curran Associates Inc.}, address = {Red Hook, NY, USA}, booktitle = {Proceedings of the 33rd International Conference on Neural Information Processing Systems}, articleno = {1303}, numpages = {12} }
+
+
+
+@inproceedings{charpentier2020posterior,
+author = {Charpentier, Bertrand and Z{\"u}gner, Daniel and G{\"u}nnemann, Stephan}, title = {Posterior network: uncertainty estimation without OOD samples via density-based pseudo-counts}, year = {2020}, isbn = {9781713829546}, publisher = {Curran Associates Inc.}, address = {Red Hook, NY, USA}, abstract = {Accurate estimation of aleatoric and epistemic uncertainty is crucial to build safe and reliable systems. Traditional approaches, such as dropout and ensemble methods, estimate uncertainty by sampling probability predictions from different submodels, which leads to slow uncertainty estimation at inference time. Recent works address this drawback by directly predicting parameters of prior distributions over the probability predictions with a neural network. While this approach has demonstrated accurate uncertainty estimation, it requires defining arbitrary target parameters for in-distribution data and makes the unrealistic assumption that out-of-distribution (OOD) data is known at training time.In this work we propose the Posterior Network (PostNet), which uses Normalizing Flows to predict an individual closed-form posterior distribution over predicted probabilites for any input sample. The posterior distributions learned by PostNet accurately reflect uncertainty for in- and out-of-distribution data – without requiring access to OOD data at training time. PostNet achieves state-of-the art results in OOD detection and in uncertainty calibration under dataset shifts.}, booktitle = {Proceedings of the 34th International Conference on Neural Information Processing Systems}, articleno = {115}, numpages = {12}, location = {Vancouver, BC, Canada}, series = {NIPS '20} }
+@inproceedings{haussmann2020bayesian,
+  author = {Hau{\ss}mann, Manuel and Gerwinn, Sebastian and Kandemir, Melih},
+  title = {Bayesian Evidential Deep Learning with {PAC} Regularization},
+  booktitle = {Third Symposium on Advances in Approximate Bayesian Inference},
+  year = {2020},
+  eprint = {1906.00816},
+  archivePrefix = {arXiv},
+  url = {https://openreview.net/forum?id=QJVfIwtiJN}
+}
+
+@inproceedings{malinin2020ensemble,
+title={Ensemble Distribution Distillation},
+author={Andrey Malinin and Bruno Mlodozeniec and Mark Gales},
+booktitle={International Conference on Learning Representations},
+year={2020},
+url={https://openreview.net/forum?id=BygSP6Vtvr}
+}
+
+@InProceedings{fathullah2022selfdistribution,
+  title = 	 {Self-distribution distillation: efficient uncertainty estimation},
+  author =       {Fathullah, Yassir and Gales, Mark J. F.},
+  booktitle = 	 {Proceedings of the Thirty-Eighth Conference on Uncertainty in Artificial Intelligence},
+  pages = 	 {663--673},
+  year = 	 {2022},
+  editor = 	 {Cussens, James and Zhang, Kun},
+  volume = 	 {180},
+  series = 	 {Proceedings of Machine Learning Research},
+  month = 	 {01--05 Aug},
+  publisher =    {PMLR},
+  pdf = 	 {https://proceedings.mlr.press/v180/fathullah22a/fathullah22a.pdf},
+  url = 	 {https://proceedings.mlr.press/v180/fathullah22a.html},
+  abstract = 	 {Deep learning is increasingly being applied in safety-critical domains. For these scenarios it is important to know the level of uncertainty in a model’s prediction to ensure appropriate decisions are made by the system. Deep ensembles are the de-facto standard approach to obtaining various measures of uncertainty. However, ensembles often significantly increase the resources required in the training and/or deployment phases. Approaches have been developed that typically address the costs in one of these phases. In this work we propose a novel training approach, self-distribution distillation (S2D), which is able to efficiently train a single model that can estimate uncertainties. Furthermore it is possible to build ensembles of these models and apply hierarchical ensemble distillation approaches. Experiments on CIFAR-100 showed that S2D models outperformed standard models and Monte-Carlo dropout. Additional out-of-distribution detection experiments on LSUN, Tiny ImageNet, SVHN showed that even a standard deep ensemble can be outperformed using S2D based ensembles and novel distilled models.}
+}
+
+@InProceedings{hobbhahn2022fast,
+  author = {Hobbhahn, Marius and Kristiadi, Agustinus and Hennig, Philipp},
+  title = {Fast Predictive Uncertainty for Classification with {Bayesian} Deep Networks},
+  booktitle = {Proceedings of the Thirty-Eighth Conference on Uncertainty in Artificial Intelligence},
+  pages = {822--832},
+  year = {2022},
+  volume = {180},
+  series = {Proceedings of Machine Learning Research},
+  publisher = {PMLR},
+  url = {https://proceedings.mlr.press/v180/hobbhahn22a.html}
+}
+
+@InProceedings{wang2024beyond,
+author = {Wang, Hanjing and Ji, Qiang},
+title = {Beyond {Dirichlet}-based models: when {Bayesian} neural networks meet evidential deep learning},
+year = {2024},
+publisher = {JMLR.org},
+abstract = {Bayesian neural networks (BNNs) excel in uncertainty quantification (UQ) by estimating the posterior distribution of model parameters, yet face challenges due to the high computational demands of Bayesian inference. Evidential deep learning methods address this by treating target distribution parameters as random variables with a learnable conjugate distribution, enabling efficient UQ. However, there's debate over whether these methods can accurately estimate epistemic uncertainty due to their single-network, samplingfree nature. In this paper, we combine the strengths of both approaches by distilling BNN knowledge into a Dirichlet-based model, endowing it with a Bayesian perspective and theoretical guarantees. Additionally, we introduce two enhancements to further improve the integration of Bayesian UQ with Dirichlet-based models. To relax the heavy computational load with BNNs, we introduce a self-regularized training strategy using Laplacian approximation (LA) for self-distillation. To alleviate the conjugate prior assumption, we employ an expressive normalizing flow for refining the model in a post-processing manner, where a few training iterations can enhance model performance. The experimental results have demonstrated the effectiveness of our proposed methods in both UQ accuracy and robustness.},
+booktitle = {Proceedings of the Fortieth Conference on Uncertainty in Artificial Intelligence},
+articleno = {170},
+numpages = {23},
+location = {Barcelona, Spain},
+series = {UAI '24}
+}
+
+@inproceedings{amini2020deepevidential,
+  author = {Amini, Alexander and Schwarting, Wilko and Soleimany, Ava and Rus, Daniela},
+  title = {Deep Evidential Regression},
+  booktitle = {Advances in Neural Information Processing Systems 33 (NeurIPS)},
+  pages = {14927--14937},
+  year = {2020},
+  eprint = {1910.02600},
+  archivePrefix = {arXiv}
+}
+
+@article{ulmer2023survey,
+title={Prior and Posterior Networks: A Survey on Evidential Deep Learning Methods For Uncertainty Estimation},
+author={Dennis Thomas Ulmer and Christian Hardmeier and Jes Frellsen},
+journal={Transactions on Machine Learning Research},
+issn={2835-8856},
+year={2023},
+url={https://openreview.net/forum?id=xqS8k9E75c},
+note={}
+}
+
+@book{josang2016subjective,
+  author = {J{\o}sang, Audun},
+  title = {Subjective Logic: A Formalism for Reasoning Under Uncertainty},
+  publisher = {Springer},
+  year = {2016}
+}
+
+# Identifiability critiques of second-order / evidential models
+
+@InProceedings{bengs2022pitfalls,
+author = {Bengs, Viktor and H{\"u}llermeier, Eyke and Waegeman, Willem},
+title = {Pitfalls of epistemic uncertainty quantification through loss minimisation},
+year = {2022},
+isbn = {9781713871088},
+publisher = {Curran Associates Inc.},
+address = {Red Hook, NY, USA},
+abstract = {Uncertainty quantification has received increasing attention in machine learning in the recent past. In particular, a distinction between aleatoric and epistemic uncertainty has been found useful in this regard. The latter refers to the learner's (lack of) knowledge and appears to be especially difficult to measure and quantify. In this paper, we analyse a recent proposal based on the idea of a second-order learner, which yields predictions in the form of distributions over probability distributions. While standard (first-order) learners can be trained to predict accurate probabilities, namely by minimising suitable loss functions on sample data, we show that loss minimisation does not work for second-order predictors: The loss functions proposed for inducing such predictors do not incentivise the learner to represent its epistemic uncertainty in a faithful way.},
+booktitle = {Proceedings of the 36th International Conference on Neural Information Processing Systems},
+articleno = {2118},
+numpages = {12},
+location = {New Orleans, LA, USA},
+series = {NIPS '22}
+}
+
+
+@InProceedings{bengs2023secondorder,
+author = {Bengs, Viktor and H{\"u}llermeier, Eyke and Waegeman, Willem},
+title = {On second-order scoring rules for epistemic uncertainty quantification},
+year = {2023},
+publisher = {JMLR.org},
+abstract = {It is well known that accurate probabilistic predictors can be trained through empirical risk minimisation with proper scoring rules as loss functions. While such learners capture so-called aleatoric uncertainty of predictions, various machine learning methods have recently been developed with the goal to let the learner also represent its epistemic uncertainty, i.e., the uncertainty caused by a lack of knowledge and data. An emerging branch of the literature proposes the use of a secondorder learner that provides predictions in terms of distributions on probability distributions. However, recent work has revealed serious theoretical shortcomings for second-order predictors based on loss minimisation. In this paper, we generalise these findings and prove a more fundamental result: There seems to be no loss function that provides an incentive for a second-order learner to faithfully represent its epistemic uncertainty in the same manner as proper scoring rules do for standard (first-order) learners. As a main mathematical tool to prove this result, we introduce the generalised notion of second-order scoring rules.},
+booktitle = {Proceedings of the 40th International Conference on Machine Learning},
+articleno = {89},
+numpages = {14},
+location = {Honolulu, Hawaii, USA},
+series = {ICML'23}
+}
+
+@article{meinert2023unreasonable,
+  author = {Meinert, Nis and Gawlikowski, Jakob and Lavin, Alexander},
+  title = {The Unreasonable Effectiveness of Deep Evidential Regression},
+  journal = {Proceedings of the AAAI Conference on Artificial Intelligence},
+  volume = {37},
+  number = {8},
+  pages = {9134--9142},
+  year = {2023},
+  eprint = {2205.10060},
+  archivePrefix = {arXiv}
+}
+
+@InProceedings{juergens2024epistemic,
+author = {J{\"u}rgens, Mira and Meinert, Nis and Bengs, Viktor and H{\"u}llermeier, Eyke and Waegeman, Willem},
+title = {Is epistemic uncertainty faithfully represented by evidential deep learning methods?},
+year = {2024},
+publisher = {JMLR.org},
+abstract = {Trustworthy ML systems should not only return accurate predictions, but also a reliable representation of their uncertainty. Bayesian methods are commonly used to quantify both aleatoric and epistemic uncertainty, but alternative approaches, such as evidential deep learning methods, have become popular in recent years. The latter group of methods in essence extends empirical risk minimization (ERM) for predicting second-order probability distributions over outcomes, from which measures of epistemic (and aleatoric) uncertainty can be extracted. This paper presents novel theoretical insights of evidential deep learning, highlighting the difficulties in optimizing second-order loss functions and interpreting the resulting epistemic uncertainty measures. With a systematic setup that covers a wide range of approaches for classification, regression and counts, it provides novel insights into issues of identifiability and convergence in second-order loss minimization, and the relative (rather than absolute) nature of epistemic uncertainty measures.},
+booktitle = {Proceedings of the 41st International Conference on Machine Learning},
+articleno = {910},
+numpages = {19},
+location = {Vienna, Austria},
+series = {ICML'24}
+}
+@inproceedings{shen2024mirage,
+author = {Shen, Maohao and Ryu, J. Jon and Ghosh, Soumya and Bu, Yuheng and Sattigeri, Prasanna and Das, Subhro and Wornell, Gregory W.},
+title = {Are uncertainty quantification capabilities of evidential deep learning a mirage?},
+year = {2024},
+isbn = {9798331314385},
+publisher = {Curran Associates Inc.},
+address = {Red Hook, NY, USA},
+abstract = {This paper questions the effectiveness of a modern predictive uncertainty quantification approach, called evidential deep learning (EDL), in which a single neural network model is trained to learn a meta distribution over the predictive distribution by minimizing a specific objective function. Despite their perceived strong empirical performance on downstream tasks, a line of recent studies by Bengs et al. identify limitations of the existing methods to conclude their learned epistemic uncertainties are unreliable, e.g., in that they are non-vanishing even with infinite data. Building on and sharpening such analysis, we 1) provide a sharper understanding of the asymptotic behavior of a wide class of EDL methods by unifying various objective functions; 2) reveal that the EDL methods can be better interpreted as an out-of-distribution detection algorithm based on energy-based-models; and 3) conduct extensive ablation studies to better assess their empirical effectiveness with real-world datasets. Through all these analyses, we conclude that even when EDL methods are empirically effective on downstream tasks, this occurs despite their poor uncertainty quantification capabilities. Our investigation suggests that incorporating model uncertainty can help EDL methods faithfully quantify uncertainties and further improve performance on representative downstream tasks, albeit at the cost of additional computational complexity. The code to replicate the experiments is available on https://github.com/maohaos2/EDL-Mirage.},
+booktitle = {Proceedings of the 38th International Conference on Neural Information Processing Systems},
+articleno = {3424},
+numpages = {35},
+location = {Vancouver, BC, Canada},
+series = {NIPS '24}
+}
+
+# Priors on concentration/precision parameters and function-space priors
+
+@article{escobar1995bayesian,
+  author = {Escobar, Michael D. and West, Mike},
+  title = {Bayesian Density Estimation and Inference Using Mixtures},
+  journal = {Journal of the American Statistical Association},
+  volume = {90},
+  number = {430},
+  pages = {577--588},
+  year = {1995}
+}
+
+@article{teh2006hierarchical,
+  author = {Teh, Yee Whye and Jordan, Michael I. and Beal, Matthew J. and Blei, David M.},
+  title = {Hierarchical {D}irichlet Processes},
+  journal = {Journal of the American Statistical Association},
+  volume = {101},
+  number = {476},
+  pages = {1566--1581},
+  year = {2006}
+}
+
+@inproceedings{sun2019functional,
+  author = {Sun, Shengyang and Zhang, Guodong and Shi, Jiaxin and Grosse, Roger},
+  title = {Functional Variational {B}ayesian Neural Networks},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year = {2019},
+  eprint = {1903.05779},
+  archivePrefix = {arXiv}
+}
+
+# Mean-precision parameterization
+
+@article{ferrari2004beta,
+  author = {Ferrari, Silvia L. P. and Cribari-Neto, Francisco},
+  title = {Beta Regression for Modelling Rates and Proportions},
+  journal = {Journal of Applied Statistics},
+  volume = {31},
+  number = {7},
+  pages = {799--815},
+  year = {2004}
+}
+
+@techreport{maier2014dirichletreg,
+  author = {Maier, Marco J.},
+  title = {{DirichletReg}: {D}irichlet Regression for Compositional Data in {R}},
+  institution = {WU Vienna University of Economics and Business},
+  type = {Research Report Series, Department of Statistics and Mathematics},
+  number = {125},
+  year = {2014}
+}
+
+@article{wolpert1995estimating,
+  author = {Wolpert, David H. and Wolf, David R.},
+  title = {Estimating Functions of Probability Distributions from a Finite Set of Samples},
+  journal = {Physical Review E},
+  volume = {52},
+  pages = {6841},
+  year = {1995}
+}
+
+@inproceedings{duan2024evidential,
+title = "Evidential Uncertainty Quantification: A Variance-Based Perspective",
+abstract = "Uncertainty quantification of deep neural networks has become an active field of research and plays a crucial role in various downstream tasks such as active learning. Recent advances in evidential deep learning shed light on the direct quantification of aleatoric and epistemic uncertainties with a single forward pass of the model. Most traditional approaches adopt an entropy-based method to derive evidential uncertainty in classification, quantifying uncertainty at the sample level. However, the variance-based method that has been widely applied in regression problems is seldom used in the classification setting. In this work, we adapt the variance-based approach from regression to classification, quantifying classification uncertainty at the class level. The variance decomposition technique in regression is extended to class covariance decomposition in classification based on the law of total covariance, and the class correlation is also derived from the covariance. Experiments on cross-domain datasets are conducted to illustrate that the variance-based approach not only results in similar accuracy as the entropy-based one in active domain adaptation but also brings information about class-wise uncertainties as well as between-class correlations. The code is available at https://github.com/KerryDRX/EvidentialADA. This alternative means of evidential uncertainty quantification will give researchers more options when class uncertainties and correlations are important in their applications.",
+keywords = "Algorithms, Algorithms, Image recognition and understanding, Machine learning architectures, and algorithms, formulations",
+author = "Ruxiao Duan and Brian Caffo and Bai, \{Harrison X.\} and Sair, \{Haris I.\} and Craig Jones",
+year = "2024",
+month = jan,
+day = "3",
+doi = "10.1109/WACV57701.2024.00213",
+language = "English (US)",
+publisher = "Institute of Electrical and Electronics Engineers Inc.",
+pages = "2121--2130",
+booktitle = "Proceedings - 2024 IEEE Winter Conference on Applications of Computer Vision, WACV 2024",
+}
+
+# Mathematical reference
+
+@book{abramowitz1972handbook,
+  author = {Abramowitz, Milton and Stegun, Irene A.},
+  title = {Handbook of Mathematical Functions with Formulas, Graphs, and Mathematical Tables},
+  publisher = {Dover Publications},
+  address = {New York},
+  year = {1972}
+}
+
+
+##### Approximate inference in BNNs (related-work section; all verified against publisher/arXiv pages)
+
+# Stochastic variational inference
+
+@article{hoffman2013stochastic,
+  author  = {Matthew D. Hoffman and David M. Blei and Chong Wang and John Paisley},
+  title   = {Stochastic Variational Inference},
+  journal = {Journal of Machine Learning Research},
+  year    = {2013},
+  volume  = {14},
+  number  = {40},
+  pages   = {1303--1347},
+  url     = {http://jmlr.org/papers/v14/hoffman13a.html}
+}
+
+@inproceedings{graves2011practical,
+author = {Graves, Alex},
+title = {Practical variational inference for neural networks},
+year = {2011},
+isbn = {9781618395993},
+publisher = {Curran Associates Inc.},
+address = {Red Hook, NY, USA},
+abstract = {Variational methods have been previously explored as a tractable approximation to Bayesian inference for neural networks. However the approaches proposed so far have only been applicable to a few simple network architectures. This paper introduces an easy-to-implement stochastic variational method (or equivalently, minimum description length loss function) that can be applied to most neural networks. Along the way it revisits several common regularisers from a variational perspective. It also provides a simple pruning heuristic that can both drastically reduce the number of network weights and lead to improved generalisation. Experimental results are provided for a hierarchical multidimensional recurrent neural network applied to the TIMIT speech corpus.},
+booktitle = {Proceedings of the 25th International Conference on Neural Information Processing Systems},
+pages = {2348–2356},
+numpages = {9},
+location = {Granada, Spain},
+series = {NIPS'11}
+}
+
+@inproceedings{kingma2015variational,
+author = {Kingma, Diederik P. and Salimans, Tim and Welling, Max},
+title = {Variational dropout and the local reparameterization trick},
+year = {2015},
+publisher = {MIT Press},
+address = {Cambridge, MA, USA},
+abstract = {We investigate a local reparameterizaton technique for greatly reducing the variance of stochastic gradients for variational Bayesian inference (SGVB) of a posterior over model parameters, while retaining parallelizability. This local reparameterization translates uncertainty about global parameters into local noise that is independent across datapoints in the minibatch. Such parameterizations can be trivially parallelized and have variance that is inversely proportional to the mini-batch size, generally leading to much faster convergence. Additionally, we explore a connection with dropout: Gaussian dropout objectives correspond to SGVB with local reparameterization, a scale-invariant prior and proportionally fixed posterior variance. Our method allows inference of more flexibly parameterized posteriors; specifically, we propose variational dropout, a generalization of Gaussian dropout where the dropout rates are learned, often leading to better models. The method is demonstrated through several experiments.},
+booktitle = {Proceedings of the 29th International Conference on Neural Information Processing Systems - Volume 2},
+pages = {2575–2583},
+numpages = {9},
+location = {Montreal, Canada},
+series = {NIPS'15}
+}
+
+@InProceedings{molchanov2017variational,
+  author = {Molchanov, Dmitry and Ashukha, Arsenii and Vetrov, Dmitry},
+  title = {Variational Dropout Sparsifies Deep Neural Networks},
+  booktitle = {Proceedings of the 34th International Conference on Machine Learning},
+  pages = {2498--2507},
+  year = {2017},
+  volume = {70},
+  series = {Proceedings of Machine Learning Research},
+  publisher = {PMLR},
+  url = {https://proceedings.mlr.press/v70/molchanov17a.html}
+}
+
+@InProceedings{louizos2017multiplicative,
+  author = {Louizos, Christos and Welling, Max},
+  title = {Multiplicative Normalizing Flows for Variational {B}ayesian Neural Networks},
+  booktitle = {Proceedings of the 34th International Conference on Machine Learning},
+  pages = {2218--2227},
+  year = {2017},
+  volume = {70},
+  series = {Proceedings of Machine Learning Research},
+  publisher = {PMLR},
+  url = {https://proceedings.mlr.press/v70/louizos17a.html}
+}
+
+@InProceedings{khan2018fast,
+  author = {Khan, Mohammad Emtiyaz and Nielsen, Didrik and Tangkaratt, Voot and Lin, Wu and Gal, Yarin and Srivastava, Akash},
+  title = {Fast and Scalable {B}ayesian Deep Learning by Weight-Perturbation in {A}dam},
+  booktitle = {Proceedings of the 35th International Conference on Machine Learning},
+  pages = {2611--2620},
+  year = {2018},
+  volume = {80},
+  series = {Proceedings of Machine Learning Research},
+  publisher = {PMLR},
+  url = {https://proceedings.mlr.press/v80/khan18a.html}
+}
+
+@InProceedings{zhang2018noisy,
+  author = {Zhang, Guodong and Sun, Shengyang and Duvenaud, David and Grosse, Roger},
+  title = {Noisy Natural Gradient as Variational Inference},
+  booktitle = {Proceedings of the 35th International Conference on Machine Learning},
+  pages = {5852--5861},
+  year = {2018},
+  volume = {80},
+  series = {Proceedings of Machine Learning Research},
+  publisher = {PMLR},
+  url = {https://proceedings.mlr.press/v80/zhang18l.html}
+}
+
+@inproceedings{wu2019deterministic,
+  author       = {Anqi Wu and
+                  Sebastian Nowozin and
+                  Edward Meeds and
+                  Richard E. Turner and
+                  Jos{\'{e}} Miguel Hern{\'{a}}ndez{-}Lobato and
+                  Alexander L. Gaunt},
+  title        = {Deterministic Variational Inference for Robust {Bayesian} Neural Networks},
+  booktitle    = {7th International Conference on Learning Representations, {ICLR} 2019,
+                  New Orleans, LA, USA, May 6-9, 2019},
+  publisher    = {OpenReview.net},
+  year         = {2019},
+  url          = {https://openreview.net/forum?id=B1l08oAct7},
+  timestamp    = {Thu, 25 Jul 2019 13:03:15 +0200},
+  biburl       = {https://dblp.org/rec/conf/iclr/WuNMTHG19.bib},
+  bibsource    = {dblp computer science bibliography, https://dblp.org}
+}
+
+
+@inproceedings{osawa2019practical,
+author = {Osawa, Kazuki and Swaroop, Siddharth and Jain, Anirudh and Eschenhagen, Runa and Turner, Richard E. and Yokota, Rio and Khan, Mohammad Emtiyaz},
+title = {Practical deep learning with {Bayesian} principles},
+year = {2019},
+publisher = {Curran Associates Inc.},
+address = {Red Hook, NY, USA},
+abstract = {Bayesian methods promise to fix many shortcomings of deep learning, but they are impractical and rarely match the performance of standard methods, let alone improve them. In this paper, we demonstrate practical training of deep networks with natural-gradient variational inference. By applying techniques such as batch normalisation, data augmentation, and distributed training, we achieve similar performance in about the same number of epochs as the Adam optimiser, even on large datasets such as ImageNet. Importantly, the benefits of Bayesian principles are preserved: predictive probabilities are well-calibrated, uncertainties on out-of-distribution data are improved, and continual-learning performance is boosted. This work enables practical deep learning while preserving benefits of Bayesian principles. A PyTorch implementation1 is available as a plug-and-play optimiser.},
+booktitle = {Proceedings of the 33rd International Conference on Neural Information Processing Systems},
+articleno = {386},
+numpages = {13}
+}
+
+@InProceedings{dusenberry2020rank1,
+  author = {Dusenberry, Michael and Jerfel, Ghassen and Wen, Yeming and Ma, Yian and Snoek, Jasper and Heller, Katherine and Lakshminarayanan, Balaji and Tran, Dustin},
+  title = {Efficient and Scalable {B}ayesian Neural Nets with Rank-1 Factors},
+  booktitle = {Proceedings of the 37th International Conference on Machine Learning},
+  pages = {2782--2792},
+  year = {2020},
+  volume = {119},
+  series = {Proceedings of Machine Learning Research},
+  publisher = {PMLR},
+  url = {https://proceedings.mlr.press/v119/dusenberry20a.html}
+}
+
+# Dropout
+
+@article{srivastava2014dropout,
+  author  = {Nitish Srivastava and Geoffrey Hinton and Alex Krizhevsky and Ilya Sutskever and Ruslan Salakhutdinov},
+  title   = {Dropout: A Simple Way to Prevent Neural Networks from Overfitting},
+  journal = {Journal of Machine Learning Research},
+  year    = {2014},
+  volume  = {15},
+  number  = {56},
+  pages   = {1929--1958},
+  url     = {http://jmlr.org/papers/v15/srivastava14a.html}
+}
+@inproceedings{gal2017concrete,
+author = {Gal, Yarin and Hron, Jiri and Kendall, Alex},
+title = {Concrete dropout},
+year = {2017},
+isbn = {9781510860964},
+publisher = {Curran Associates Inc.},
+address = {Red Hook, NY, USA},
+abstract = {Dropout is used as a practical tool to obtain uncertainty estimates in large vision models and reinforcement learning (RL) tasks. But to obtain well-calibrated uncertainty estimates, a grid-search over the dropout probabilities is necessary— a prohibitive operation with large models, and an impossible one with RL. We propose a new dropout variant which gives improved performance and better calibrated uncertainties. Relying on recent developments in Bayesian deep learning, we use a continuous relaxation of dropout's discrete masks. Together with a principled optimisation objective, this allows for automatic tuning of the dropout probability in large models, and as a result faster experimentation cycles. In RL this allows the agent to adapt its uncertainty dynamically as more data is observed. We analyse the proposed variant extensively on a range of tasks, and give insights into common practice in the field where larger dropout probabilities are often used in deeper model layers.},
+booktitle = {Proceedings of the 31st International Conference on Neural Information Processing Systems},
+pages = {3584–3593},
+numpages = {10},
+location = {Long Beach, California, USA},
+series = {NIPS'17}
+}
+
+@InProceedings{hron2018variational,
+  author = {Hron, Jiri and Matthews, Alexander and Ghahramani, Zoubin},
+  title = {Variational {B}ayesian Dropout: Pitfalls and Fixes},
+  booktitle = {Proceedings of the 35th International Conference on Machine Learning},
+  pages = {2019--2028},
+  year = {2018},
+  volume = {80},
+  series = {Proceedings of Machine Learning Research},
+  publisher = {PMLR},
+  url = {https://proceedings.mlr.press/v80/hron18a.html}
+}
+
+# Laplace approximation
+
+@article{kirkpatrick2017overcoming,
+  author = {Kirkpatrick, James and Pascanu, Razvan and Rabinowitz, Neil and Veness, Joel and Desjardins, Guillaume and Rusu, Andrei A. and Milan, Kieran and Quan, John and Ramalho, Tiago and Grabska-Barwinska, Agnieszka and Hassabis, Demis and Clopath, Claudia and Kumaran, Dharshan and Hadsell, Raia},
+  title = {Overcoming Catastrophic Forgetting in Neural Networks},
+  journal = {Proceedings of the National Academy of Sciences},
+  volume = {114},
+  number = {13},
+  pages = {3521--3526},
+  year = {2017}
+}
+
+@inproceedings{ritter2018scalable,
+  author = {Ritter, Hippolyt and Botev, Aleksandar and Barber, David},
+  title = {A Scalable {L}aplace Approximation for Neural Networks},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year = {2018},
+  url = {https://openreview.net/forum?id=Skdvd2xAZ}
+}
+
+@InProceedings{daxberger2021subnetwork,
+
+  title = 	 {Bayesian Deep Learning via Subnetwork Inference},
+  author =       {Daxberger, Erik and Nalisnick, Eric and Allingham, James U and Antoran, Javier and Hernandez-Lobato, Jose Miguel},
+  booktitle = 	 {Proceedings of the 38th International Conference on Machine Learning},
+  pages = 	 {2510--2521},
+  year = 	 {2021},
+  editor = 	 {Meila, Marina and Zhang, Tong},
+  volume = 	 {139},
+  series = 	 {Proceedings of Machine Learning Research},
+  month = 	 {18--24 Jul},
+  publisher =    {PMLR},
+  pdf = 	 {http://proceedings.mlr.press/v139/daxberger21a/daxberger21a.pdf},
+  url = 	 {https://proceedings.mlr.press/v139/daxberger21a.html},
+  abstract = 	 {The Bayesian paradigm has the potential to solve core issues of deep neural networks such as poor calibration and data inefficiency. Alas, scaling Bayesian inference to large weight spaces often requires restrictive approximations. In this work, we show that it suffices to perform inference over a small subset of model weights in order to obtain accurate predictive posteriors. The other weights are kept as point estimates. This subnetwork inference framework enables us to use expressive, otherwise intractable, posterior approximations over such subsets. In particular, we implement subnetwork linearized Laplace as a simple, scalable Bayesian deep learning method: We first obtain a MAP estimate of all weights and then infer a full-covariance Gaussian posterior over a subnetwork using the linearized Laplace approximation. We propose a subnetwork selection strategy that aims to maximally preserve the model’s predictive uncertainty. Empirically, our approach compares favorably to ensembles and less expressive posterior approximations over full networks.}
+}
+
+
+@inproceedings{daxberger2021laplaceredux,
+  author = {Daxberger, Erik and Kristiadi, Agustinus and Immer, Alexander and Eschenhagen, Runa and Bauer, Matthias and Hennig, Philipp},
+  title = {Laplace Redux -- Effortless {B}ayesian Deep Learning},
+  booktitle = {Advances in Neural Information Processing Systems 34 (NeurIPS)},
+  year = {2021},
+  eprint = {2106.14806},
+  archivePrefix = {arXiv}
+}
+
+
+# SGD-trajectory methods and stochastic-gradient MCMC
+
+@inproceedings{welling2011bayesian,
+author = {Welling, Max and Teh, Yee Whye},
+title = {Bayesian learning via stochastic gradient {Langevin} dynamics},
+year = {2011},
+isbn = {9781450306195},
+publisher = {Omnipress},
+address = {Madison, WI, USA},
+abstract = {In this paper we propose a new framework for learning from large scale datasets based on iterative learning from small mini-batches. By adding the right amount of noise to a standard stochastic gradient optimization algorithm we show that the iterates will converge to samples from the true posterior distribution as we anneal the stepsize. This seamless transition between optimization and Bayesian posterior sampling provides an inbuilt protection against overfitting. We also propose a practical method for Monte Carlo estimates of posterior statistics which monitors a "sampling threshold" and collects samples after it has been surpassed. We apply the method to three models: a mixture of Gaussians, logistic regression and ICA with natural gradients.},
+booktitle = {Proceedings of the 28th International Conference on International Conference on Machine Learning},
+pages = {681–688},
+numpages = {8},
+location = {Bellevue, Washington, USA},
+series = {ICML'11}
+}
+
+@InProceedings{chen2014stochastic,
+  author = {Chen, Tianqi and Fox, Emily and Guestrin, Carlos},
+  title = {Stochastic Gradient {H}amiltonian {M}onte {C}arlo},
+  booktitle = {Proceedings of the 31st International Conference on Machine Learning},
+  pages = {1683--1691},
+  year = {2014},
+  volume = {32},
+  series = {Proceedings of Machine Learning Research},
+  publisher = {PMLR},
+  url = {https://proceedings.mlr.press/v32/cheni14.html}
+}
+
+@inproceedings{ding2014sgnht,
+author = {Ding, Nan and Fang, Youhan and Babbush, Ryan and Chen, Changyou and Skeel, Robert D. and Neven, Hartmut},
+title = {Bayesian sampling using stochastic gradient thermostats},
+year = {2014},
+publisher = {MIT Press},
+address = {Cambridge, MA, USA},
+abstract = {Dynamics-based sampling methods, such as Hybrid Monte Carlo (HMC) and Langevin dynamics (LD), are commonly used to sample target distributions. Recently, such approaches have been combined with stochastic gradient techniques to increase sampling efficiency when dealing with large datasets. An outstanding problem with this approach is that the stochastic gradient introduces an unknown amount of noise which can prevent proper sampling after discretization. To remedy this problem, we show that one can leverage a small number of additional variables to stabilize momentum fluctuations induced by the unknown noise. Our method is inspired by the idea of a thermostat in statistical physics and is justified by a general theory.},
+booktitle = {Proceedings of the 28th International Conference on Neural Information Processing Systems - Volume 2},
+pages = {3203–3211},
+numpages = {9},
+location = {Montreal, Canada},
+series = {NIPS'14}
+}
+
+@inproceedings{
+mensch2026robust,
+title={Robust Stochastic Gradient Posterior Sampling with Lattice Based Discretisation},
+author={Zier Mensch and Lars Holdijk and Samuel Duffield and Maxwell Aifer and Patrick J. Coles and Max Welling and Miranda C. N. Cheng},
+booktitle={Forty-third International Conference on Machine Learning},
+year={2026},
+url={https://openreview.net/forum?id=mtRgrp0u7Z}
+}
+
+@inproceedings{zhang2020cyclical,
+  author = {Zhang, Ruqi and Li, Chunyuan and Zhang, Jianyi and Chen, Changyou and Wilson, Andrew Gordon},
+  title = {Cyclical Stochastic Gradient {MCMC} for {B}ayesian Deep Learning},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year = {2020},
+  eprint = {1902.03932},
+  archivePrefix = {arXiv}
+}
+
+@article{mandt2017stochastic,
+  author = {Mandt, Stephan and Hoffman, Matthew D. and Blei, David M.},
+  title = {Stochastic Gradient Descent as Approximate {B}ayesian Inference},
+  journal = {Journal of Machine Learning Research},
+  volume = {18},
+  number = {134},
+  pages = {1--35},
+  year = {2017}
+}
+
+@inproceedings{izmailov2018averaging,
+  author       = {Pavel Izmailov and
+                  Dmitrii Podoprikhin and
+                  Timur Garipov and
+                  Dmitry P. Vetrov and
+                  Andrew Gordon Wilson},
+  title        = {Averaging Weights Leads to Wider Optima and Better Generalization},
+  booktitle    = {Proceedings of the Thirty-Fourth Conference on Uncertainty in Artificial
+                  Intelligence, {UAI} 2018, Monterey, California, USA, August 6-10,
+                  2018},
+  pages        = {876--885},
+  publisher    = {{AUAI} Press},
+  year         = {2018},
+  url          = {http://auai.org/uai2018/proceedings/papers/313.pdf},
+  timestamp    = {Wed, 05 Feb 2025 17:14:18 +0100},
+  biburl       = {https://dblp.org/rec/conf/uai/IzmailovPGVW18.bib},
+  bibsource    = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{maddox2019simple,
+author = {Maddox, Wesley J. and Garipov, Timur and Izmailov, Pavel and Vetrov, Dmitry and Wilson, Andrew Gordon},
+title = {A simple baseline for {Bayesian} uncertainty in deep learning},
+year = {2019},
+publisher = {Curran Associates Inc.},
+address = {Red Hook, NY, USA},
+abstract = {We propose SWA-Gaussian (SWAG), a simple, scalable, and general purpose approach for uncertainty representation and calibration in deep learning. Stochastic Weight Averaging (SWA), which computes the first moment of stochastic gradient descent (SGD) iterates with a modified learning rate schedule, has recently been shown to improve generalization in deep learning. With SWAG, we fit a Gaussian using the SWA solution as the first moment and a low rank plus diagonal covariance also derived from the SGD iterates, forming an approximate posterior distribution over neural network weights; we then sample from this Gaussian distribution to perform Bayesian model averaging. We empirically find that SWAG approximates the shape of the true posterior, in accordance with results describing the stationary distribution of SGD iterates. Moreover, we demonstrate that SWAG performs well on a wide variety of tasks, including out of sample detection, calibration, and transfer learning, in comparison to many popular alternatives including MC dropout, KFAC Laplace, SGLD, and temperature scaling.},
+booktitle = {Proceedings of the 33rd International Conference on Neural Information Processing Systems},
+articleno = {1179},
+numpages = {12}
+}
+@inproceedings{wilson2020probabilistic,
+author = {Wilson, Andrew Gordon and Izmailov, Pavel},
+title = {Bayesian deep learning and a probabilistic perspective of generalization},
+year = {2020},
+isbn = {9781713829546},
+publisher = {Curran Associates Inc.},
+address = {Red Hook, NY, USA},
+abstract = {The key distinguishing property of a Bayesian approach is marginalization, rather than using a single setting of weights. Bayesian marginalization can particularly improve the accuracy and calibration of modern deep neural networks, which are typically underspecified by the data, and can represent many compelling but different solutions. We show that deep ensembles provide an effective mechanism for approximate Bayesian marginalization, and propose a related approach that further improves the predictive distribution by marginalizing within basins of attraction, without significant overhead. We also investigate the prior over functions implied by a vague distribution over neural network weights, explaining the generalization properties of such models from a probabilistic perspective. From this perspective, we explain results that have been presented as mysterious and distinct to neural network generalization, such as the ability to fit images with random labels, and show that these results can be reproduced with Gaussian processes. We also show that Bayesian model averaging alleviates double descent, resulting in monotonic performance improvements with increased flexibility.},
+booktitle = {Proceedings of the 34th International Conference on Neural Information Processing Systems},
+articleno = {394},
+numpages = {12},
+location = {Vancouver, BC, Canada},
+series = {NIPS '20}
+}
+# Expressiveness of approximate posteriors
+
+@inproceedings{foong2020expressiveness,
+  author = {Foong, Andrew Y. K. and Burt, David R. and Li, Yingzhen and Turner, Richard E.},
+  title = {On the Expressiveness of Approximate Inference in {B}ayesian Neural Networks},
+  booktitle = {Advances in Neural Information Processing Systems 33 (NeurIPS)},
+  year = {2020},
+  eprint = {1909.00719},
+  archivePrefix = {arXiv}
+}
+
+@inproceedings{farquhar2020liberty,
+  author = {Farquhar, Sebastian and Smith, Lewis and Gal, Yarin},
+  title = {Liberty or Depth: Deep {B}ayesian Neural Nets Do Not Need Complex Weight Posterior Approximations},
+  booktitle = {Advances in Neural Information Processing Systems 33 (NeurIPS)},
+  year = {2020},
+  eprint = {2002.03704},
+  archivePrefix = {arXiv}
+}
+
+# Deep ensembles and empirical evaluations
+
+@inproceedings{lakshminarayanan2017simple,
+  author = {Lakshminarayanan, Balaji and Pritzel, Alexander and Blundell, Charles},
+  title = {Simple and Scalable Predictive Uncertainty Estimation Using Deep Ensembles},
+  booktitle = {Advances in Neural Information Processing Systems 30 (NeurIPS)},
+  year = {2017},
+  eprint = {1612.01474},
+  archivePrefix = {arXiv}
+}
+
+@inproceedings{ovadia2019trust,
+  author = {Ovadia, Yaniv and Fertig, Emily and Ren, Jie and Nado, Zachary and Sculley, D. and Nowozin, Sebastian and Dillon, Joshua and Lakshminarayanan, Balaji and Snoek, Jasper},
+  title = {Can You Trust Your Model's Uncertainty? {E}valuating Predictive Uncertainty under Dataset Shift},
+  booktitle = {Advances in Neural Information Processing Systems 32 (NeurIPS)},
+  year = {2019},
+  eprint = {1906.02530},
+  archivePrefix = {arXiv}
+}
+
+# Recent developments
+
+@InProceedings{shen2024variational,
+  author = {Shen, Yuesong and Daheim, Nico and Cong, Bai and Nickl, Peter and Marconi, Gian Maria and Bazan, Clement Emile Marcel Raoul and Yokota, Rio and Gurevych, Iryna and Cremers, Daniel and Khan, Mohammad Emtiyaz and M{\"o}llenhoff, Thomas},
+  title = {Variational Learning is Effective for Large Deep Networks},
+  booktitle = {Proceedings of the 41st International Conference on Machine Learning},
+  pages = {44665--44686},
+  year = {2024},
+  volume = {235},
+  series = {Proceedings of Machine Learning Research},
+  publisher = {PMLR},
+  url = {https://proceedings.mlr.press/v235/shen24b.html}
+}
+
+@InProceedings{papamarkou2024position,
+  author = {Papamarkou, Theodore and Skoularidou, Maria and Palla, Konstantina and Aitchison, Laurence and Arbel, Julyan and Dunson, David and Filippone, Maurizio and Fortuin, Vincent and others},
+  title = {Position: {B}ayesian Deep Learning is Needed in the Age of Large-Scale {AI}},
+  booktitle = {Proceedings of the 41st International Conference on Machine Learning},
+  pages = {39556--39586},
+  year = {2024},
+  volume = {235},
+  series = {Proceedings of Machine Learning Research},
+  publisher = {PMLR},
+  url = {https://proceedings.mlr.press/v235/papamarkou24b.html}
+}
+
+@article{li2008monotonicity,
+  author  = {Li, Ai-Jun and Yuan, Jun and Chen, Chao-Ping},
+  title   = {Monotonicity Results for the Polygamma Functions},
+  journal = {Mathematical Inequalities \& Applications},
+  year    = {2008},
+  volume  = {11},
+  number  = {2},
+  pages   = {307--316},
+  doi     = {10.7153/mia-11-22}
+}
+
+% --- Added during methods rewrite. Verification status:
+% --- depeweg2018decomposition: VERIFIED (Eq. 3, Sec. 3, arXiv:1710.07283).
+% --- poirier1998revising: VERIFIED at abstract level (Cambridge Core; the
+% ---   quoted sentence in methods.tex is verbatim from the abstract, p. 483).
+% --- gustafson2015bayesian: VERIFIED at TOC level (Ch. 2, "The Structure of
+% ---   Inference in Partially Identified Models"); page-level check needs
+% ---   library access.
+% --- gustafson2010partially: VERIFIED at abstract level (open access,
+% ---   DOI 10.2202/1557-4679.1206).
+
+@inproceedings{depeweg2018decomposition,
+  title = 	 {Decomposition of Uncertainty in {B}ayesian Deep Learning for Efficient and Risk-sensitive Learning},
+  author =       {Depeweg, Stefan and Hernandez-Lobato, Jose-Miguel and Doshi-Velez, Finale and Udluft, Steffen},
+  booktitle = 	 {Proceedings of the 35th International Conference on Machine Learning},
+  pages = 	 {1184--1193},
+  year = 	 {2018},
+  editor = 	 {Dy, Jennifer and Krause, Andreas},
+  volume = 	 {80},
+  series = 	 {Proceedings of Machine Learning Research},
+  month = 	 {10--15 Jul},
+  publisher =    {PMLR},
+  pdf = 	 {http://proceedings.mlr.press/v80/depeweg18a/depeweg18a.pdf},
+  url = 	 {https://proceedings.mlr.press/v80/depeweg18a.html},
+  abstract = 	 {Bayesian neural networks with latent variables are scalable and flexible probabilistic models: they account for uncertainty in the estimation of the network weights and, by making use of latent variables, can capture complex noise patterns in the data. Using these models we show how to perform and utilize a decomposition of uncertainty in aleatoric and epistemic components for decision making purposes. This allows us to successfully identify informative points for active learning of functions with heteroscedastic and bimodal noise. Using the decomposition we further define a novel risk-sensitive criterion for reinforcement learningto identify policies that balance expected cost, model-bias and noise aversion.}
+}
+
+
+@article{poirier1998revising,
+publisher={Cambridge University Press (CUP)}, 
+journal={Econometric Theory},
+author={Poirier, Dale J.},
+title={Revising Beliefs In Nonidentified Models},
+year={1998},
+month={August},
+pages={483-509},
+volume={14},
+number={4},
+abstract={A Bayesian analysis of a nonidentified model is always possible if a proper prior on all the parameters is specified. There is, however, no Bayesian free lunch. The â€œpriceâ€ is that there exist quantities about which the data are uninformative, i.e., their marginal prior and posterior distributions are identical. In the case of improper priors the analysis is problematicâ€”resulting posteriors can be improper. This study investigates both proper and improper cases through a series of examples.},
+keywords={},
+doi={None},}
+
+
+
+@book{gustafson2015bayesian,
+  author    = {Gustafson, Paul},
+  title     = {Bayesian Inference for Partially Identified Models:
+               Exploring the Limits of Limited Data},
+  publisher = {CRC Press},
+  year      = {2015}
+}
+
+@article{gustafson2010partially,
+  author  = {Gustafson, Paul},
+  title   = {Bayesian Inference for Partially Identified Models},
+  journal = {The International Journal of Biostatistics},
+  year    = {2010},
+  volume  = {6},
+  number  = {2},
+  note    = {Article 17},
+  doi     = {10.2202/1557-4679.1206}
+}
+
+@misc{xiao2017fashion,
+      title={{Fashion-MNIST}: a Novel Image Dataset for Benchmarking Machine Learning Algorithms}, 
+      author={Han Xiao and Kashif Rasul and Roland Vollgraf},
+      year={2017},
+      eprint={1708.07747},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/1708.07747}, 
+}
+
+@techreport{krizhevsky2009learning,
+  author={Alex Krizhevsky},
+  title={Learning Multiple Layers of Features from Tiny Images},
+  institution={University of Toronto},
+  year={2009}
+}
+
+@inproceedings{he2016deep,
+  added-at = {2024-01-08T12:26:11.000+0100},
+  author = {He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
+  biburl = {https://www.bibsonomy.org/bibtex/2f08d8f1a1881a5c9ee27060e40ada500/weihao},
+  booktitle = {Proceedings of 2016 IEEE Conference on Computer Vision and Pattern Recognition},
+  doi = {10.1109/CVPR.2016.90},
+  interhash = {d2fe72bcc2c02bacc9fae990ec4d4927},
+  intrahash = {f08d8f1a1881a5c9ee27060e40ada500},
+  issn = {1063-6919},
+  keywords = {a},
+  location = {Las Vegas, NV, USA},
+  month = jun,
+  pages = {770--778},
+  publisher = {IEEE},
+  series = {CVPR '16},
+  timestamp = {2024-01-08T12:26:11.000+0100},
+  title = {{Deep Residual Learning for Image Recognition}},
+  url = {http://ieeexplore.ieee.org/document/7780459},
+  year = 2016
+}
+
+@inproceedings{singh2020filter,
+  author={Singh, Saurabh and Krishnan, Shankar},
+  booktitle={2020 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)}, 
+  title={Filter Response Normalization Layer: Eliminating Batch Dependence in the Training of Deep Neural Networks}, 
+  year={2020},
+  volume={},
+  number={},
+  pages={11234-11243},
+  keywords={Training;Degradation;Computer architecture;Neural networks;Object detection;Task analysis;Testing},
+  doi={10.1109/CVPR42600.2020.01125}}
+
+
+@inproceedings{naeini2015obtaining,
+  author={Mahdi Pakdaman Naeini and Gregory F. Cooper and Milos Hauskrecht},
+  title={Obtaining Well Calibrated Probabilities Using {Bayesian} Binning},
+  booktitle={Proceedings of the Twenty-Ninth AAAI Conference on Artificial Intelligence},
+  pages={2901--2907},
+  year={2015}
+}
+
+@inproceedings{guo2017calibration,
+  author={Chuan Guo and Geoff Pleiss and Yu Sun and Kilian Q. Weinberger},
+  title={On Calibration of Modern Neural Networks},
+  booktitle={Proceedings of the 34th International Conference on Machine Learning},
+  series={Proceedings of Machine Learning Research},
+  volume={70},
+  pages={1321--1330},
+  year={2017}
+}
+
+@inproceedings{peterson2019human,
+  author={Peterson, Joshua and Battleday, Ruairidh and Griffiths, Thomas and Russakovsky, Olga},
+  booktitle={2019 IEEE/CVF International Conference on Computer Vision (ICCV)}, 
+  title={Human Uncertainty Makes Classification More Robust}, 
+  year={2019},
+  volume={},
+  number={},
+  pages={9616-9625},
+  keywords={Training;Robustness;Uncertainty;Benchmark testing;Standards;Task analysis;Dogs},
+  doi={10.1109/ICCV.2019.00971}}
+
+
+@InProceedings{sommer2024connecting,
+ author = {Sommer, Emanuel and Wimmer, Lisa and Papamarkou, Theodore and Bothmann, Ludwig and Bischl, Bernd and R{\"u}gamer, David}, title = {Connecting the dots: is mode-connectedness the key to feasible sample-based inference in {Bayesian} neural networks?}, year = {2024}, publisher = {JMLR.org}, abstract = {A major challenge in sample-based inference (SBI) for Bayesian neural networks is the size and structure of the networks' parameter space. Our work shows that successful SBI is possible by embracing the characteristic relationship between weight and function space, uncovering a systematic link between overparameterization and the difficulty of the sampling problem. Through extensive experiments, we establish practical guidelines for sampling and convergence diagnosis. As a result, we present a deep ensemble initialized approach as an effective solution with competitive performance and uncertainty quantification.}, booktitle = {Proceedings of the 41st International Conference on Machine Learning}, articleno = {1870}, numpages = {31}, location = {Vienna, Austria}, series = {ICML'24} }
+
+
+@article{lecun1998gradient,
+  author  = {LeCun, Yann and Bottou, L{\'e}on and Bengio, Yoshua and Haffner, Patrick},
+  title   = {Gradient-based learning applied to document recognition},
+  journal = {Proceedings of the IEEE},
+  volume  = {86},
+  number  = {11},
+  pages   = {2278--2324},
+  year    = {1998},
+  doi     = {10.1109/5.726791}
+}
+
+@inproceedings{netzer2011reading,
+  author    = {Netzer, Yuval and Wang, Tao and Coates, Adam and Bissacco, Alessandro and Wu, Bo and Ng, Andrew Y.},
+  title     = {Reading Digits in Natural Images with Unsupervised Feature Learning},
+  booktitle = {NIPS Workshop on Deep Learning and Unsupervised Feature Learning 2011},
+  year      = {2011},
+  url       = {http://ufldl.stanford.edu/housenumbers}
+}
+
+@inproceedings{mucsanyi2024benchmarking,
+  author    = {Mucs{\'a}nyi, B{\'a}lint and Kirchhof, Michael and Oh, Seong Joon},
+  title     = {Benchmarking Uncertainty Disentanglement: Specialized Uncertainties for Specialized Tasks},
+  booktitle = {Advances in Neural Information Processing Systems 37, Datasets and Benchmarks Track},
+  year      = {2024},
+  url       = {https://arxiv.org/abs/2402.19460}
+}
+
+@article{vollmer2016exploration,
+  author  = {Sebastian J. Vollmer and Konstantinos C. Zygalakis and Yee Whye Teh},
+  title   = {Exploration of the (Non-)Asymptotic Bias and Variance of Stochastic Gradient {Langevin} Dynamics},
+  journal = {Journal of Machine Learning Research},
+  year    = {2016},
+  volume  = {17},
+  number  = {159},
+  pages   = {1--48},
+  url     = {http://jmlr.org/papers/v17/15-494.html}
+}
+
+@article{nemeth2021stochastic,
+  author  = {Nemeth, Christopher and Fearnhead, Paul},
+  title   = {Stochastic Gradient {M}arkov Chain {M}onte {C}arlo},
+  journal = {Journal of the American Statistical Association},
+  volume  = {116},
+  number  = {533},
+  pages   = {433--450},
+  year    = {2021}
+}
+
+@book{press1992numerical,
+  author    = {Press, William H. and Teukolsky, Saul A. and Vetterling, William T. and Flannery, Brian P.},
+  title     = {Numerical Recipes in {FORTRAN}: The Art of Scientific Computing},
+  publisher = {Cambridge University Press},
+  address   = {Cambridge},
+  year      = {1992},
+  edition   = {3rd},
+}
+
+@article{yu2014dirichletmultinomial,
+  author  = {Yu, Peng and Shaw, Chad A.},
+  title   = {An efficient algorithm for accurate computation of the
+             {Dirichlet}-multinomial log-likelihood function},
+  journal = {Bioinformatics},
+  volume  = {30},
+  number  = {11},
+  pages   = {1547--1554},
+  year    = {2014},
+  doi     = {10.1093/bioinformatics/btu079},
+  url     = {https://doi.org/10.1093/bioinformatics/btu079}
+}
+
+@book{ng2011dirichlet,
+title = "Dirichlet and Related Distributions: Theory, Methods and Application",
+author = "Kai-Wang Ng and Guo-Liang Tian and Tang, \{Man Lai\}",
+year = "2011",
+language = "English",
+publisher = "Wiley",
+address = "United States",
+}
+
+% Related Work sources added on 2026-08-27. Exact claim checks are recorded
+% in VERIFIED_SOURCES.md.
+
+@inproceedings{charpentier2022natural,
+  author    = {Charpentier, Bertrand and Borchert, Oliver and Z{\"u}gner, Daniel and
+               Geisler, Simon and G{\"u}nnemann, Stephan},
+  title     = {Natural Posterior Network: Deep {Bayesian} Uncertainty for
+               Exponential Family Distributions},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2022},
+  url       = {https://openreview.net/forum?id=tV3N0DWMxCg}
+}
+
+@inproceedings{plank2022humanvariation,
+    title = "The ``Problem'' of Human Label Variation: On Ground Truth in Data, Modeling and Evaluation",
+    author = "Plank, Barbara",
+    editor = "Goldberg, Yoav  and
+      Kozareva, Zornitsa  and
+      Zhang, Yue",
+    booktitle = "Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing",
+    month = dec,
+    year = "2022",
+    address = "Abu Dhabi, United Arab Emirates",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2022.emnlp-main.731/",
+    doi = "10.18653/v1/2022.emnlp-main.731",
+    pages = "10671--10682",
+    abstract = "Human variation in labeling is often considered noise. Annotation projects for machine learning (ML) aim at minimizing human label variation, with the assumption to maximize data quality and in turn optimize and maximize machine learning metrics. However, thisconventional practice assumes that there exists a \textit{ground truth}, and neglects that there exists genuine human variation in labeling due to disagreement, subjectivity in annotation or multiple plausible answers.In this position paper, we argue that this big open problem of \textit{human label variation} persists and critically needs more attention to move our field forward. This is because human label variation impacts all stages of the ML pipeline: \textit{data, modeling and evaluation}. However, few works consider all of these dimensions jointly; and existing research is fragmented. We reconcile different previously proposed notions of human label variation, provide a repository of publicly-available datasets with un-aggregated labels, depict approaches proposed so far, identify gaps and suggest ways forward. As datasets are becoming increasingly available, we hope that this synthesized view on the ``problem'' will lead to an open discussion on possible strategies to devise fundamentally new directions."
+}
+
+@article{ahfock2021harmless,
+title = {Harmless label noise and informative soft-labels in supervised classification},
+journal = {Computational Statistics \& Data Analysis},
+volume = {161},
+pages = {107253},
+year = {2021},
+issn = {0167-9473},
+doi = {https://doi.org/10.1016/j.csda.2021.107253},
+url = {https://www.sciencedirect.com/science/article/pii/S0167947321000876},
+author = {Daniel Ahfock and Geoffrey J. McLachlan},
+keywords = {Label noise, Multiple labels, Model-based classification, Supervised classification},
+abstract = {Manual labelling of training examples is common practice in supervised learning. When the labelling task is of non-trivial difficulty, the supplied labels may not be equal to the ground-truth labels, and label noise is introduced into the training dataset. If the manual annotation is carried out by multiple experts, the same training example can be given different class assignments by different experts, which is indicative of label noise. In the framework of model-based classification, a simple, but key observation is that when the manual labels are sampled using the posterior probabilities of class membership, the noisy labels are as valuable as the ground-truth labels in terms of statistical information. A relaxation of this process is a random effects model for imperfect labelling by a group that uses approximate posterior probabilities of class membership. The relative efficiency of logistic regression using the noisy labels compared to logistic regression using the ground-truth labels can then be derived. The main finding is that logistic regression can be robust to label noise when label noise and classification difficulty are positively correlated. In particular, when classification difficulty is the only source of label errors, multiple sets of noisy labels can supply more information for the estimation of a classification rule compared to the single set of ground-truth labels.}
+}
+
+@misc{sadowski2018neuralcountoutputs,
+title={Neural Network Regression with Beta, {Dirichlet}, and {Dirichlet-Multinomial} Outputs},
+author={Peter Sadowski and Pierre Baldi},
+year={2019},
+url={https://openreview.net/forum?id=BJeRg205Fm},
+}
+
+@article{hechinger2026labelembeddings,
+  author  = {Hechinger, Katharina and Schweden, Christoph and Zhu, Xiao Xiang and
+             Kauermann, G{\"o}ran},
+  title   = {Human-in-the-Loop: Towards Label Embeddings for Assessing
+             Classification Difficulty},
+  journal = {Statistical Modelling},
+  volume  = {26},
+  number  = {3},
+  pages   = {295--312},
+  year    = {2026},
+  doi     = {10.1177/1471082X251371796},
+  url     = {https://doi.org/10.1177/1471082X251371796}
+}
+
+@misc{liu2026generalized,
+  author        = {Liu, Yuanye and Gao, Yibo and Chen, Yuanyang and Zhuang, Xiahai},
+  title         = {Generalized Evidential Deep Learning: From a {Bayesian}
+                   Perspective},
+  year          = {2026},
+  eprint        = {2605.25599},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG},
+  doi           = {10.48550/arXiv.2605.25599},
+  url           = {https://arxiv.org/abs/2605.25599},
+  note          = {Preprint}
+}
+
+@misc{carlotti2026density,
+  author        = {Carlotti, Pietro and Gligi{\'c}, Nevena and Farahi, Arya},
+  title         = {Density-Informed Pseudo-Counts for Calibrated Evidential
+                   Deep Learning},
+  year          = {2026},
+  eprint        = {2602.01477},
+  archivePrefix = {arXiv},
+  primaryClass  = {stat.ML},
+  doi           = {10.48550/arXiv.2602.01477},
+  url           = {https://arxiv.org/abs/2602.01477},
+  note          = {Preprint, version 3}
+}
+
+@InProceedings{yoon2024density,
+  author    = {Yoon, Taeseong and Kim, Heeyoung},
+  title     = {Uncertainty Estimation by Density Aware Evidential Deep Learning},
+  booktitle = {Proceedings of the 41st International Conference on Machine Learning},
+  pages     = {57217--57243},
+  year      = {2024},
+  volume    = {235},
+  series    = {Proceedings of Machine Learning Research},
+  publisher = {PMLR},
+  url       = {https://proceedings.mlr.press/v235/yoon24a.html}
+}
+
+@InProceedings{pandey2023accumulate,
+  author    = {Pandey, Deep Shankar and Yu, Qi},
+  title     = {Learn to Accumulate Evidence from All Training Samples:
+               Theory and Practice},
+  booktitle = {Proceedings of the 40th International Conference on Machine Learning},
+  pages     = {26963--26989},
+  year      = {2023},
+  volume    = {202},
+  series    = {Proceedings of Machine Learning Research},
+  publisher = {PMLR},
+  url       = {https://proceedings.mlr.press/v202/pandey23a.html}
+}
+
+@InProceedings{deng2023fisher,
+  author    = {Deng, Danruo and Chen, Guangyong and Yu, Yang and Liu, Furui and
+               Heng, Pheng-Ann},
+  title     = {Uncertainty Estimation by {F}isher Information-Based Evidential
+               Deep Learning},
+  booktitle = {Proceedings of the 40th International Conference on Machine Learning},
+  pages     = {7596--7616},
+  year      = {2023},
+  volume    = {202},
+  series    = {Proceedings of Machine Learning Research},
+  publisher = {PMLR},
+  url       = {https://proceedings.mlr.press/v202/deng23b.html}
+}
+
+@inproceedings{guo2024bayesian,
+author="Guo, Hongji
+and Wang, Hanjing
+and Ji, Qiang",
+editor="Leonardis, Ale{\v{s}}
+and Ricci, Elisa
+and Roth, Stefan
+and Russakovsky, Olga
+and Sattler, Torsten
+and Varol, G{\"u}l",
+title="Bayesian Evidential Deep Learning for Online Action Detection",
+booktitle="Computer Vision -- ECCV 2024",
+year="2025",
+publisher="Springer Nature Switzerland",
+address="Cham",
+pages="283--301",
+abstract="Online action detection aims at identifying the ongoing action in a streaming video without seeing the future. Timely and reliable response is critical for real-world applications. In this paper, we introduce Bayesian Evidential Deep Learning (BEDL), an efficient and generalizable framework for online action detection and uncertainty quantification. Specifically, we combine Bayesian neural networks and evidential deep learning by a teacher-student architecture. The teacher model is built in a Bayesian manner and transfers its mutual information and distribution to the student model through evidential deep learning. In this way, the student model can make accurate online inference while efficiently quantifying the uncertainty. Compared to existing evidential deep learning methods, BEDL estimates uncertainty more accurately by leveraging the Bayesian teacher model. In addition, we designed an attention module for active OAD, which actively selects important features based on the Bayesian mutual information instead of using all the features. We evaluated BEDL on benchmark datasets including THUMPS'14, TVSeries, and HDD. BEDL achieves competitive performance while keeping efficient inference. Extensive ablation studies demonstrate the effectiveness of each component. To verify the uncertainty quantification, we perform experiments of online anomaly detection with different types of uncertainties.",
+isbn="978-3-031-72640-8"
+}
+
+
+
+
+@article{raykar2010crowds,
+  author  = {Raykar, Vikas C. and Yu, Shipeng and Zhao, Linda H. and
+             Valadez, Gerardo Hermosillo and Florin, Charles and Bogoni, Luca and
+             Moy, Linda},
+  title   = {Learning From Crowds},
+  journal = {Journal of Machine Learning Research},
+  volume  = {11},
+  number  = {43},
+  pages   = {1297--1322},
+  year    = {2010},
+  url     = {https://jmlr.org/papers/v11/raykar10a.html}
+}
+
+@inproceedings{rodrigues2018crowds,
+  author    = {Rodrigues, Filipe and Pereira, Francisco C.},
+  title     = {Deep Learning from Crowds},
+  booktitle = {Proceedings of the Thirty-Second AAAI Conference on Artificial Intelligence},
+  pages     = {1611--1619},
+  year      = {2018},
+  doi       = {10.1609/aaai.v32i1.11506},
+  url       = {https://ojs.aaai.org/index.php/AAAI/article/view/11506}
+}
+
+@article{gao2026survey,
+  author  = {Gao, Junyu and Chen, Mengyuan and Xiang, Liangyu and Xu, Changsheng},
+  title   = {A Comprehensive Survey on Evidential Deep Learning and Its Applications},
+  journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  volume  = {48},
+  number  = {3},
+  pages   = {2118--2138},
+  year    = {2026},
+  doi     = {10.1109/TPAMI.2025.3625258},
+  url     = {https://arxiv.org/abs/2409.04720}
+}
+
+@book{agresti2007introduction,
+  author    = {Agresti, Alan},
+  title     = {An Introduction to Categorical Data Analysis},
+  edition   = {2},
+  publisher = {John Wiley \& Sons},
+  year      = {2007}
+}
+
+@misc{wu2019quantifying,
+      title={Quantifying Intrinsic Uncertainty in Classification via Deep {Dirichlet} Mixture Networks}, 
+      author={Qingyang Wu and He Li and Lexin Li and Zhou Yu},
+      year={2019},
+      eprint={1906.04450},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/1906.04450}, 
+}
+
+@article{chen2025revisiting,
+  author  = {Chen, Mengyuan and Gao, Junyu and Xu, Changsheng},
+  title   = {Revisiting Essential and Nonessential Settings of Evidential
+             Deep Learning},
+  journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  volume  = {47},
+  number  = {10},
+  pages   = {8658--8673},
+  year    = {2025},
+  doi     = {10.1109/TPAMI.2025.3583410},
+  url     = {https://arxiv.org/abs/2410.00393}
+}
+
+@inproceedings{jimenez2026incomplete,
+  author        = {Jim{\'e}nez, Sebasti{\'a}n and J{\"u}rgens, Mira and
+                   Waegeman, Willem},
+  title         = {Position: Epistemic Uncertainty Estimation Methods Are
+                   Fundamentally Incomplete},
+  booktitle     = {Proceedings of the 43rd International Conference on
+                   Machine Learning},
+  year          = {2026},
+  eprint        = {2505.23506},
+  archivePrefix = {arXiv},
+  url           = {https://arxiv.org/abs/2505.23506}
+}
+
+@inproceedings{zhao2020uncertainty,
+author = {Zhao, Xujiang and Chen, Feng and Hu, Shu and Cho, Jin-Hee},
+title = {Uncertainty aware semi-supervised learning on graph data},
+year = {2020},
+isbn = {9781713829546},
+publisher = {Curran Associates Inc.},
+address = {Red Hook, NY, USA},
+abstract = {Thanks to graph neural networks (GNNs), semi-supervised node classification has shown the state-of-the-art performance in graph data. However, GNNs have not considered different types of uncertainties associated with class probabilities to minimize risk of increasing misclassification under uncertainty in real life. In this work, we propose a multi-source uncertainty framework using a GNN that reflects various types of predictive uncertainties in both deep learning and belief/evidence theory domains for node classification predictions. By collecting evidence from the given labels of training nodes, the Graph-based Kernel Dirichlet distribution Estimation (GKDE) method is designed for accurately predicting node-level Dirichlet distributions and detecting out-of-distribution (OOD) nodes. We validated the outperformance of our proposed model compared to the state-of-the-art counterparts in terms of misclassification detection and OOD detection based on six real network datasets. We found that dissonance-based detection yielded the best results on misclassification detection while vacuity-based detection was the best for OOD detection. To clarify the reasons behind the results, we provided the theoretical proof that explains the relationships between different types of uncertainties considered in this work.},
+booktitle = {Proceedings of the 34th International Conference on Neural Information Processing Systems},
+articleno = {1076},
+numpages = {10},
+location = {Vancouver, BC, Canada},
+series = {NIPS '20}
+}
