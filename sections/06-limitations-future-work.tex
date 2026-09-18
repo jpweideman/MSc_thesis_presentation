@@ -1,20 +1,27 @@
-% Section 6. Limitations and Future Work
-% See STORY.md.
-
+% Limitations and Future Work. Slide 24.
 \section{Limitations and Future Work}
 
-% Slide 6.1. Source: Experiments 5.4 (sec:exp-limitations). Conclusion 7.
-\begin{frame}{Limitations}
-	\textbf{Message.} The evidence has three limits.
-
-	\medskip
-	\textbf{TODO: content.} One SGLD chain per run. One dataset with repeated labels, no simulated data. The practical value of the decompositions is open.
-\end{frame}
-
-% Slide 6.2. Source: Conclusion 7.
-\begin{frame}{Future Work}
-	\textbf{Message.} Four directions follow from the limits.
-
-	\medskip
-	\textbf{TODO: content.} Several chains and other samplers. Simulated data with known label variation. Further datasets. Decision tasks.
+% Source. Conclusion, Section 7. Sampling details in Experiments 5.1.3 and 5.1.4.
+% Delivery. Pair each limit with the experiment that could address it.
+\begin{frame}{Limits and next steps}
+\label{frm:limitations}
+\begin{itemize}
+\setlength{\itemsep}{0pt}
+\item It does not demonstrate improved decisions, and it does not study descision making at all!.
+\setlength{\itemsep}{8mm}
+\item \textbf{One sampling chain per run.}
+\begin{itemize}
+\item Test several chains, larger budgets, and other samplers.
+\end{itemize}
+\item \textbf{One dataset with repeated labels.}
+\begin{itemize}
+\item Evaluate further datasets with repeated labels.
+\end{itemize}
+\item \textbf{The uncertainty terms need validation.}
+\begin{itemize}
+\item Test known label variation and practical decision tasks.
+\end{itemize}
+\end{itemize}
+% Preparation. Representing three terms does not establish that their values support better decisions.
+% Source detail. Thesis \S7.
 \end{frame}

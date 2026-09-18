@@ -1,21 +1,21 @@
-% Section 5. Discussion
-% Goal. Return to the thread. What each model gives, and what follows. See STORY.md.
-
+% Discussion. Slide 23.
 \section{Discussion}
 
-% Slide 5.1. Source: Discussion 6.1 to 6.3 (sec:discussion-representation,
-% sec:discussion-cat-ebnn, sec:discussion-counts).
-\begin{frame}{What Each Model Gives}
-	\textbf{Message.} The eBNNs are the only models here that represent all three terms. They also differ in how the split is set.
-
-	\medskip
-	\textbf{TODO: content.} The table from slide 1.3 with one new column. How the split is set. Point mass, training objective, stated prior, prior and count data.
-\end{frame}
-
-% Slide 5.2. Source: Discussion 6.4 (sec:discussion-implications).
-\begin{frame}{Implications for Uncertainty-Aware Classification}
-	\textbf{Message.} Making the assumption explicit does not remove the single label limit. Repeated labels do. This motivates collecting and retaining repeated labels.
-
-	\medskip
-	\textbf{TODO: content.} Three lines. The Cat-eBNN states the assumption. Single labels cannot inform it. Count data can, and also improve count prediction.
+% Source. Discussion 6.2 to 6.4, sec:discussion-cat-ebnn,
+% sec:discussion-counts, sec:discussion-implications.
+% Delivery. Separate the representation, information in the likelihood, and predictive evidence.
+\begin{frame}{What the two models contribute}
+\label{frm:discussion}
+\slidemessage{The observation model determines what labels can inform.}
+\begin{itemize}
+\setlength{\itemsep}{5mm}
+\item Both models represent aleatoric, distributional, and epistemic uncertainty.
+\item At fixed mean vectors, the Cat-eBNN relies on the prior assumption for total concentration.
+\item The DM-eBNN count likelihood can also inform total concentration.
+\end{itemize}
+\medskip
+\slidepoint{Better count prediction does not validate the uncertainty decomposition.}
+% Preparation. Information about the total concentration parameter is compared at fixed mean vectors.\par
+% The experiments do not establish a correct uncertainty allocation.
+% Source detail. Thesis \S6.2 to \S6.4.
 \end{frame}

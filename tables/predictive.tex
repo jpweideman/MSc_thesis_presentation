@@ -1,0 +1,20 @@
+\begin{tabular}{lcc}
+\toprule
+\multicolumn{3}{c}{Single-label predictive performance, test split} \\
+model & accuracy & NLL \\
+\midrule
+\multicolumn{3}{l}{\textbf{Fashion-MNIST}} \\
+\midrule
+Softmax & 0.928\,(0.923--0.933) & 0.202\,(0.190--0.214) \\
+EDL & 0.924\,(0.919--0.926) & 0.496\,(0.477--0.520) \\
+Cat-BNN & 0.921\,(0.917--0.924) & 0.221\,(0.211--0.230) \\
+Cat-eBNN & 0.913\,(0.908--0.916) & 0.431\,(0.410--0.458) \\
+\midrule
+\multicolumn{3}{l}{\textbf{CIFAR-10}} \\
+\midrule
+Softmax & 0.879\,(0.875--0.882) & 0.554\,(0.512--0.595) \\
+EDL & 0.885\,(0.884--0.887) & 0.530\,(0.517--0.544) \\
+Cat-BNN & 0.856\,(0.850--0.859) & 0.426\,(0.418--0.441) \\
+Cat-eBNN & 0.867\,(0.866--0.868) & 0.470\,(0.461--0.476) \\
+\bottomrule
+\end{tabular}

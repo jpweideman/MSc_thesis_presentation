@@ -1,56 +1,289 @@
-% Backup frames. Shown only on request. See STORY.md, Backup.
-% The starred section adds no outline frame and no entry in the outline.
-
+% Backup frames support questions after the conclusion.
 \section*{Backup}
 
-% B1. Source: Related Work 3.4 (sec:related-hybrids), 3.5 (sec:related-count),
-% 3.1 (sec:related-approximate-inference).
-\begin{frame}{Backup. Related Work}
-	\textbf{TODO: content.} Bayesian Dirichlet combination models. Models for repeated labels. Posterior samplers.
+% Source. Background 2.7, eq:general-hierarchy and eq:three-way-decomposition.
+% Speaking notes
+% Predictive entropy measures total uncertainty about the class label.
+% Read the aleatoric term from inside out. Fix the class probabilities, calculate label entropy, then average.
+% The distributional term is the average reduction in label uncertainty from knowing class probabilities at fixed weights.
+% The epistemic term is the reduction in label uncertainty from knowing the network weights.
+% All terms refer to the same fixed input and the fitted model.
+\begin{frame}{Backup. Decomposition of predictive uncertainty}
+\label{frm:backup-three-way-decomposition}
+\begin{itemize}
+\item $x$ is the fixed input, $y$ the class label, and $D$ the training data.
+\item $w$ denotes network weights. $\pi$ is the random class-probability vector.
+\item $\mathcal H$ denotes entropy. $\mathcal I$ denotes mutual information.
+\end{itemize}
+% Copied from thesis eq:three-way-decomposition. Only line breaks are changed.
+\begin{align*}
+\underbrace{\mathcal H\big[p(y\mid x,D)\big]}_{\text{predictive}}
+&=\underbrace{\mathbb E_{p(w\mid D)}
+\Big[\mathbb E_{p(\pi\mid x,w)}
+\big[\mathcal H[\mathrm{Cat}(y\mid\pi)]\big]\Big]}_{\text{aleatoric}}
+\\[3mm]
+&\quad+\underbrace{\mathbb E_{p(w\mid D)}
+\big[\mathcal I(y;\pi\mid w)\big]}_{\text{distributional}}
++\underbrace{\mathcal I(y;w)}_{\text{epistemic}}.
+\end{align*}
+\begin{itemize}
+\item $\mathrm{Cat}(y\mid\pi)$ is the label distribution with class probabilities $\pi$.
+\item Expectations average over $p(w\mid D)$ and $p(\pi\mid x,w)$.
+\item Mutual information terms also condition on the fixed $x$ and $D$, omitted for brevity.
+\end{itemize}
 \end{frame}
 
-% B2. Source: Experiments 5.2.1 (sec:exp-starts, tab:e2-start-procedure, fig:start-trajectory).
-\begin{frame}{Backup. Initialisation Experiments}
-	\textbf{TODO: content.} Cold, warm, and shifted initialisation. Trajectory figure or table extract.
+% Source. Methods 4.3.1 and 4.3.4, eq:gamma-prior-weights,
+% eq:assumed-total-concentration. Background 2.10, eq:gamma-mean-variance.
+\begin{frame}{Backup. Gamma prior over weights}
+\label{frm:backup-prior}
+\slidemessage{The Gamma factors act on network outputs at the training inputs.}
+% Copied from eq:gamma-prior-weights.
+\[
+\tilde p(w)\propto p(w)\prod_{i=1}^{N}
+\mathrm{Gamma}\bigl(\alpha_0(x_i;w)\mid\kappa,\beta\bigr),
+\quad \kappa>1,\ \beta>0.
+\]
+% Copied from eq:assumed-total-concentration.
+\[
+\bar\alpha_0=\frac{\kappa-1}{\beta}>C.
+\]
+\begin{itemize}
+\item The Gamma prior standard deviation is $\sqrt{\kappa}/\beta$.
+\item The Gamma factors use the training inputs but no labels.
+\item $p(w)$ is the Gaussian weight prior. $C$ counts classes. $N$ counts training inputs.
+\end{itemize}
+% Preparation. $p(w)$ is the Gaussian weight prior. $C$ is the number of classes. $N$ is the number of training inputs.
+% Source detail. Thesis \S4.3.1, \S4.3.4, and \S2.10.
 \end{frame}
 
-% B3. Source: Background 2.9.2 (eq:aleatoric-final, eq:distributional-remainder).
-\begin{frame}{Backup. Closed Forms of the Decomposition}
-	\textbf{TODO: content.} Aleatoric term in closed form. Distributional term as the remainder.
+% Source. Methods 4.3.3, eq:ebnn-likelihood-invariance, eq:posterior-odds-unchanged.
+\begin{frame}{Backup. Equal mean vectors and posterior odds}
+\label{frm:backup-invariance}
+\slidemessage{Equal mean vectors leave the posterior odds equal to the prior odds.}
+\slidepoint{Consider weights $w$ and $w'$ with equal mean vectors on every training input.}
+% Copied from eq:ebnn-likelihood-invariance.
+\[
+p(D\mid w)=\prod_{i=1}^{N}m_{y_i}(x_i;w)
+=\prod_{i=1}^{N}m_{y_i}(x_i;w')=p(D\mid w').
+\]
+% Copied from eq:posterior-odds-unchanged.
+\[
+\frac{p(w\mid D)}{p(w'\mid D)}
+=\frac{\tilde p(w)}{\tilde p(w')}
+\frac{p(D\mid w)}{p(D\mid w')}
+=\frac{\tilde p(w)}{\tilde p(w')}.
+\]
+% Preparation. This result holds at fixed mean vectors. Training can change the mean vectors and total concentration together.
+% Source detail. Thesis \S4.3.3.
 \end{frame}
 
-% B4. Source: Background 2.3 (eq:scale-invariance). Methods 4.3.3
-% (eq:ebnn-likelihood-invariance, eq:posterior-odds-unchanged).
-\begin{frame}{Backup. Likelihood Invariance in Full}
-	\textbf{TODO: content.} Scale invariance. Product of mean components. Posterior odds unchanged.
+% Source. Background 2.9.2, eq:aleatoric-final, eq:distributional-remainder,
+% eq:digamma-function. Methods 4.3.5, sec:ebnn-uncertainty-decomposition.
+\begin{frame}{Backup. Closed forms at fixed weights}
+\label{frm:backup-closed-forms}
+\slidemessage{The aleatoric and distributional terms have closed forms.}
+\slidepoint{$\mathcal H$ denotes entropy. $\mathcal I$ denotes mutual information. $\psi$ is the digamma function.}
+% Copied from eq:aleatoric-final. Line breaks added for the slide.
+\begin{align*}
+\mathbb E_{\mathrm{Dir}(\pi\mid\alpha(x;w))}
+\bigl[\mathcal H[\mathrm{Cat}(y\mid\pi)]\bigr]
+&=\sum_{c=1}^{C}m_c(x;w)
+\bigl[\psi(\alpha_0(x;w)+1)-\psi(\alpha_c(x;w)+1)\bigr].
+\end{align*}
+% First equality of eq:distributional-remainder.
+\begin{align*}
+\mathcal I(y;\pi\mid w)
+&=\mathcal H[\mathrm{Cat}(y\mid m(x;w))]
+-\mathbb E_{\mathrm{Dir}(\pi\mid\alpha(x;w))}
+\bigl[\mathcal H[\mathrm{Cat}(y\mid\pi)]\bigr].
+\end{align*}
+\par\medskip
+\slidepoint{The Cat-eBNN and DM-eBNN average these terms over the weight posterior.}
+% Preparation. The Cat-eBNN and DM-eBNN average these terms over the weight posterior.
+% Source detail. Thesis \S2.9.2 and \S4.3.5.
 \end{frame}
 
-% B5. Source: Background 2.10 (eq:gamma-density, eq:gamma-mode).
-\begin{frame}{Backup. The Gamma Prior}
-	\textbf{TODO: content.} Density, prior mode, prior standard deviation.
+% Source. Methods 4.4.4, sec:count-comparison, eq:count-variance-ratio.
+\begin{frame}{Backup. Count variance}
+\label{frm:backup-count-variance}
+\slidemessage{Finite total concentration permits additional count variance when $R>1$.}
+\slidepoint{Both distributions have class-probability vector $q$ and count total $R$.}
+% Copied from the displayed equality in sec:count-comparison.
+\[
+\mathbb E_{\mathrm{Mult}(n\mid R,q)}[n_c]
+=\mathbb E_{\mathrm{DM}(n\mid R,\alpha_0q)}[n_c]=Rq_c.
+\]
+% Copied from eq:count-variance-ratio.
+\[
+\frac{\operatorname{Var}_{\mathrm{DM}(n\mid R,\alpha_0q)}[n_c]}
+{\operatorname{Var}_{\mathrm{Mult}(n\mid R,q)}[n_c]}
+=\frac{\alpha_0+R}{\alpha_0+1}.
+\]
+\par\medskip
+\slidepoint{The variance ratio assumes $0<q_c<1$. It is one when $R=1$.}
+% Preparation. The ratio is one when $R=1$. It approaches one as the total concentration parameter increases without bound.
+% Source detail. Thesis \S4.4.4. The ratio assumes $0<q_c<1$.
 \end{frame}
 
-% B6. Source: Methods 4.2.3 (sec:edl-learning-objective), 4.2.4 (sec:edl-regularizer).
-\begin{frame}{Backup. EDL Losses and the KL Regulariser}
-	\textbf{TODO: content.} Marginal likelihood loss is invariant to $\alpha_0(x;w)$. The KL term sets it.
+% Source. Experiments 5.1.3 and 5.1.4, sec:exp-training-setup,
+% sec:exp-count-training-setup, eq:sample-bma-predictive, eq:sample-count-bma-predictive.
+\begin{frame}{Backup. Sampling budgets}
+\label{frm:backup-sampling}
+\slidemessage{Each run uses one chain of stochastic gradient Langevin dynamics (SGLD).}
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.45}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+ & Single labels & Repeated labels\\
+\midrule
+Final BMA samples & 10 & 40\\
+Cold initialisation epochs & 150 / 600 & 3000\\
+Warm pretraining epochs & 50 / 300 & 400\\
+Warm SGLD epochs & 100 / 300 & 1000\\
+\bottomrule
+\end{tabular}
+\end{center}
+\begin{itemize}
+\item The paired single label values refer to Fashion-MNIST / CIFAR-10.
+\item Cold and warm budgets differ in the count experiments.
+\end{itemize}
+% Preparation. Warm initialisation uses the best validation checkpoint. Earlier SGLD epochs serve as burn in.\par
+% The count experiments use different cold and warm budgets. They do not isolate the effect of initialisation.
+% Source detail. Thesis \S5.1.3 and \S5.1.4.
 \end{frame}
 
-% B7. Source: Experiments 5.1.3, 5.1.4.
-\begin{frame}{Backup. SGLD and the Sampling Budget}
-	\textbf{TODO: content.} Sampler, one chain per run, budget, checkpoint restore.
+% Source. Experiments 5.2.4, tab:e2-predictive.
+\begin{frame}{Backup. Full predictive comparison}
+\label{frm:backup-predictive}
+\begin{center}
+\small
+\renewcommand{\arraystretch}{0.96}
+\input{tables/predictive}
+\end{center}
+\par\medskip
+\begin{itemize}
+\item Means and ranges over three seeds.
+\begin{itemize}
+\item Sampled models use final BMA over ten samples.
+\end{itemize}
+\end{itemize}
+% Preparation. Mean and range over three seeds. Sampled models use the final BMA over ten samples.\par
+% Deterministic models use their best validation checkpoint. Cat-BNN uses warm initialisation.\par
+% Cat-eBNN uses shifted initialisation, Gamma prior mode 100, and prior standard deviation 20\%.
+% Source detail. Thesis \S5.2.4.
 \end{frame}
 
-% B8. Source: Experiments tables tab:e2-*.
-\begin{frame}{Backup. Full Tables}
-	\textbf{TODO: content.} One frame per full table as needed.
+% Source. Experiments 5.2.3, tab:e2-sd-sweep, eq:realised-total-concentration.
+\begin{frame}{Backup. Prior standard deviation}
+\label{frm:backup-prior-sd}
+\slidemessage{A tighter Gamma prior keeps realised total concentration closer to the prior mode.}
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.5}
+\input{tables/sd_extract}
+\end{center}
+\par\medskip
+\slidepoint{CIFAR-10. Prior mode 100. Means and ranges over three seeds.}
+% Preparation. CIFAR-10. Gamma prior mode 100. Shifted initialisation. Final BMA over ten samples.\par
+% Mean and range over three seeds. The trained mean vectors also change.\par
+% Shares are percentages of average predictive uncertainty. Standard deviations are relative to the prior mode.
+% Source detail. Thesis \S5.2.3.
 \end{frame}
 
-% B9. Source: Appendix A.2, A.3.
-\begin{frame}{Backup. Results by Seed}
-	\textbf{TODO: content.} Per seed tables for single labels and repeated labels.
+% Source. Experiments 5.3.1, tab:e2-count-prediction.
+\begin{frame}{Backup. Count prediction}
+\label{frm:backup-count-prediction}
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.15}
+\input{tables/count_predictive_extract}
+\end{center}
+\par\medskip
+\slidepoint{CIFAR-10H. Means and ranges over three seeds. Final BMA over 40 samples.}
+% Preparation. CIFAR-10H. Mean and range over three seeds. Final BMA over 40 samples.\par
+% DM-eBNN Gamma prior standard deviation 20\%. Cold and warm budgets differ.
+% Source detail. Thesis \S5.3.1.
 \end{frame}
 
-% B10. Source: Experiments 5.3.2 (fig:count-cold-collapse).
-\begin{frame}{Backup. Cold Initialisation without the Gamma Prior}
-	\textbf{TODO: content.} The four panels of the cold collapse figure.
+% Source. Experiments 5.3.1, tab:e2-count-prediction.
+\begin{frame}{Backup. Mean matched controls}
+\label{frm:backup-count-controls}
+\slidemessage{The controls retain the DM-eBNN mean vectors and weight samples.}
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.5}
+\input{tables/count_control_extract}
+\end{center}
+\par\medskip
+\begin{itemize}
+\item The control uses the multinomial likelihood.
+\item CIFAR-10H. Means and ranges over three seeds.
+\end{itemize}
+% Preparation. Only the observation model changes to the multinomial distribution.\par
+% CIFAR-10H. Mean and range over three seeds. Final BMA over 40 samples.\par
+% Gamma prior standard deviation 20\%. Cold and warm budgets differ.
+% Source detail. Thesis \S5.3.1.
+\end{frame}
+
+% Source. Experiments 5.2.1, fig:start-trajectory, tab:e2-start-procedure.
+% Both assets are copied unchanged from the thesis figures folder.
+\begin{frame}{Backup. Initialisation diagnostics}
+\label{frm:backup-starts}
+\slidemessage{Initialisation affects predictive performance within the tested budget.}
+\begin{center}
+\includegraphics[width=0.44\textwidth]{figures/start_trajectory_accuracy.pdf}\hfill
+\includegraphics[width=0.44\textwidth]{figures/start_trajectory_alpha0.pdf}
+\end{center}
+\par\medskip
+\begin{itemize}
+\item Fashion-MNIST. Prior mode 300. Current weight checkpoints.
+\begin{itemize}
+\item Lines show means over three seeds. Shading shows the seed range.
+\end{itemize}
+\end{itemize}
+% Preparation. Cat-eBNN on Fashion-MNIST. Means over three seeds. Shading shows the seed range.\par
+% Prior mode 300 and prior standard deviation 20\%. Curves use individual weight checkpoints.
+% Source detail. Thesis \S5.2.1. These diagnostic curves do not select the reported final BMA.
+\end{frame}
+
+% Source. Experiments 5.3.2, fig:count-cold-collapse, tab:e2-count-prior-sensitivity.
+% Panels copied unchanged from the thesis figures folder.
+\begin{frame}{Backup. Cold initialisation}
+\label{frm:backup-collapse}
+\begin{center}
+\includegraphics[width=0.44\textwidth]{figures/count_collapse_concentration.pdf}\hfill
+\includegraphics[width=0.44\textwidth]{figures/count_collapse_nll.pdf}
+\end{center}
+\par\medskip
+\begin{itemize}
+\item One DM-eBNN run on CIFAR-10H. Cold initialisation without the Gamma prior.
+\begin{itemize}
+\item Measurements use the current training minibatch before each update.
+\end{itemize}
+\end{itemize}
+% Preparation. One DM-eBNN diagnostic run on CIFAR-10H. Cold initialisation without the Gamma prior.\par
+% Measurements precede each update and use the current training minibatch.
+% Source detail. Thesis \S5.3.2. The full experiment reports collapse in all three tested cold runs without the Gamma prior.
+\end{frame}
+
+% Source. Experiments 5.3.2, fig:count-cold-collapse, tab:e2-count-prior-sensitivity.
+% Panels copied unchanged from the thesis figures folder.
+\begin{frame}{Backup. Accuracy and gradient norm}
+\label{frm:backup-collapse-accuracy}
+\begin{center}
+\includegraphics[width=0.44\textwidth]{figures/count_collapse_accuracy.pdf}\hfill
+\includegraphics[width=0.44\textwidth]{figures/count_collapse_gradient.pdf}
+\end{center}
+\par\medskip
+\begin{itemize}
+\item The same DM-eBNN run without the Gamma prior.
+\begin{itemize}
+\item The gradient norm falls while majority label accuracy stays near chance.
+\end{itemize}
+\end{itemize}
+% Preparation. The same DM-eBNN diagnostic run on CIFAR-10H. Cold initialisation without the Gamma prior.\par
+% The gradient norm falls while majority label accuracy stays near chance.
+% Source detail. Thesis \S5.3.2. Current training minibatches, before each update. No BMA.
 \end{frame}

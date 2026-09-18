@@ -1,0 +1,14 @@
+\begin{tabular}{lcccccc}
+\toprule
+\multicolumn{7}{c}{Gamma prior sensitivity, test split} \\
+initialisation & \shortstack{pretraining Gamma\\prior mode,\\standard deviation} & \shortstack{initial realised\\total concentration} & \shortstack{SGLD Gamma\\prior mode,\\standard deviation} & \shortstack{realised total\\concentration} & \shortstack{majority label\\accuracy} & count NLL \\
+\midrule
+cold & none & -- & none & 10.0\,(10.0--10.0) & 0.099\,(0.098--0.100) & 23.433\,(23.433--23.433) \\
+warm & 50, 20\% & 52.1\,(51.6--52.6) & 50, 20\% & 51.0\,(50.8--51.1) & 0.753\,(0.720--0.777) & 14.392\,(13.724--15.529) \\
+warm & 50, 20\% & 52.1\,(51.6--52.6) & 50, 100\% & 69.8\,(69.2--70.3) & 0.754\,(0.723--0.776) & 13.626\,(12.863--14.940) \\
+warm & 50, 20\% & 52.1\,(51.6--52.6) & none & 79.3\,(78.2--80.1) & 0.752\,(0.724--0.776) & 13.657\,(12.863--15.032) \\
+warm & 200, 20\% & 186.7\,(184.4--189.9) & 200, 20\% & 182.7\,(181.5--184.8) & 0.773\,(0.759--0.781) & 16.152\,(15.664--16.860) \\
+warm & 200, 20\% & 186.7\,(184.4--189.9) & 200, 100\% & 162.5\,(160.6--165.5) & 0.771\,(0.758--0.781) & 14.439\,(13.983--15.153) \\
+warm & 200, 20\% & 186.7\,(184.4--189.9) & none & 155.9\,(154.1--159.0) & 0.772\,(0.760--0.784) & 13.941\,(13.557--14.574) \\
+\bottomrule
+\end{tabular}

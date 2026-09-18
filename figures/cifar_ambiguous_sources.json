@@ -1,0 +1,84 @@
+{
+  "generator": "scripts/build_cifar_ambiguous_example.py",
+  "run": "e2_c10h_ebnn_dm_mode50_warm_s0",
+  "model": "DM-eBNN",
+  "split": "cifar10h_test",
+  "evaluation": "Final BMA over all saved samples",
+  "weight_samples": 40,
+  "split_row": 258,
+  "split_index": 258,
+  "cifar10_test_image_index": 2078,
+  "image_mapping": "Unique exact match of the saved count vector to the original CIFAR-10H counts",
+  "selection": "Visually ambiguous example among held-out images with high observed label disagreement and maximum predicted probability below 0.7. Not a representative performance estimate.",
+  "classes": [
+    "airplane",
+    "automobile",
+    "bird",
+    "cat",
+    "deer",
+    "dog",
+    "frog",
+    "horse",
+    "ship",
+    "truck"
+  ],
+  "predicted_class": "frog",
+  "original_label": "bird",
+  "probabilities_from_float16_means": [
+    0.030562973022460936,
+    0.030562973022460936,
+    0.30846519470214845,
+    0.030651092529296875,
+    0.13927078247070312,
+    0.0307220458984375,
+    0.3354511260986328,
+    0.030562973022460936,
+    0.030562973022460936,
+    0.03317832946777344
+  ],
+  "probabilities_normalised": [
+    0.030563264496464695,
+    0.030563264496464695,
+    0.3084681364835404,
+    0.030651384843681753,
+    0.13927211067305253,
+    0.03072233888949289,
+    0.3354543252403759,
+    0.030563264496464695,
+    0.030563264496464695,
+    0.033178645883997764
+  ],
+  "uncertainty_terms_nats": {
+    "aleatoric": 1.2606630325317383,
+    "distributional": 0.11777762323617935,
+    "epistemic": 0.378564715385437
+  },
+  "predictive_uncertainty_nats": 1.7570053711533546,
+  "entropy_check_nats": 1.7569938468398283,
+  "uncertainty_shares_percent": {
+    "aleatoric": 71.750664695134,
+    "distributional": 6.703316060944443,
+    "epistemic": 21.54601924392155
+  },
+  "observed_counts_for_provenance_only": [
+    0,
+    1,
+    21,
+    1,
+    7,
+    1,
+    18,
+    0,
+    0,
+    0
+  ],
+  "scope": "One fitted model, one seed, one image. The decomposition is a model output, not measured real-world sources or a validated decision rule. It depends on the model, prior and inference.",
+  "sources": {
+    "/Users/jpweideman/BNN-EDL/outputs/e2_c10h_ebnn_dm_mode50_warm_s0/arrays/cifar10h_test.npz": "9b9dc39ad19e279d1f92b9d85ddc1b7c2649ee18cd0c800b7603847644411014",
+    "/Users/jpweideman/BNN-EDL/data/cifar10h/cifar10h-counts.npy": "9b36b4550349af56c79083356312eb4af856cc5fd3caf1f669d40b9d0bbb69ff",
+    "/Users/jpweideman/BNN-EDL/data/cifar-10-batches-py/test_batch": "f53d8d457504f7cff4ea9e021afcf0e0ad8e24a91f3fc42091b8adef61157831",
+    "/Users/jpweideman/BNN-EDL/analysis/count_likelihoods.py": "c3d5a5e462ab8355e78caebc2ee6fee98141de3f39fd934f721346ef063f9b0c",
+    "/Users/jpweideman/BNN-EDL/analysis/common/predictive.py": "16e1333ee0e2ae704e3b71fa0699a3b3e86365f12ba57a53979372abddaecce7",
+    "/Users/jpweideman/BNN-EDL/src/data/loader.py": "776f82e5fe1562cbe378cd4a9c398f5008698079c85c80f6b606769cb19a0438"
+  }
+}

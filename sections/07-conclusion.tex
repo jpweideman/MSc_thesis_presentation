@@ -1,12 +1,19 @@
-% Section 7. Conclusion
-% See STORY.md.
-
+% Conclusion. Slide 25. Remains visible during questions.
 \section{Conclusion}
 
-% Slide 7.1. Source: Conclusion 7 (chapters/conclusion.tex). Stays on screen during questions.
-\begin{frame}{Take Home}
-	\textbf{Message.} Two evidential BNNs represent all three uncertainty terms. Single labels cannot inform the split, so the Cat-eBNN states it as a prior. Repeated labels can inform it, and the DM-eBNN also predicts count data better than the M-BNN.
-
-	\medskip
-	\textbf{TODO: content.} Three lines, the thread of STORY.md Section 0.
+% Source. Conclusion, Section 7. All claims refer back to the presented models and results.
+% Delivery. Give the three statements, then close with the motivation to retain repeated labels.
+\begin{frame}{Conclusion}
+\label{frm:conclusion}
+\slidemessage{Repeated labels can inform the total concentration parameter.}
+\begin{itemize}
+\setlength{\itemsep}{5mm}
+\item Both proposed models represent aleatoric, distributional, and epistemic uncertainty.
+\item The Cat-eBNN states the assumption through a Gamma prior.
+\item The DM-eBNN improves count prediction in the tested CIFAR-10H settings.
+\end{itemize}
+\medskip
+\slidepoint{The practical value of the uncertainty decomposition remains open.}
+% Preparation. The practical value of the uncertainty decomposition remains open.
+% Source detail. Thesis \S7.
 \end{frame}

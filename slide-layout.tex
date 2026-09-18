@@ -1,0 +1,14 @@
+% Content helpers. The LMU template preamble is unchanged.
+% \textbf{TODO: Add the defence date when the author supplies it.}
+\renewcommand{\mydate}{}
+% Use native Beamer lists so subitems retain the template's smaller default style.
+\newcommand{\slidepoint}[1]{\begin{itemize}\item #1\end{itemize}}
+\newcommand{\slidemessage}[1]{\slidepoint{{\large #1}}\medskip}
+\definecolor{introblue}{RGB}{50,106,159}
+% Shared class legend for the introduction's mathematical illustrations.
+\newcommand{\introlegend}[1][Two class illustration]{%
+\begin{center}
+\textcolor{lmugreen}{\rule{4mm}{3mm}}\ Class A\qquad
+\textcolor{introblue}{\rule{4mm}{3mm}}\ Class B\qquad
+#1
+\end{center}}

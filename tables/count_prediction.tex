@@ -1,0 +1,18 @@
+\begin{tabular}{lccccc}
+\toprule
+\multicolumn{6}{c}{Count prediction, test split} \\
+model & \shortstack{Gamma prior\\mode} & \shortstack{realised total\\concentration} & \shortstack{majority label\\accuracy} & count NLL & \shortstack{mean matched\\control NLL} \\
+\midrule
+\multicolumn{6}{l}{\textbf{Cold initialisation}} \\
+\midrule
+M-BNN & -- & -- & 0.724\,(0.712--0.744) & 19.161\,(18.012--19.754) & -- \\
+DM-eBNN & 50 & 50.0\,(49.6--50.6) & 0.712\,(0.697--0.731) & 12.718\,(12.486--13.007) & 23.719\,(23.195--24.467) \\
+DM-eBNN & 200 & 178.6\,(176.4--180.3) & 0.702\,(0.693--0.715) & 13.199\,(11.872--14.051) & 20.291\,(17.602--22.035) \\
+\midrule
+\multicolumn{6}{l}{\textbf{Warm initialisation}} \\
+\midrule
+M-BNN & -- & -- & 0.746\,(0.722--0.776) & 27.540\,(23.630--31.685) & -- \\
+DM-eBNN & 50 & 51.0\,(50.8--51.1) & 0.753\,(0.720--0.777) & 14.392\,(13.724--15.529) & 28.802\,(26.771--32.415) \\
+DM-eBNN & 200 & 182.7\,(181.5--184.8) & 0.773\,(0.759--0.781) & 16.152\,(15.664--16.860) & 26.207\,(25.281--27.394) \\
+\bottomrule
+\end{tabular}

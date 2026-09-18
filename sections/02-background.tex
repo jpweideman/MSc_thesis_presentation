@@ -1,34 +1,158 @@
-% Section 2. Background
-% Goal. Only the tools the methods need. Three slides, three tools. See STORY.md.
-
+% Background. Four slides prepare the model contributions and their interpretation.
 \section{Background}
 
-% Slide 2.1. Source: Background 2.1 (sec:bg-bnn, eq:bayes-posterior,
-% eq:categorical-likelihood, eq:bma-predictive). Methods 4.1 (sec:bayesian-classification).
-\begin{frame}{Bayesian Neural Networks}
-	\textbf{Message.} A BNN has a posterior over the network weights. Prediction averages over it.
-
-	\medskip
-	\textbf{TODO: content.} Weight posterior $p(w \mid D)$. BMA predictive. Categorical likelihood with $f(x;w)$.
+% Source. Background 2.1, eq:class-probability-vector, eq:categorical-likelihood,
+% eq:likelihood-factorization, eq:bayes-posterior, eq:bma-predictive.
+% Speaking notes
+% Start with the network. For input x and weights w, its output f lists the class probabilities.
+% The categorical observation model assigns the observed label its output probability.
+% The likelihood combines these probabilities across the labelled training examples.
+% The prior describes our assumptions about the weights before observing the labels.
+% Bayes' rule combines the likelihood and prior to give the posterior over weights.
+% We retain uncertainty about weights instead of using only one fitted weight estimate.
+% Predictions average over that posterior. We leave the sampling approximation for the training section.
+% Next, we replace the direct class-probability output with parameters of a Dirichlet distribution.
+\begin{frame}{Categorical Bayesian Neural Networks}
+\label{frm:bg-categorical-bnn}
+\begin{itemize}
+\setlength{\itemsep}{2mm}
+\item $x$ is an input and $y\in\{1,\ldots,C\}$ its label among $C$ classes.
+\item The network has weights $w$ and outputs the class-probability vector $f(x;w)$.
+\begin{itemize}
+\item $\mathrm{Cat}$ denotes the categorical distribution over labels.
+\end{itemize}
+\end{itemize}
+% Copied from thesis eq:categorical-likelihood, omitting the product expansion.
+\[
+p(y\mid x,w)=\mathrm{Cat}\bigl(y\mid f(x;w)\bigr)=f_y(x;w).
+\]
+\begin{itemize}
+\item Training data $D=\{(x_i,y_i)\}_{i=1}^{N}$ contain $N$ labelled examples.
+\end{itemize}
+% Thesis eq:likelihood-factorization and eq:bayes-posterior, with the normalising constant suppressed.
+\begin{align*}
+p(D\mid w)&=\prod_{i=1}^{N}p(y_i\mid x_i,w),\\[1mm]
+\underbrace{p(w\mid D)}_{\text{posterior}}
+&\propto\underbrace{p(D\mid w)}_{\text{likelihood}}\,
+\underbrace{p(w)}_{\text{prior}}.
+\end{align*}
+\begin{itemize}
+\item Predictions average over the posterior over weights.
+\end{itemize}
 \end{frame}
 
-% Slide 2.2. Source: Background 2.2 (sec:bg-dirichlet, eq:dirichlet-density,
-% eq:general-dirichlet-mean), 2.3 (sec:bg-scale-invariance, eq:scale-invariance,
-% eq:mean-total-concentration-parameterisation). New figure from scripts/.
-\begin{frame}{The Dirichlet Distribution}
-	\textbf{Message.} A Dirichlet has a mean vector and a total concentration parameter. Rescaling the concentration parameters changes the total concentration parameter and leaves the mean vector unchanged.
-
-	\medskip
-	\textbf{TODO: content.} Density, mean vector, total concentration parameter, scale invariance. Small simplex figure with two total concentration parameters at one mean vector.
+% Source. Background 2.2, 2.4 and 2.9, eq:general-dirichlet-mean,
+% eq:dirichlet-classification-label, eq:fixed-weight-dirichlet, eq:fixed-weight-dirichlet-marginal.
+% Speaking notes
+% A deterministic Dirichlet network uses one fitted set of weights.
+% For each input, it outputs positive concentration parameters alpha rather than class probabilities directly.
+% Alpha specifies a Dirichlet distribution over the random class-probability vector pi.
+% Given pi, the label follows a categorical distribution. These are the two levels of the model.
+% The concentration parameters sum to the total concentration alpha_0.
+% Dividing each concentration parameter by this sum gives the mean class-probability vector m.
+% Averaging over pi gives predicted class probabilities equal to m.
+% Pi is a random vector. Alpha and m are deterministic network functions at given input and weights.
+% We now use these model setups to explain their uncertainty decompositions.
+\begin{frame}{Dirichlet Networks}
+\label{frm:bg-dirichlet-network}
+\begin{itemize}
+\setlength{\itemsep}{2mm}
+\item A deterministic network uses one fitted set of weights $w$.
+\item It outputs concentration parameters $\alpha(x;w)$, with $\alpha_c(x;w)>0$ for each class $c$.
+\item $\pi$ is a random class-probability vector. $\mathrm{Dir}$ denotes its Dirichlet distribution.
+\end{itemize}
+% Copied from thesis eq:fixed-weight-dirichlet and eq:dirichlet-classification-label.
+\begin{align*}
+p(\pi\mid x,w)&=\mathrm{Dir}\bigl(\pi\mid\alpha(x;w)\bigr),\\
+p(y\mid\pi)&=\mathrm{Cat}(y\mid\pi)=\pi_y.
+\end{align*}
+\begin{itemize}
+\item Define the total concentration parameter $\alpha_0(x;w)$ and mean vector $m(x;w)$.
+\end{itemize}
+% Thesis eq:general-dirichlet-mean evaluated at alpha(x;w).
+\[
+\alpha_0(x;w)=\sum_{c=1}^{C}\alpha_c(x;w),
+\qquad m(x;w)=\frac{\alpha(x;w)}{\alpha_0(x;w)}.
+\]
+\begin{itemize}
+\item The mean gives the predicted class probabilities, $p(y=c\mid x,w)=m_c(x;w)$.
+\end{itemize}
 \end{frame}
 
-% Slide 2.3. Source: Background 2.6 (sec:entropy-decomposition), 2.7
-% (sec:bg-three-way-decomposition, eq:three-way-decomposition), 2.8
-% (eq:degenerate-distributional-term), 2.9.3 (sec:bg-dirichlet-total-concentration,
-% eq:aleatoric-as-function-of-total-concentration, eq:aleatoric-limits). New figure from scripts/.
-\begin{frame}{Decomposition of Predictive Uncertainty}
-	\textbf{Message.} Predictive uncertainty splits into aleatoric, distributional, and epistemic terms. At a fixed mean vector, the total concentration parameter sets the split between aleatoric and distributional uncertainty.
+% Source. Background 2.6, 2.8 and 2.9, eq:shannon-entropy,
+% eq:aleatoric-epistemic-decomposition and eq:aleatoric-distributional-split.
+% Speaking notes
+% Entropy measures uncertainty about the label. It is zero for a certain label and largest for equally likely labels.
+% An expectation is an average. Mutual information measures the average reduction in label entropy when another variable becomes known.
+% In a categorical BNN, average the label entropy at each weight setting. This is the aleatoric term.
+% Knowing the weights can reduce label entropy. That reduction is the epistemic term.
+% In a Dirichlet network, instead average the label entropy for each possible class-probability vector at fixed weights.
+% Knowing that vector can reduce label entropy. That reduction is the distributional term.
+% Cat denotes the categorical label distribution. All quantities refer to the same fixed input and observed training data.
+% We now focus on the Dirichlet split. What controls the allocation between its two terms?
+\begin{frame}{How the Models Decompose Predictive Uncertainty}
+% Preserve the labels of the earlier uncertainty explanations on their replacement frame.
+\label{frm:predictive-entropy}
+\label{frm:aleatoric-intuition}
+\label{frm:distributional-intuition}
+\label{frm:uncertainty-terms}
+\begin{itemize}
+\setlength{\itemsep}{2mm}
+\item Entropy $\mathcal H$ measures label uncertainty. $\mathbb E$ denotes an average.
+\item Mutual information $\mathcal I$ measures how much knowing another variable reduces label uncertainty, on average.
+\item $\mathrm{Cat}(y\mid\pi)$ is the categorical label distribution with class probabilities $\pi$.
+\end{itemize}
+\medskip
+\textbf{Categorical BNN}\par
+% Copied from thesis eq:aleatoric-epistemic-decomposition.
+{\small
+\[
+\underbrace{\mathcal H[p(y\mid x,D)]}_{\text{predictive}}
+=\underbrace{\mathbb E_{p(w\mid D)}
+\Big[\mathcal H\big[\mathrm{Cat}(y\mid f(x;w))\big]\Big]}_{\text{aleatoric}}
++\underbrace{\mathcal I(y;w)}_{\text{epistemic}}.
+\]
+}
+\textbf{Dirichlet network at fixed weights}\par
+% Copied from thesis eq:aleatoric-distributional-split.
+{\small
+\[
+\underbrace{\mathcal H\big[\mathrm{Cat}(y\mid m(x;w))\big]}_{\text{predictive}}
+=\underbrace{\mathbb E_{\mathrm{Dir}(\pi\mid\alpha(x;w))}
+\Big[\mathcal H[\mathrm{Cat}(y\mid\pi)]\Big]}_{\text{aleatoric}}
++\underbrace{\mathcal I(y;\pi\mid w)}_{\text{distributional}}.
+\]
+}
+\end{frame}
 
-	\medskip
-	\textbf{TODO: content.} Three term decomposition in one line. Cat-BNN point mass, zero distributional term. Small figure of both terms against $\alpha_0$.
+% Source. Background 2.3 and 2.9.3, eq:scale-invariance,
+% prop:aleatoric-monotonicity, cor:distributional-monotonicity.
+% Figure. scripts/build_figures.py, figures/mean_and_concentration.pdf.
+% Speaking notes
+% Consider a Dirichlet concentration vector alpha, with total concentration alpha_0 and mean m.
+% Multiply every concentration parameter by the same positive factor lambda. The ratios and mean stay unchanged.
+% The left plot uses two classes with mean probabilities 50/50. Higher concentration narrows the distribution around that mean.
+% The right plot shows the consequence. Aleatoric uncertainty increases and distributional uncertainty decreases.
+% Their sum stays unchanged because the predicted class probabilities stay unchanged.
+% This comparison varies concentration vectors at the same mean. It does not vary the output of one fixed network.
+% We can therefore obtain the same class prediction with different uncertainty allocations.
+% We next combine the model structures and ask what training with single labels can tell us about this allocation.
+% This follows Discussion 6.1 to 6.2. The likelihood limitation and explicit prior follow in the main section.
+\begin{frame}{Same Prediction, Different Uncertainty Split}
+\label{frm:mean-concentration}
+\begin{itemize}
+\item Write $\alpha$, $\alpha_0$, and $m$ for a Dirichlet concentration vector, its total concentration, and its mean.
+\begin{itemize}
+\item Multiplying all concentration parameters by the same factor $\lambda>0$ preserves the mean.
+\end{itemize}
+\end{itemize}
+% Copied from thesis eq:scale-invariance.
+\[
+\frac{\lambda\alpha}{\lambda\alpha_0}=\frac{\alpha}{\alpha_0}=m.
+\]
+{\centering
+\includegraphics[width=0.77\textwidth]{figures/mean_and_concentration.pdf}\par}
+\begin{itemize}
+\item At the same mean, higher total concentration increases aleatoric uncertainty and decreases distributional uncertainty.
+\end{itemize}
 \end{frame}

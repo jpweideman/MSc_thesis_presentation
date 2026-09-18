@@ -1,0 +1,19 @@
+\begin{tabular}{lcccccc}
+\toprule
+\multicolumn{7}{c}{Gamma prior mode experiment at standard deviation 20\%, test split} \\
+\shortstack{Gamma prior\\mode} & \shortstack{realised total\\concentration} & \shortstack{predictive\\uncertainty} & \shortstack{aleatoric\\uncertainty\\\%} & \shortstack{distributional\\uncertainty\\\%} & \shortstack{epistemic\\uncertainty\\\%} & NLL \\
+\midrule
+\multicolumn{7}{l}{\textbf{Fashion-MNIST}} \\
+\midrule
+30 & 30.5\,(30.5--30.6) & 1.336\,(1.333--1.341) & 90.36 & 9.39 & 0.25 & 0.535\,(0.529--0.545) \\
+58 & 58.4\,(58.4--58.5) & 0.934\,(0.920--0.958) & 92.51 & 7.07 & 0.42 & 0.382\,(0.373--0.399) \\
+100 & 99.0\,(98.8--99.3) & 0.974\,(0.934--1.008) & 95.42 & 4.13 & 0.45 & 0.431\,(0.410--0.458) \\
+300 & 292.7\,(292.3--292.9) & 1.947\,(1.922--1.959) & 99.12 & 0.77 & 0.11 & 1.143\,(1.111--1.168) \\
+\midrule
+\multicolumn{7}{l}{\textbf{CIFAR-10}} \\
+\midrule
+30 & 30.4\,(30.2--30.5) & 1.414\,(1.399--1.436) & 89.24 & 8.98 & 1.78 & 0.763\,(0.682--0.923) \\
+100 & 99.7\,(99.5--99.8) & 0.818\,(0.813--0.822) & 91.11 & 4.79 & 4.10 & 0.470\,(0.461--0.476) \\
+300 & 291.4\,(291.2--291.6) & 1.733\,(1.728--1.739) & 98.07 & 0.87 & 1.06 & 0.916\,(0.907--0.921) \\
+\bottomrule
+\end{tabular}

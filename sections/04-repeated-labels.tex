@@ -1,0 +1,135 @@
+% Repeated Labels. Slides 17 to 22.
+\section{Repeated Labels}
+
+% Source. Experiments 5.1.1, sec:exp-setup. CIFAR-10H image and counts.
+% Delivery. Introduce the CIFAR-10H image. These are observed human labels, not a model illustration.
+% Delivery. Retaining these labels preserves information that one selected label hides.
+% Preparation. Do not assign this observed disagreement to a validated uncertainty component.
+\begin{frame}{Repeated labels reveal disagreement}
+\label{frm:observed-disagreement}
+\slidemessage{Retaining repeated labels preserves observed disagreement.}
+\begin{columns}[T,onlytextwidth]
+\begin{column}{0.28\textwidth}
+\centering
+\vspace{3mm}
+\includegraphics[width=0.88\linewidth]{figures/cifar10h_example.png}
+\par\smallskip
+{\small One CIFAR-10H image}
+\end{column}
+\begin{column}{0.70\textwidth}
+\includegraphics[width=\linewidth]{figures/observed_counts.pdf}
+\end{column}
+\end{columns}
+\par\medskip
+\slidepoint{\exampletotal{} observed human labels for the same input.}
+% Preparation. \exampletotal{} human labels. The counts describe how labels differ for one input.
+% Source detail. Thesis \S5.1.1. CIFAR-10H image \exampleindex{}.
+\end{frame}
+
+% Source. Methods 4.4.1 and 4.4.2, eq:mbnn-observation, eq:dm-ebnn-likelihood.
+% Delivery. Both models use the same count vectors. Their observation models differ.
+\begin{frame}{A model for complete count vectors}
+\label{frm:count-model}
+\slidemessage{Repeated labels change the observation model.}
+\begin{itemize}
+\item Labels are aggregated by class into a count vector $n$.
+\begin{itemize}
+\item The count total is $R=\sum_c n_c$.
+\end{itemize}
+\end{itemize}
+\medskip
+{\small Multinomial Bayesian neural network (M-BNN)}
+% Copied from thesis eq:mbnn-observation.
+\[
+p(n\mid x,w)=\mathrm{Mult}\bigl(n\mid R,f(x;w)\bigr).
+\]
+{\small Dirichlet multinomial evidential Bayesian neural network (DM-eBNN)}
+% Copied from thesis eq:dm-ebnn-likelihood.
+\[
+p(n\mid x,w)=\mathrm{DM}\bigl(n\mid R,\alpha(x;w)\bigr).
+\]
+\par\medskip
+\slidepoint{$f(x;w)$ is the class-probability vector of the M-BNN.}
+% Preparation. Both models use a posterior over shared weights. The DM-eBNN retains its Gamma prior.
+% Source detail. Thesis \S4.4.1 and \S4.4.2.
+\end{frame}
+
+% Source. Methods 4.4.3 and 4.4.4, eq:dm-ebnn-posterior-odds, eq:count-variance-ratio.
+% Figure comes from Background eq:multinomial-mass and eq:dm-mass.
+% Delivery. State the fixed mean and count total before comparing the spread.
+\begin{frame}{Count variance}
+\label{frm:count-variance}
+\slidemessage{The count likelihood can inform the total concentration parameter.}
+\begin{center}
+\includegraphics[width=0.90\textwidth]{figures/count_variance.pdf}
+\end{center}
+\begin{itemize}
+\item The mean vector and count total stay fixed. The count probabilities differ.
+\begin{itemize}
+\item Two class illustration with mean vector $(0.5,0.5)$ and count total 20.
+\end{itemize}
+\end{itemize}
+% Preparation. Mathematical illustration with two classes, mean vector $(0.5,0.5)$, and count total 20.\par
+% At fixed mean vectors, this dependence on total concentration requires a count total above one.
+% Source detail. Thesis \S4.4.3 and \S4.4.4.
+\end{frame}
+
+% Source. Experiments 5.3.1, tab:e2-count-prediction. All four comparisons are shown.
+% Delivery. Explain the mean matched control before discussing the values.
+\begin{frame}{Better count prediction on CIFAR-10H}
+\label{frm:count-prediction}
+\slidemessage{Additional count variance contributes to better count prediction.}
+\begin{itemize}
+\item The mean matched control keeps the DM-eBNN mean vectors and weight samples.
+\begin{itemize}
+\item Only the observation model changes to the multinomial distribution.
+\end{itemize}
+\end{itemize}
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.12}
+\setlength{\tabcolsep}{6pt}
+\input{tables/count_comparison_slide}
+\end{center}
+\slidepoint{CIFAR-10H. Means and ranges over three seeds. Lower count NLL is better.}
+% Preparation. Count negative log likelihood (count NLL). Lower is better. Points show means over three seeds. Bars show seed ranges.\par
+% CIFAR-10H test split. Final BMA over 40 samples. DM-eBNN prior standard deviation 20\%.
+% Source detail. Thesis \S5.3.1. Cold and warm chains have different sampling budgets.
+\end{frame}
+
+% Source. Experiments 5.3.2, tab:e2-count-prior-sensitivity.
+% Delivery. The two trajectories approach each other but remain different within the budget.
+\begin{frame}{Prior sensitivity remains}
+\label{frm:count-prior-sensitivity}
+\slidemessage{The prior and initial checkpoint still affect realised total concentration.}
+\slidepoint{Realised total concentration after sampling on CIFAR-10H.}
+\begin{center}
+\renewcommand{\arraystretch}{1.65}
+\input{tables/count_sensitivity_slide}
+\end{center}
+\slidepoint{Means and ranges over three seeds. Warm initialisation with a fixed sampling budget.}
+% Preparation. Warm initialisation on CIFAR-10H. Mean and range over three seeds. Final BMA over 40 samples.\par
+% Pretraining uses a Gamma prior standard deviation of 20\%. These results concern the fixed sampling budget.
+% Source detail. Thesis \S5.3.2.
+\end{frame}
+
+% Source. Methods 4.4.5 and Experiments 5.3.3, sec:count-uncertainty-decomposition, tab:e2-count-terms.
+% Delivery. These are terms for one class label, although training uses count vectors.
+\begin{frame}{Decomposition for class labels}
+\label{frm:count-decomposition}
+\slidemessage{The DM-eBNN reports the three terms. Their practical value remains open.}
+\begin{center}
+\renewcommand{\arraystretch}{1.6}
+\setlength{\tabcolsep}{7pt}
+\input{tables/count_shares_slide}
+\end{center}
+\begin{itemize}
+\item Shares of each model's own predictive uncertainty in a class label.
+\begin{itemize}
+\item CIFAR-10H. Averages over inputs and three seeds. Warm initialisation.
+\end{itemize}
+\end{itemize}
+% Preparation. Shares of each model's own predictive uncertainty, averaged over inputs and three seeds.\par
+% CIFAR-10H test split. Warm initialisation. Final BMA over 40 samples. DM-eBNN prior standard deviation 20\%.
+% Source detail. Thesis \S4.4.5 and \S5.3.3.
+\end{frame}

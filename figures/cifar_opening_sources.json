@@ -1,0 +1,68 @@
+{
+  "generator": "scripts/build_cifar_opening.py",
+  "run": "e1_c10_bnn_T1_warm_s0",
+  "evaluation": "Final BMA over all saved weight samples",
+  "weight_samples": 10,
+  "classes": [
+    "airplane",
+    "automobile",
+    "bird",
+    "cat",
+    "deer",
+    "dog",
+    "frog",
+    "horse",
+    "ship",
+    "truck"
+  ],
+  "examples": [
+    {
+      "name": "lower",
+      "image_index": 9310,
+      "row": 9310,
+      "probabilities": [
+        7.027387619018555e-06,
+        2.5033950805664064e-07,
+        0.00011816024780273438,
+        0.997900390625,
+        0.0011874079704284669,
+        0.0006127536296844482,
+        0.00022662878036499022,
+        7.450580596923828e-07,
+        5.364418029785156e-07,
+        7.092952728271485e-07
+      ],
+      "entropy_nats": 0.017714620029820886,
+      "predicted_class": "cat",
+      "true_class": "cat"
+    },
+    {
+      "name": "higher",
+      "image_index": 3901,
+      "row": 3901,
+      "probabilities": [
+        0.10157318115234375,
+        0.08617706298828125,
+        0.2252288818359375,
+        0.30877685546875,
+        0.006676483154296875,
+        0.0301971435546875,
+        0.0004122734069824219,
+        0.007153129577636719,
+        0.1137725830078125,
+        0.1200592041015625
+      ],
+      "entropy_nats": 1.8216090484197616,
+      "predicted_class": "cat",
+      "true_class": "cat"
+    }
+  ],
+  "entropy_definition": "eq:shannon-entropy. Natural logarithm. Used to verify the contrast, not displayed as a rounded measurement.",
+  "sources": {
+    "/Users/jpweideman/BNN-EDL/outputs/e1_c10_bnn_T1_warm_s0/arrays/cifar10_test.npz": "1a562e730955d3ec0706daedd1f7f33cd5c28331ebaedbe0e4c4d29e972a4572",
+    "/Users/jpweideman/BNN-EDL/data/cifar-10-batches-py/test_batch": "f53d8d457504f7cff4ea9e021afcf0e0ad8e24a91f3fc42091b8adef61157831",
+    "/Users/jpweideman/BNN-EDL/analysis/common/predictive.py": "16e1333ee0e2ae704e3b71fa0699a3b3e86365f12ba57a53979372abddaecce7",
+    "/Users/jpweideman/MSc_thesis/chapters/background.tex": "5ff4f0debb0defab869d314435c22bfe9ecc1f91a340561e30db1dc41d4a82d5",
+    "/Users/jpweideman/MSc_thesis/chapters/experiments.tex": "f8326c5fc8b7f9051a6cb478822a5517ca7b9013e990f6f76e92d6eda410eb9a"
+  }
+}

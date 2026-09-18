@@ -1,31 +1,155 @@
-% Section 1. Introduction
-% Goal. The examiners see the problem before they see a model. See STORY.md.
-
+% Introduction. Slides 2 to 6. Title is in main.tex.
 \section{Introduction}
 
-% Slide 1.1. Source: Experiments 5.1.1 (sec:exp-setup, CIFAR-10H, peterson2019human).
-% New figure from scripts/.
-\begin{frame}{A Class Label Alone Is Not Enough}
-	\textbf{Message.} Annotators disagree on some images. A model must say how sure it is, and why.
-
-	\medskip
-	\textbf{TODO: content.} One CIFAR-10H image with its count vector over the ten classes. One sentence on predictive uncertainty and its sources.
+% Speaking notes
+% Neural networks perform well, but their predictions can be overconfident.
+% Knowing the uncertainty can help us decide how to act, especially when errors have serious consequences.
+% In this illustration, the model labels part of the shadowed footpath as road.
+% High estimated uncertainty could prompt a driving system to slow down and avoid that region.
+% This motivates uncertainty-aware modelling. We now focus on classification.
+% The illustration is not an experimental result.
+\begin{frame}[t]{Why Uncertainty-Aware Modelling Matters}
+\label{frm:uncertainty-motivation}
+\begin{itemize}
+\setlength{\itemsep}{3mm}
+\item Neural networks are widely used in vision, language, speech, etc.
+\item Despite strong performance, their predictions can be overconfident.
+\item Estimating uncertainty in a model’s predictions can support safer decisions.
+% \begin{itemize}
+% \item Help with decisions about how to act on a prediction.
+% \end{itemize}
+\item Especially important when errors have serious consequences.
+\begin{itemize}
+\vspace{1mm}
+\item Autonomous driving, medical, financial, legal, etc.
+\end{itemize}
+\end{itemize}
+\vspace{2mm}
+{\centering
+% Crop only unused white space below the colour scale.
+\includegraphics[width=0.8\textwidth,trim=0 48bp 0 0,clip]{figures/uncertainty_road_triptych_v5.png}\par}
 \end{frame}
 
-% Slide 1.2. Source: Introduction. Background 2.7 (sec:bg-three-way-decomposition).
-% malinin2018priornetworks.
-\begin{frame}{Three Sources of Predictive Uncertainty}
-	\textbf{Message.} Predictive uncertainty has three sources. Aleatoric, epistemic, and distributional uncertainty.
-
-	\medskip
-	\textbf{TODO: content.} Three rows. Name, one line definition, one intuition each. No equations.
+% Speaking notes
+% In uncertainty-aware classification, we want a predicted class label and an expression of uncertainty about that label.
+% The model assigns probabilities to the possible class labels.
+% Here, bird and frog receive similar probabilities. Other classes also receive some probability.
+% Predictive entropy quantifies uncertainty about which label applies, not uncertainty about the probability values themselves.
+% Even known probabilities of 50% bird and 50% frog leave the label uncertain.
+% The amount of predictive uncertainty can inform a decision, but does not explain why the model is uncertain.
+% It therefore does not tell us which response is appropriate, such as deferring or collecting more training data.
+% To consider the response, we next distinguish the terms within predictive uncertainty.
+\begin{frame}[t]{Uncertainty-Aware Classification}
+\label{frm:classification-uncertainty}
+\begin{itemize}
+\setlength{\itemsep}{3mm}
+\item For a classification task, a neural network outputs probabilities for each class label.
+\end{itemize}
+\vspace{1mm}
+{\centering
+\input{figures/cifar_ambiguous_prediction}\par}
+\begin{itemize}
+    \vspace{1mm}
+\item \emph{Predictive uncertainty} quantifies uncertainty about the class label of an input.
+\begin{itemize}
+\vspace{1mm}
+\item Does not by itself guide decisions about how to act.
+\item Where does the predictive uncertainty come from?
+\end{itemize}
+\end{itemize}
 \end{frame}
 
-% Slide 1.3. Source: Introduction. Discussion 6.1 (sec:discussion-representation).
-% sensoy2018edl, ulmer2023survey.
-\begin{frame}{The Gap and Our Contribution}
-	\textbf{Message.} Categorical BNNs represent two of the three terms. EDL represents two. We combine them into two models that represent all three.
+% Speaking notes
+% See Predictive Uncertainty Estimation via Prior Networks (Malinin, Gales) For a description of uncertainties and the decisions to make depending on which uncertainty is high.
+% The reason for decomposing predictive uncertainty is that different terms can call for different responses.
+% Aleatoric uncertainty remains even when class probabilities are known, as in the known 50/50 example.
+% More training data cannot remove it at fixed input information and a fixed label process.
+% We may therefore defer a decision if its risk is too high.
+% Epistemic uncertainty concerns which network weights explain the data.
+% More relevant training examples can help constrain these weights.
+% Distributional uncertainty concerns class probabilities at fixed network weights. It is basically how wide or narrow the distribution of possible class probabilities are. Think in terms of the dirichlet distribution of pi, where a higher alpha0 meamns a tighter distribution of pi, which means less distributional uncertainty
+% Malinin and Gales motivate this term through differences between training and test distributions.
+% In that setting, they suggest collecting training examples from the unfamiliar distribution.
+% Our displayed distributional term does not establish that this image is unfamiliar.
+% These examples explain why the distinction matters. They are not fixed action rules.
+% The figure shows one fitted model's allocation, not verified causes or demonstrated decision benefits.
+% This motivates our next question. How can a model represent all three terms together?
+\begin{frame}{Decomposing Predictive Uncertainty}
+\label{frm:classification-motivation}
+{\centering
+\input{figures/cifar_ambiguous_decomposition}\par}
+\vspace{2mm}
+\begin{itemize}
+\setlength{\itemsep}{2mm}
+\item \textbf{Aleatoric (data) uncertainty} irreducible uncertainty from complexity in the data.
+% is the uncertainty that remains even when the class probabilities are known.
+\par
+\begin{itemize}
+\setlength{\itemsep}{0pt}
+\setlength{\topsep}{0pt}
+\setlength{\partopsep}{0pt}
+\item Defer the decision if high risk.
+\end{itemize}
+\item \textbf{Epistemic (model) uncertainty} reducible uncertainty in the estimated network weights. %(Given the training data. Can be reduced by collecting more data.)
+\par
+\begin{itemize}
+\setlength{\itemsep}{0pt}
+\setlength{\topsep}{0pt}
+\setlength{\partopsep}{0pt}
+\item Collect more relevant training examples.
+\end{itemize}
+\item \textbf{Distributional uncertainty} is uncertainty about the class probabilities at fixed network weights. % concerns class probabilities at fixed network weights.
+\par
+\begin{itemize}
+\setlength{\itemsep}{0pt}
+\setlength{\topsep}{0pt}
+\setlength{\partopsep}{0pt}
+\item If inputs differ from training data, collect representative training examples. % can quote malin gales here
+\end{itemize}
+\item \textbf{Different uncertainty terms require different actions.}
+\end{itemize}
+\end{frame}
 
-	\medskip
-	\textbf{TODO: content.} Table of models against uncertainty terms. Two lines. Cat-eBNN with one label per input and a prior. DM-eBNN with repeated labels. Spell out all acronyms.
+% Speaking notes
+% We have introduced three uncertainty terms. Which terms do existing approaches represent?
+% A normal classification neural network represents only aleatoric uncertainty through the class probabilities that it outputs.
+% A categorical Bayesian neural network represents aleatoric and epistemic uncertainty through a posterior over network weights.
+% A deterministic Dirichlet network represents aleatoric and distributional uncertainty through a distribution over class probabilities.
+% It uses one estimate of the network weights, so it does not represent epistemic uncertainty.
+% These representations are complementary. Can we combine them to represent all three terms?
+\begin{frame}{Models for Uncertainty Quantification}
+\label{frm:model-components}
+\begin{itemize}
+\setlength{\itemsep}{6mm}
+\item \textbf{Bayesian neural networks}
+\begin{itemize}
+\item Model uncertainty over network weights.    
+\item Aleatoric and epistemic uncertainty. %Separate predictive uncertainty into aleatoric and epistemic terms.
+\end{itemize}
+\item \textbf{Deterministic Dirichlet networks}
+\begin{itemize}
+\item Model a distribution over class probabilities %, using one set of network weights.
+\item Aleatoric and distributional uncertainty.
+\end{itemize}
+\item  Neither decomposes into all three uncertainty terms.
+\end{itemize}
+\end{frame}
+
+% Speaking notes
+% We combine a Bayesian posterior distribution over network weights with a Dirichlet network that predicts a distribution over class probabilities.
+% This lets us represent aleatoric, distributional, and epistemic uncertainty together.
+% Representing three terms is only the first step. We also ask what the data tell us about them.
+% We study how observed labels and model assumptions shape the allocation between these terms.
+% The thesis studies representation and allocation. It does not demonstrate improved decisions, and it does not study descision making at all!.
+% We next introduce the background needed to explain the models.
+\begin{frame}{Research Aim and Approach}
+\label{frm:research-aim}
+\begin{itemize}
+\setlength{\itemsep}{8mm}
+\item Model that represents aleatoric, distributional, and epistemic uncertainty. 
+\begin{itemize}
+\item Combine Bayesian posterior distribution over network weights with a Dirichlet distribution over class probabilities.
+\end{itemize}
+\item Understand how the resulting predictive uncertainty is divided between the three uncertainty terms. % what parts of the decomposition is informed by the observed labels and what part reflects model assumptions.
+\end{itemize}
 \end{frame}

@@ -1,0 +1,50 @@
+{
+  "generator": "scripts/build_figures.py",
+  "sources": {
+    "/Users/jpweideman/BNN-EDL/data/cifar10h/cifar10h-counts.npy": "9b36b4550349af56c79083356312eb4af856cc5fd3caf1f669d40b9d0bbb69ff",
+    "/Users/jpweideman/BNN-EDL/data/cifar-10-batches-py/test_batch": "f53d8d457504f7cff4ea9e021afcf0e0ad8e24a91f3fc42091b8adef61157831",
+    "/Users/jpweideman/BNN-EDL/results/mode_sweep.tex": "85d8d5cf2c61d8924928bca6f25252e9f7812638be19825997b0dfd89877a91a",
+    "/Users/jpweideman/MSc_thesis/tables/mode_sweep.tex": "85d8d5cf2c61d8924928bca6f25252e9f7812638be19825997b0dfd89877a91a",
+    "/Users/jpweideman/BNN-EDL/results/predictive.tex": "9b4659708273660601d5036da2ffe60ccc7150502f70353117b0d888783fa0f9",
+    "/Users/jpweideman/MSc_thesis/tables/predictive.tex": "9b4659708273660601d5036da2ffe60ccc7150502f70353117b0d888783fa0f9",
+    "/Users/jpweideman/BNN-EDL/results/count_prediction.tex": "86deb49c2a0864c7abba6eaec168ff695cfa4f983fe9d56c96ebc6b0ec7b10ef",
+    "/Users/jpweideman/MSc_thesis/tables/count_prediction.tex": "86deb49c2a0864c7abba6eaec168ff695cfa4f983fe9d56c96ebc6b0ec7b10ef",
+    "/Users/jpweideman/BNN-EDL/results/sd_sweep.tex": "97a300181c316f8adf93223cc3856584fdcd41a892f74bd4b9a6c5e05084ac14",
+    "/Users/jpweideman/MSc_thesis/tables/sd_sweep.tex": "97a300181c316f8adf93223cc3856584fdcd41a892f74bd4b9a6c5e05084ac14",
+    "/Users/jpweideman/BNN-EDL/results/count_prior_sensitivity.tex": "15cfb36cc565b4bed915af03f664d0042491ddb0c651caa83757fae956529f6e",
+    "/Users/jpweideman/MSc_thesis/tables/count_prior_sensitivity.tex": "15cfb36cc565b4bed915af03f664d0042491ddb0c651caa83757fae956529f6e",
+    "/Users/jpweideman/BNN-EDL/results/count_uncertainty.tex": "faa2610c0f07ac4fc29039554c6f03f5172ef5187e8b03e6d043a2e934a5f031",
+    "/Users/jpweideman/MSc_thesis/tables/count_uncertainty.tex": "faa2610c0f07ac4fc29039554c6f03f5172ef5187e8b03e6d043a2e934a5f031",
+    "/Users/jpweideman/BNN-EDL/results/start_procedure.tex": "4b4740751e27a0b0a46c20e72f248323a7bb1deceedfe9b299b0f9ad4060790a",
+    "/Users/jpweideman/MSc_thesis/tables/start_procedure.tex": "4b4740751e27a0b0a46c20e72f248323a7bb1deceedfe9b299b0f9ad4060790a",
+    "/Users/jpweideman/BNN-EDL/results/terms.tex": "4913a4358ece6b45c6e4ff5c8caebd86e54b3ca267872b71a63cef94e83404fa",
+    "/Users/jpweideman/MSc_thesis/tables/terms.tex": "4913a4358ece6b45c6e4ff5c8caebd86e54b3ca267872b71a63cef94e83404fa",
+    "/Users/jpweideman/MSc_thesis/figures/start_trajectory_accuracy.pdf": "ddc288870bc547c839787d3dae270d8b1fc0e5928f6e4230c9254a777e397686",
+    "/Users/jpweideman/MSc_thesis/figures/start_trajectory_alpha0.pdf": "ead28630e01e628cacd3aefc494498ffab50364b25d06ad686e345cfa9fa98e8",
+    "/Users/jpweideman/MSc_thesis/figures/count_collapse_concentration.pdf": "0b28e51b10ac7c46c88739b4e77cff17fcb1fe4c74188d6156c1159c1a802f5f",
+    "/Users/jpweideman/MSc_thesis/figures/count_collapse_nll.pdf": "cf6829ef4e8e957b36303e1c41be25632ce39b3de3161fb69f64ffb2cb5b3fb1",
+    "/Users/jpweideman/MSc_thesis/figures/count_collapse_accuracy.pdf": "5f225c3193ed1a1acd46fabf8617d3e0f6be218fdbb71d2d9cae63fba11d756f",
+    "/Users/jpweideman/MSc_thesis/figures/count_collapse_gradient.pdf": "92c2320edc6644fb106b4efcc59cd3a76d2cd20570222d89152b32d15ccf4026"
+  },
+  "example_index": 4195,
+  "example_count_vector": [
+    0,
+    0,
+    0,
+    29,
+    0,
+    23,
+    0,
+    0,
+    0,
+    0
+  ],
+  "theory_labels": [
+    "eq:dirichlet-density",
+    "eq:aleatoric-as-function-of-total-concentration",
+    "eq:gamma-mode",
+    "eq:gamma-mean-variance",
+    "eq:dm-mass",
+    "eq:multinomial-mass"
+  ]
+}

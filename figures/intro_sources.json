@@ -1,0 +1,65 @@
+{
+  "generator": "scripts/build_intro_figures.py",
+  "sources": {
+    "/Users/jpweideman/BNN-EDL/analysis/common/predictive.py": "16e1333ee0e2ae704e3b71fa0699a3b3e86365f12ba57a53979372abddaecce7",
+    "/Users/jpweideman/BNN-EDL/outputs/e1_c10_bnn_T1_warm_s0/arrays/cifar10_test.npz": "1a562e730955d3ec0706daedd1f7f33cd5c28331ebaedbe0e4c4d29e972a4572",
+    "/Users/jpweideman/MSc_thesis/chapters/background.tex": "5ff4f0debb0defab869d314435c22bfe9ecc1f91a340561e30db1dc41d4a82d5",
+    "/Users/jpweideman/MSc_thesis/chapters/discussion.tex": "2f95895a38264617d4d93f08477de75a0f17d1390dbd5f0f6dffe21be64d31e8",
+    "figures/cifar10h_example.png": "7716ee8427689f6f55e67621070c768d90e7b7f08736ef6fd28f51f576f5d47b"
+  },
+  "prediction": {
+    "run": "e1_c10_bnn_T1_warm_s0",
+    "image_index": 4195,
+    "row": 4195,
+    "weight_samples": 10,
+    "probabilities": [
+      0.00026513338088989257,
+      5.345940589904785e-05,
+      0.002948355674743652,
+      0.52825927734375,
+      2.1159648895263672e-05,
+      0.46226806640625,
+      0.006159257888793945,
+      5.495548248291016e-06,
+      3.0666589736938477e-05,
+      4.46319580078125e-05
+    ],
+    "predicted_class": "cat"
+  },
+  "model_illustration": {
+    "concentrations": [
+      [
+        8.0,
+        2.0
+      ],
+      [
+        6.0,
+        4.0
+      ],
+      [
+        3.0,
+        7.0
+      ]
+    ],
+    "possible_class_probability_vectors": [
+      [
+        0.8421575865500046,
+        0.15784241344999544
+      ],
+      [
+        0.5660893565773544,
+        0.43391064342264557
+      ],
+      [
+        0.4251221573684431,
+        0.574877842631557
+      ]
+    ],
+    "random_seed": 14,
+    "theory_labels": [
+      "eq:three-way-decomposition",
+      "eq:general-dirichlet-mean",
+      "eq:categorical-likelihood"
+    ]
+  }
+}

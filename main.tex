@@ -66,13 +66,18 @@
 
 \begin{document}
 
+\input{slide-layout}
+\input{tables/example}
+
 %----------------------------------------------------------------------------------------
 %	TITLE FRAME
 %----------------------------------------------------------------------------------------
 
 {
 \usebackgroundtemplate{\includegraphics[width=\paperwidth]{lmu-background.pdf}}
+% Source. Thesis main.tex title page and Background 2.2, eq:dirichlet-density.
 \begin{frame}[noframenumbering, plain]
+\label{frm:title}
 \begin{columns}[onlytextwidth]
 	\begin{column}{0.38\textwidth}
 		\vspace{2.5cm}
@@ -87,8 +92,8 @@
 	\begin{column}{0.48\textwidth}
 		\vspace{2cm}
 		\begin{center}
-			% TODO: replace the template figure with one thesis figure (STORY.md, Title).
-			\includegraphics[width=1\textwidth]{showcase_figure.png}
+			% Source. Background 2.2, eq:dirichlet-density. Illustration from scripts/build_figures.py.
+			\includegraphics[width=1\textwidth]{figures/dirichlet_cover.pdf}
 		\end{center}
 	\end{column}
 \end{columns}
@@ -101,27 +106,13 @@
 
 \input{sections/01-introduction}
 \input{sections/02-background}
-\input{sections/03-methods}
-\input{sections/04-experiments}
+\input{sections/03-single-labels}
+\input{sections/04-repeated-labels}
 \input{sections/05-discussion}
 \input{sections/06-limitations-future-work}
 \input{sections/07-conclusion}
 
-%----------------------------------------------------------------------------------------
-%	REFERENCES
-%----------------------------------------------------------------------------------------
-
-\begin{frame}[allowframebreaks]
-	\frametitle{References}
-	\scriptsize
-	\bibliographystyle{plainnat}
-	\bibliography{literature}
-\end{frame}
-
-%----------------------------------------------------------------------------------------
-%	BACKUP. Shown only on request.
-%----------------------------------------------------------------------------------------
-
+% Backup follows the conclusion and appears only on request.
 \appendix
 \input{sections/08-backup}
 
