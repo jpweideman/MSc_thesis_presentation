@@ -1,158 +1,230 @@
-% Background. Four slides prepare the model contributions and their interpretation.
+% Background. Model definitions prepare the contributions and their interpretation.
 \section{Background}
-
 % Source. Background 2.1, eq:class-probability-vector, eq:categorical-likelihood,
 % eq:likelihood-factorization, eq:bayes-posterior, eq:bma-predictive.
 % Speaking notes
-% Start with the network. For input x and weights w, its output f lists the class probabilities.
-% The categorical observation model assigns the observed label its output probability.
-% The likelihood combines these probabilities across the labelled training examples.
-% The prior describes our assumptions about the weights before observing the labels.
-% Bayes' rule combines the likelihood and prior to give the posterior over weights.
-% We retain uncertainty about weights instead of using only one fitted weight estimate.
-% Predictions average over that posterior. We leave the sampling approximation for the training section.
-% Next, we replace the direct class-probability output with parameters of a Dirichlet distribution.
+% We consider C classes indexed by c, input x, and a generic label y.
+% The training data contain N input and label pairs, indexed by i. The observed label for example i is y_i.
+% No component subscript denotes a whole vector. Subscript c selects class c. Subscript y selects the component for label y.
+% For given weights w, the network deterministically outputs the vector f of class probabilities.
+% The displayed conditions say that each probability is nonnegative and the probabilities sum to one.
+% A vector with these properties lies on the probability simplex. We state the conditions directly on the slide.
+% The categorical distribution assigns each possible label its corresponding component of f.
+% For training example i, we evaluate it at the observed label y_i. This selects f_{y_i}(x_i;w).
+% For example, if y_i is 3, this selects f_3(x_i;w), the probability assigned to class 3.
+% We assume the observations are independent given their inputs and the shared weights.
+% Multiplying their categorical probabilities gives the likelihood of all observed training labels.
+% The prior describes our assumptions about the weights before observing these labels. This is normally taken to be isotropic Gaussian. We also use isotropic gaussian in our experiments.
+% Combining prior and likelihood gives the posterior over weights, up to a normalising constant.
+% We retain uncertainty about weights and average predictions over this posterior.
+% Next, we consider a network that outputs a distribution over class probabilities.
 \begin{frame}{Categorical Bayesian Neural Networks}
 \label{frm:bg-categorical-bnn}
+\setlength{\abovedisplayskip}{4pt}
+\setlength{\belowdisplayskip}{4pt}
+\setlength{\abovedisplayshortskip}{4pt}
+\setlength{\belowdisplayshortskip}{4pt}
 \begin{itemize}
-\setlength{\itemsep}{2mm}
-\item $x$ is an input and $y\in\{1,\ldots,C\}$ its label among $C$ classes.
-\item The network has weights $w$ and outputs the class-probability vector $f(x;w)$.
-\begin{itemize}
-\item $\mathrm{Cat}$ denotes the categorical distribution over labels.
-\end{itemize}
-\end{itemize}
-% Copied from thesis eq:categorical-likelihood, omitting the product expansion.
+\setlength{\itemsep}{4mm}
+\item $C$ classes, input $x$, label $y\in\{1,\ldots,C\}$,
+training data $D=\{(x_i,y_i)\}_{i=1}^{N}$.
+
+\item The network with weights $w$ outputs class-probability vector,
+% Thesis eq:class-probability-vector and simplex constraints.
 \[
-p(y\mid x,w)=\mathrm{Cat}\bigl(y\mid f(x;w)\bigr)=f_y(x;w).
+f(x;w)=\bigl(f_1(x;w),\ldots,f_C(x;w)\bigr),
+\quad f_c(x;w)\geq0,\quad \sum_{c=1}^{C}f_c(x;w)=1.
 \]
-\begin{itemize}
-\item Training data $D=\{(x_i,y_i)\}_{i=1}^{N}$ contain $N$ labelled examples.
-\end{itemize}
-% Thesis eq:likelihood-factorization and eq:bayes-posterior, with the normalising constant suppressed.
+
+\item Categorical likelihood and weight prior define the posterior over weights.
+% Thesis eq:likelihood-factorization with eq:categorical-likelihood substituted,
+% and eq:bayes-posterior without its normalising constant.
 \begin{align*}
-p(D\mid w)&=\prod_{i=1}^{N}p(y_i\mid x_i,w),\\[1mm]
+p(D\mid w)&=\prod_{i=1}^{N}\mathrm{Cat}\bigl(y_i\mid f(x_i;w)\bigr)
+=\prod_{i=1}^{N}f_{y_i}(x_i;w),\\[2mm]
 \underbrace{p(w\mid D)}_{\text{posterior}}
 &\propto\underbrace{p(D\mid w)}_{\text{likelihood}}\,
 \underbrace{p(w)}_{\text{prior}}.
 \end{align*}
-\begin{itemize}
-\item Predictions average over the posterior over weights.
 \end{itemize}
 \end{frame}
 
-% Source. Background 2.2, 2.4 and 2.9, eq:general-dirichlet-mean,
-% eq:dirichlet-classification-label, eq:fixed-weight-dirichlet, eq:fixed-weight-dirichlet-marginal.
+% Source. Background 2.2, eq:dirichlet-density, eq:general-dirichlet-mean,
+% eq:dirichlet-variance. The probability vectors represent class probabilities in our classification setting.
 % Speaking notes
-% A deterministic Dirichlet network uses one fitted set of weights.
-% For each input, it outputs positive concentration parameters alpha rather than class probabilities directly.
-% Alpha specifies a Dirichlet distribution over the random class-probability vector pi.
-% Given pi, the label follows a categorical distribution. These are the two levels of the model.
-% The concentration parameters sum to the total concentration alpha_0.
-% Dividing each concentration parameter by this sum gives the mean class-probability vector m.
-% Averaging over pi gives predicted class probabilities equal to m.
-% Pi is a random vector. Alpha and m are deterministic network functions at given input and weights.
-% We now use these model setups to explain their uncertainty decompositions.
-\begin{frame}{Dirichlet Networks}
-\label{frm:bg-dirichlet-network}
+%“In the categorical BNN, a given input and network weights produce one class-probability vector \(f(x;w)\). We now introduce a distribution over possible class-probability vectors, denoted \(\pi\). We use the Dirichlet distribution for this.”
+% In our classification setting, pi is a random class-probability vector. Its component pi_c is the probability of class c.
+% Each possible vector has nonnegative entries that sum to one.
+% We model its distribution with a Dirichlet distribution, specified by positive concentration parameters alpha.
+% The mean vector is m, with components m_c. Each m_c is the average of pi_c under Dir(pi|alpha).
+% Its mean is alpha divided by the sum of its entries. We call that sum the total concentration parameter.
+% The variance describes how each component of pi varies around its mean.
+% At a fixed mean, larger total concentration gives smaller variance. this will be important later when we discuss the allocation of uncertainty.
+% Next, we connect this distribution to the network output and the categorical label model.
+\begin{frame}{The Dirichlet Distribution}
+\label{frm:bg-dirichlet-distribution}
+\setlength{\abovedisplayskip}{4pt}
+\setlength{\belowdisplayskip}{4pt}
 \begin{itemize}
-\setlength{\itemsep}{2mm}
-\item A deterministic network uses one fitted set of weights $w$.
-\item It outputs concentration parameters $\alpha(x;w)$, with $\alpha_c(x;w)>0$ for each class $c$.
-\item $\pi$ is a random class-probability vector. $\mathrm{Dir}$ denotes its Dirichlet distribution.
+\setlength{\itemsep}{4mm}
+\item Random class-probability vector $\pi=(\pi_1,\ldots,\pi_C)$,
+$\pi_c\geq0$ $\forall c$, $\sum_{c=1}^{C}\pi_c=1$.
+
+\item $\pi$ is Dirichlet distributed with concentration parameters $\alpha=(\alpha_1,\ldots,\alpha_C)$, $\alpha_c>0$ $\forall c$,
+% Thesis eq:dirichlet-density and its parameter domain.
+\[
+p(\pi\mid\alpha)=\mathrm{Dir}(\pi\mid\alpha).
+\]
+
+\item Mean vector and random class-probability variance,
+% Thesis eq:general-dirichlet-mean and eq:dirichlet-variance.
+\[
+\begin{aligned}
+&m=\mathbb E[\pi]=\frac{\alpha}{\alpha_0},
+\qquad \underbrace{\alpha_0=\sum_{c=1}^{C}\alpha_c,}_{\text{total concentration parameter}}\\[4mm]
+&\operatorname{Var}(\pi_c)=\frac{m_c(1-m_c)}{\alpha_0+1}.
+\end{aligned}
+\]
+\begin{itemize}
+\item At a fixed mean, larger total concentration gives less spread.
 \end{itemize}
-% Copied from thesis eq:fixed-weight-dirichlet and eq:dirichlet-classification-label.
+\end{itemize}
+\end{frame}
+
+% Source. Background 2.4 and 2.9, eq:dirichlet-classification-label,
+% eq:fixed-weight-dirichlet and eq:fixed-weight-dirichlet-marginal.
+% Methods 4.2.1, eq:edl-softplus-evidence and eq:edl-dirichlet-concentration.
+% Speaking notes
+% We want label probabilities for an input x.
+% The network outputs alpha(x;w), specifying a Dirichlet distribution over class-probability vectors pi.
+% Given pi, we model the label with a categorical distribution, so p(y|pi) equals pi_y.
+% Together, these distributions define the Dirichlet-categorical model.
+% The vector pi is unobserved in this model. We marginalise it to obtain p(y|x,w).
+% The integral runs over all probability vectors in the simplex.
+% Substituting p(y|pi) = pi_y gives the expectation of pi_y under the Dirichlet distribution.
+% This is the corresponding mean component, alpha_y(x;w) divided by alpha_0(x;w).
+% Thus the Dirichlet mean gives the label probabilities for x. (For one predicted class, choose their largest component.)
+% We adopt the evidence parameterisation of evidential deep learning, or EDL, motivated by subjective logic.
+% Subjective logic represents support for each class and a remaining mass not assigned to any class.
+% EDL learns nonnegative evidence e_c for each class and maps it to Dirichlet parameters through alpha_c = e_c + 1.
+% The +1 supplies one baseline unit per class. Zero evidence therefore gives the uniform Dirichlet Dir(1,...,1).
+% This baseline is EDL's choice within subjective logic. A general Dirichlet distribution only requires alpha_c > 0.
+% Our softplus output gives e_c > 0, so alpha_c > 1 and zero evidence is a limiting case.
+% We adopt this parameterisation and later add a posterior over network weights. Evidence is a learned output, not an observed count.
+% Source. Sensoy et al. 2018, Section 3, Eq. (1) and the zero-evidence example on page 4.
+% We can now explain how the model decomposes predictive uncertainty.
+\begin{frame}{Dirichlet Networks for Classification}
+\label{frm:bg-dirichlet-network}
+\setlength{\abovedisplayskip}{6pt}
+\setlength{\belowdisplayskip}{6pt}
+\begin{itemize}
+\setlength{\itemsep}{7mm}
+\item Dirichlet-categorical network outputs $\alpha(x;w)$. 
+% Thesis eq:fixed-weight-dirichlet and eq:dirichlet-classification-label.
 \begin{align*}
 p(\pi\mid x,w)&=\mathrm{Dir}\bigl(\pi\mid\alpha(x;w)\bigr),\\
 p(y\mid\pi)&=\mathrm{Cat}(y\mid\pi)=\pi_y.
 \end{align*}
-\begin{itemize}
-\item Define the total concentration parameter $\alpha_0(x;w)$ and mean vector $m(x;w)$.
-\end{itemize}
-% Thesis eq:general-dirichlet-mean evaluated at alpha(x;w).
+\item Marginalise $\pi$ to obtain label probabilities for input $x$.
+% Thesis eq:dirichlet-classification-marginal and eq:fixed-weight-dirichlet-marginal.
 \[
-\alpha_0(x;w)=\sum_{c=1}^{C}\alpha_c(x;w),
-\qquad m(x;w)=\frac{\alpha(x;w)}{\alpha_0(x;w)}.
+\begin{aligned}
+p(y\mid x,w)
+&=\int p(y\mid\pi)\,p(\pi\mid x,w)\,d\pi\\
+&=\mathbb E_{\mathrm{Dir}(\pi\mid\alpha(x;w))}[\pi_y]
+=\frac{\alpha_y(x;w)}{\alpha_0(x;w)}
+=m_y(x;w).
+\end{aligned}
 \]
-\begin{itemize}
-\item The mean gives the predicted class probabilities, $p(y=c\mid x,w)=m_c(x;w)$.
+\item \textbf{Evidential deep learning (EDL)} parameterises the concentrations through evidence $e_c(x;w)>0$, with %we use softplus for our evidence, sensoy proposed relu. But we used edl pytorch library, which used softplus, maybe because its more stable?
+% Methods eq:edl-softplus-evidence and eq:edl-dirichlet-concentration.
+$\alpha_c(x;w)=e_c(x;w)+1$. % 
 \end{itemize}
 \end{frame}
 
-% Source. Background 2.6, 2.8 and 2.9, eq:shannon-entropy,
+% Source. Background 2.6 to 2.9, eq:expected-conditional-entropy,
+% eq:mutual-information, eq:three-way-decomposition,
 % eq:aleatoric-epistemic-decomposition and eq:aleatoric-distributional-split.
 % Speaking notes
-% Entropy measures uncertainty about the label. It is zero for a certain label and largest for equally likely labels.
-% An expectation is an average. Mutual information measures the average reduction in label entropy when another variable becomes known.
-% In a categorical BNN, average the label entropy at each weight setting. This is the aleatoric term.
-% Knowing the weights can reduce label entropy. That reduction is the epistemic term.
-% In a Dirichlet network, instead average the label entropy for each possible class-probability vector at fixed weights.
-% Knowing that vector can reduce label entropy. That reduction is the distributional term.
-% Cat denotes the categorical label distribution. All quantities refer to the same fixed input and observed training data.
-% We now focus on the Dirichlet split. What controls the allocation between its two terms?
-\begin{frame}{How the Models Decompose Predictive Uncertainty}
-% Preserve the labels of the earlier uncertainty explanations on their replacement frame.
+% Predictive uncertainty is the entropy of the model's predicted label distribution for an input.
+% Aleatoric uncertainty is the expected conditional entropy obtained by conditioning on the class-probability vector.
+% It measures the label uncertainty remaining once that vector is known.
+% The vector is f(x;w) for the categorical BNN and pi for Dirichlet models.
+% In the categorical BNN, average the categorical label entropy over the weight posterior.
+% In the deterministic Dirichlet network, average it over the Dirichlet distribution of pi.
+% Epistemic uncertainty is mutual information between the label y and weights w.
+% It measures the reduction in label uncertainty obtained by knowing the weights.
+% Distributional uncertainty is mutual information between y and pi at given weights.
+% It measures the reduction in label uncertainty obtained by knowing pi, with the weights given.
+% In the combined model, this conditional mutual information is also averaged over the weight posterior.
+% These expectations use the model distributions at the same input. They do not average over different inputs.
+% A deterministic Dirichlet network fixes w at one fitted value, equivalent to a point mass over weights.
+% Knowing w then supplies no additional information, so its epistemic term is zero.
+% A categorical BNN fixes the class probabilities at f(x;w) once x,w are given.
+% In the general hierarchy, this is a point mass for pi at f(x;w), so its distributional term is zero.
+% A point mass is a degenerate distribution. The variable can still be written as a random variable mathematically.
+% These zeros follow from model assumptions, not evidence that the corresponding source is absent from the problem.
+\begin{frame}{Decomposing Predictive Uncertainty}
 \label{frm:predictive-entropy}
 \label{frm:aleatoric-intuition}
 \label{frm:distributional-intuition}
-\label{frm:uncertainty-terms}
 \begin{itemize}
-\setlength{\itemsep}{2mm}
-\item Entropy $\mathcal H$ measures label uncertainty. $\mathbb E$ denotes an average.
-\item Mutual information $\mathcal I$ measures how much knowing another variable reduces label uncertainty, on average.
-\item $\mathrm{Cat}(y\mid\pi)$ is the categorical label distribution with class probabilities $\pi$.
+\setlength{\itemsep}{5mm}
+\item \textbf{Predictive:}\quad Uncertainty about class label under model's predicted probabilities.
+% we use the shannon entropy to measure this. whcih is defined in the appendix.
+\item \textbf{Aleatoric:}\quad Label uncertainty that remains once class probabilities are known.
+%either f(x;w) for categorical BNN or pi for deterministic Dirichlet network
+\item \textbf{Epistemic:}\quad Reduction in label uncertainty obtained by knowing the weights $w$.
+%i.e the mutual information between the label and weights
+% if we have fixed weights, this implicitly assumes a point mass distribution over the weihgts. I.e. that the weights are known (and are not a random variable with a distribution). Therefore in the dirichlet network, this is zero.
+\begin{itemize}
+    \item \emph{Deterministic Dirichlet network}: Point mass $P(w=\hat w)=1$.
+    \item Assumes no uncertainty about weights. Epistemic uncertainty is zero.\end{itemize}
+\item \textbf{Distributional:}\quad Reduction in label uncertainty obtained by knowing $\pi$, given weights $w$.
+%i.e the mutual information between the label and the class probabilities given the weights
+% if we known class probabilities (f in the case of categorical BNN), this implicitly assumes a point mass distribution over the class probabilities. I.e. that the class probabilities are known (and are not a random variable with a distribution). Therefore in the dirichlet network, this is zero.
+\begin{itemize}
+    \item \emph{Categorical BNN}: Point mass $P(\pi=f(x;w)|x,w)=1$.
+    \item Assumes no uncertainty about the class probabilities. Distributional uncertainty is zero.
 \end{itemize}
-\medskip
-\textbf{Categorical BNN}\par
-% Copied from thesis eq:aleatoric-epistemic-decomposition.
-{\small
-\[
-\underbrace{\mathcal H[p(y\mid x,D)]}_{\text{predictive}}
-=\underbrace{\mathbb E_{p(w\mid D)}
-\Big[\mathcal H\big[\mathrm{Cat}(y\mid f(x;w))\big]\Big]}_{\text{aleatoric}}
-+\underbrace{\mathcal I(y;w)}_{\text{epistemic}}.
-\]
-}
-\textbf{Dirichlet network at fixed weights}\par
-% Copied from thesis eq:aleatoric-distributional-split.
-{\small
-\[
-\underbrace{\mathcal H\big[\mathrm{Cat}(y\mid m(x;w))\big]}_{\text{predictive}}
-=\underbrace{\mathbb E_{\mathrm{Dir}(\pi\mid\alpha(x;w))}
-\Big[\mathcal H[\mathrm{Cat}(y\mid\pi)]\Big]}_{\text{aleatoric}}
-+\underbrace{\mathcal I(y;\pi\mid w)}_{\text{distributional}}.
-\]
-}
+\item \textbf{Combining weight posterior with a Dirichlet distribution over class probabilities represents all three uncertainty terms.} % and that is the models which we develop in the thesis.
+\end{itemize}
 \end{frame}
 
-% Source. Background 2.3 and 2.9.3, eq:scale-invariance,
-% prop:aleatoric-monotonicity, cor:distributional-monotonicity.
-% Figure. scripts/build_figures.py, figures/mean_and_concentration.pdf.
-% Speaking notes
-% Consider a Dirichlet concentration vector alpha, with total concentration alpha_0 and mean m.
-% Multiply every concentration parameter by the same positive factor lambda. The ratios and mean stay unchanged.
-% The left plot uses two classes with mean probabilities 50/50. Higher concentration narrows the distribution around that mean.
-% The right plot shows the consequence. Aleatoric uncertainty increases and distributional uncertainty decreases.
-% Their sum stays unchanged because the predicted class probabilities stay unchanged.
-% This comparison varies concentration vectors at the same mean. It does not vary the output of one fixed network.
-% We can therefore obtain the same class prediction with different uncertainty allocations.
-% We next combine the model structures and ask what training with single labels can tell us about this allocation.
-% This follows Discussion 6.1 to 6.2. The likelihood limitation and explicit prior follow in the main section.
-\begin{frame}{Same Prediction, Different Uncertainty Split}
-\label{frm:mean-concentration}
-\begin{itemize}
-\item Write $\alpha$, $\alpha_0$, and $m$ for a Dirichlet concentration vector, its total concentration, and its mean.
-\begin{itemize}
-\item Multiplying all concentration parameters by the same factor $\lambda>0$ preserves the mean.
-\end{itemize}
-\end{itemize}
-% Copied from thesis eq:scale-invariance.
-\[
-\frac{\lambda\alpha}{\lambda\alpha_0}=\frac{\alpha}{\alpha_0}=m.
-\]
-{\centering
-\includegraphics[width=0.77\textwidth]{figures/mean_and_concentration.pdf}\par}
-\begin{itemize}
-\item At the same mean, higher total concentration increases aleatoric uncertainty and decreases distributional uncertainty.
-\end{itemize}
-\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% % Source. Background 2.8 and 2.9, eq:aleatoric-epistemic-decomposition,
+% % eq:aleatoric-distributional-split and sec:bg-dirichlet-point-estimate.
+% % Speaking notes
+% % The categorical BNN represents a posterior distribution over network weights.
+% % Given input x and weights w, its class-probability vector is fixed at f(x;w).
+% % This is a point mass over class probabilities conditional on x and w, not after averaging over weights.
+% % The weights can vary, and each resulting class-probability vector can still allow several labels.
+% % The model therefore represents epistemic and aleatoric uncertainty, but its distributional term is zero.
+% % A deterministic Dirichlet network instead represents a distribution over class-probability vectors pi.
+% % It uses one fitted weight vector, equivalent to a point mass over weights.
+% % It therefore represents distributional and aleatoric uncertainty, but its epistemic term is zero.
+% % These zeros are structural assumptions. They do not establish that the corresponding source is absent from the problem.
+% % We combine the weight posterior with the conditional Dirichlet distribution to represent all three terms.
+% \begin{frame}{What Each Model Represents}
+% \label{frm:uncertainty-terms}
+% \begin{itemize}
+% \setlength{\itemsep}{5mm}
+% \item \textbf{Categorical BNN}
+% \begin{itemize}
+% \item Weight posterior $p(w\mid D)$. Knowing $w$ fixes the class probabilities $f(x;w)$ for input $x$.
+% \item Distributional term is zero. Represents \textbf{aleatoric and epistemic uncertainty}.
+% \end{itemize}
+% \item \textbf{Deterministic Dirichlet network}
+% \begin{itemize}
+% \item $p(\pi\mid x,w)=\mathrm{Dir}(\pi\mid\alpha(x;w))$, but the weights $w$ are fixed.
+% \item Epistemic term is zero. Represents \textbf{aleatoric and distributional uncertainty}.
+% \end{itemize}
+% \item \textbf{Combining both distributions allows all three terms.}
+% \end{itemize}
+% \end{frame}
+
+% 

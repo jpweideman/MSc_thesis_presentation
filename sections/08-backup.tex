@@ -1,35 +1,115 @@
 % Backup frames support questions after the conclusion.
 \section*{Backup}
 
-% Source. Background 2.7, eq:general-hierarchy and eq:three-way-decomposition.
+% Source. Background 2.6, eq:shannon-entropy, eq:expected-conditional-entropy,
+% eq:mutual-information and eq:general-entropy-decomposition.
 % Speaking notes
-% Predictive entropy measures total uncertainty about the class label.
-% Read the aleatoric term from inside out. Fix the class probabilities, calculate label entropy, then average.
-% The distributional term is the average reduction in label uncertainty from knowing class probabilities at fixed weights.
-% The epistemic term is the reduction in label uncertainty from knowing the network weights.
-% All terms refer to the same fixed input and the fitted model.
-\begin{frame}{Backup. Decomposition of predictive uncertainty}
+% Entropy measures uncertainty about the class label y.
+% Let xi be another random quantity. Conditional entropy averages the label entropy remaining when xi is known.
+% Mutual information is the average reduction in label entropy from knowing xi.
+% Rearranging its definition gives the generic entropy decomposition at the bottom.
+\begin{frame}{Backup. Generic Entropy Decomposition}
+\label{frm:backup-entropy-decomposition}
+\setlength{\abovedisplayskip}{4pt}
+\setlength{\belowdisplayskip}{4pt}
+\begin{itemize}
+\setlength{\itemsep}{3mm}
+\item \textbf{Entropy} measures label uncertainty,
+% Thesis eq:shannon-entropy.
+\[
+\mathcal H[p(y)]=-\sum_{c=1}^{C}p(y=c)\log p(y=c).
+\]
+\item \textbf{Expected conditional entropy} averages what remains when the random variable $\xi$ is known,
+% Thesis eq:expected-conditional-entropy.
+\[
+\mathcal H[y\mid\xi]=\mathbb E_{p(\xi)}\!\left[\mathcal H[p(y\mid\xi)]\right].
+\]
+\item \textbf{Mutual information} is the average reduction from knowing $\xi$,
+% Thesis eq:mutual-information.
+\[
+\mathcal I(y;\xi)=\mathcal H[p(y)]-\mathcal H[y\mid\xi],
+\]
+\end{itemize}
+% Thesis eq:general-entropy-decomposition.
+\[
+\underbrace{\mathcal H[p(y)]}_{\text{total}}
+=\underbrace{\mathcal H[y\mid\xi]}_{\text{average remaining}}
++\underbrace{\mathcal I(y;\xi).}_{\text{average reduction}}
+\]
+\end{frame}
+
+% Source. Background 2.7, eq:weight-level-decomposition,
+% eq:fixed-weight-decomposition and eq:three-way-decomposition.
+% Speaking notes
+% Apply the generic entropy decomposition first to weights, then to class probabilities at given weights.
+% The aleatoric term averages label entropy when pi is known, over both pi and w.
+% The distributional term measures the average reduction from knowing pi at given weights, then averages over weights.
+% The epistemic term measures the average reduction from knowing the weights.
+% The input x and training data D remain fixed. The mutual information notation suppresses this context, as in the thesis.
+% The next slide shows which term disappears for each simpler model.
+\begin{frame}{Backup. Decomposition of Predictive Uncertainty}
 \label{frm:backup-three-way-decomposition}
 \begin{itemize}
-\item $x$ is the fixed input, $y$ the class label, and $D$ the training data.
-\item $w$ denotes network weights. $\pi$ is the random class-probability vector.
-\item $\mathcal H$ denotes entropy. $\mathcal I$ denotes mutual information.
+\setlength{\itemsep}{4mm}
+\item Apply the decomposition to weights $w$, then to class probabilities $\pi$ given $w$.
+\item Given input $x$ and training data $D$,
 \end{itemize}
-% Copied from thesis eq:three-way-decomposition. Only line breaks are changed.
+% Thesis eq:three-way-decomposition. Only line breaks are changed.
 \begin{align*}
-\underbrace{\mathcal H\big[p(y\mid x,D)\big]}_{\text{predictive}}
-&=\underbrace{\mathbb E_{p(w\mid D)}
-\Big[\mathbb E_{p(\pi\mid x,w)}
-\big[\mathcal H[\mathrm{Cat}(y\mid\pi)]\big]\Big]}_{\text{aleatoric}}
-\\[3mm]
-&\quad+\underbrace{\mathbb E_{p(w\mid D)}
-\big[\mathcal I(y;\pi\mid w)\big]}_{\text{distributional}}
-+\underbrace{\mathcal I(y;w)}_{\text{epistemic}}.
+\underbrace{\mathcal H[p(y\mid x,D)]}_{\text{predictive}}
+&=\underbrace{\mathbb E_{p(w\mid D)}\!\left[
+\mathbb E_{p(\pi\mid x,w)}\!\left[\mathcal H[\mathrm{Cat}(y\mid\pi)]\right]\right]}_{\text{aleatoric}}\\[4mm]
+&\quad+\underbrace{\mathbb E_{p(w\mid D)}\!\left[\mathcal I(y;\pi\mid w)\right]}_{\text{distributional}}\\[4mm]
+&\quad+\underbrace{\mathcal I(y;w)}_{\text{epistemic}}.
 \end{align*}
+\end{frame}
+
+% Source. Background 2.8 and 2.9, eq:aleatoric-epistemic-decomposition,
+% eq:aleatoric-distributional-split and sec:bg-dirichlet-point-estimate.
+% Speaking notes
+% The categorical BNN represents a posterior over weights.
+% Given x and w, pi equals f(x;w). Its conditional distribution is a point mass.
+% Knowing pi then adds no information about the label. The distributional term is zero.
+% The two remaining terms are aleatoric and epistemic uncertainty.
+% The deterministic Dirichlet network instead represents a distribution over pi but fixes the weights at one fitted value.
+% Its weight distribution is a point mass, so knowing the weights adds no information. The epistemic term is zero.
+% The two remaining terms are aleatoric and distributional uncertainty.
+% These zeros follow from model structure. They do not establish that a source is absent from the problem.
+% The terms in the two models need not have the same numerical values.
+% Combining a weight posterior with a conditional Dirichlet distribution permits all three terms.
+% We next construct this combined model and study what determines its allocation.
+\begin{frame}{Backup. Model-Specific Decompositions}
+\label{frm:backup-model-decompositions}
 \begin{itemize}
-\item $\mathrm{Cat}(y\mid\pi)$ is the label distribution with class probabilities $\pi$.
-\item Expectations average over $p(w\mid D)$ and $p(\pi\mid x,w)$.
-\item Mutual information terms also condition on the fixed $x$ and $D$, omitted for brevity.
+\item \textbf{Categorical BNN}\quad Given $x,w$, $p(\pi=f(x;w)|x,w) = 1$.\\
+Distributional term is zero.
+\end{itemize}
+% Thesis eq:aleatoric-epistemic-decomposition.
+{\small
+\[
+\underbrace{\mathcal H[p(y\mid x,D)]}_{\text{predictive}}
+=\underbrace{\mathbb E_{p(w\mid D)}\!\left[\mathcal H[\mathrm{Cat}(y\mid f(x;w))]\right]}_{\text{aleatoric}}
++\underbrace{\mathcal I(y;w)}_{\text{epistemic}}.
+\]
+% where p(y|x,D) is the model's predicted class probabilities for input x and training data D. which is Cat(y|f(x;w))
+}
+\medskip
+\begin{itemize}
+\item \textbf{Deterministic Dirichlet network}\quad The weights are fixed at $\hat{w}$.\\
+Epistemic term is zero.
+\end{itemize}
+% Thesis eq:aleatoric-distributional-split.
+{\small
+\[
+\underbrace{\mathcal H[p(y\mid x,\hat{w})]}_{\text{predictive}}
+=\underbrace{\mathbb E_{\mathrm{Dir}(\pi\mid\alpha(x;\hat{w}))}\!\left[\mathcal H[\mathrm{Cat}(y\mid\pi)]\right]}_{\text{aleatoric}}
++\underbrace{\mathcal I(y;\pi\mid\hat{w})}_{\text{distributional}}.
+\]
+% Here p(y|x,\hat{w}) = Cat(y|m(x;\hat{w})) is the predicted label distribution at the fitted weights.
+}
+\medskip
+\begin{itemize}
+\item \textbf{Combining a weight posterior with a Dirichlet distribution for class probabilities allows all three terms.}
 \end{itemize}
 \end{frame}
 
