@@ -3,11 +3,10 @@
 
 % Speaking notes
 % Neural networks perform well, but their predictions can be overconfident.
-% Knowing the uncertainty can help us decide how to act, especially when errors have serious consequences.
+% Estimating uncertainty in their predictions can help us decide how to act when errors have serious consequences.
 % In this illustration, the model labels part of the shadowed footpath as road.
-% High estimated uncertainty could prompt a driving system to slow down and avoid that region.
-% This motivates uncertainty-aware modelling. We now focus on classification.
-% The illustration is not an experimental result.
+% High estimated uncertainty could prompt a driving system to slow down and avoid relying on that region.
+% This is a conceptual illustration. We now focus on classification.
 \begin{frame}[t]{Why Uncertainty-Aware Modelling Matters}
 \label{frm:uncertainty-motivation}
 \begin{itemize}
@@ -60,20 +59,16 @@
 \end{frame}
 
 % Speaking notes
-% See Predictive Uncertainty Estimation via Prior Networks (Malinin, Gales) For a description of uncertainties and the decisions to make depending on which uncertainty is high.
-% The reason for decomposing predictive uncertainty is that different terms can call for different responses.
-% Aleatoric uncertainty remains even when class probabilities are known, as in the known 50/50 example.
-% More training data cannot remove it at fixed input information and a fixed label process.
-% We may therefore defer a decision if its risk is too high.
-% Epistemic uncertainty concerns which network weights explain the data.
-% More relevant training examples can help constrain these weights.
-% Distributional uncertainty concerns class probabilities at fixed network weights. It is basically how wide or narrow the distribution of possible class probabilities are. Think in terms of the dirichlet distribution of pi, where a higher alpha0 meamns a tighter distribution of pi, which means less distributional uncertainty
+% Different uncertainty terms can call for different responses.
+% Aleatoric uncertainty remains even with known class probabilities, as in the fifty-fifty example.
+% More training data cannot remove it when the input information and label process stay the same.
+% We may defer a decision if its risk is too high.
+% Epistemic uncertainty concerns the network weights. More relevant training examples can help constrain them.
+% Distributional uncertainty concerns class probabilities at given weights.
 % Malinin and Gales motivate this term through differences between training and test distributions.
-% In that setting, they suggest collecting training examples from the unfamiliar distribution.
-% Our displayed distributional term does not establish that this image is unfamiliar.
-% These examples explain why the distinction matters. They are not fixed action rules.
-% The figure shows one fitted model's allocation, not verified causes or demonstrated decision benefits.
-% This motivates our next question. How can a model represent all three terms together?
+% In that setting, collecting examples from the unfamiliar distribution may help.
+% Our displayed decomposition does not establish that this image is unfamiliar or validate a particular response.
+% These examples motivate representing the three terms together.
 \begin{frame}{Decomposing Predictive Uncertainty}
 \label{frm:classification-motivation}
 {\centering

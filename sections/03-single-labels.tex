@@ -1,54 +1,249 @@
-% Single Labels. Slides 12 to 16. Each result follows its model explanation.
-\section{Single Labels}
+% The Cat-eBNN. Build the model, motivate the prior, explain the decomposition, then evaluate.
+\section{Categorical Evidential Bayesian Neural Network}
 
-% Source. Methods 4.3.1 and 4.3.5, eq:ebnn-hierarchy, eq:ebnn-categorical,
-% sec:ebnn-uncertainty-decomposition.
-% Delivery. Identify w, alpha(x;w), and pi before discussing the label.
-\begin{frame}{A Dirichlet network with a weight posterior}
+% Source. Methods 4.3.1, eq:ebnn-hierarchy, eq:ebnn-categorical,
+% eq:edl-bnn-full-likelihood. Sensoy et al. 2018, Section 3, pp. 3--4, for the EDL interpretation.
+% Speaking notes
+% We now combine the two model structures, starting with one observed label per input.
+% For a given input and set of weights, the network outputs concentration parameters through the evidence parameterisation.
+% We adopt EDL's interpretation of nonnegative network outputs as support for each class.
+% Adding one gives a uniform Dirichlet baseline at zero evidence.
+% The evidence and baseline then correspond to assigned and unassigned belief in its subjective logic interpretation.
+% This is a modelling choice, not a requirement for the uncertainty decomposition.
+% Our softplus implementation approaches zero evidence only as a limit.
+% These define a Dirichlet distribution over class probabilities. Given those probabilities, the label follows a categorical distribution.
+% Marginalising the class-probability vector gives the predicted label probabilities, equal to the Dirichlet mean.
+% For each training example, we take the probability assigned to its observed label.
+% That is the entry of the mean vector corresponding to the observed class. [m_{y_i}(x_i;w)]
+% Given the inputs and shared weights, we assume the labels are independent.
+% Knowing one example's label then gives no further information about another example's label.
+% We multiply the observed-label probabilities across training examples to obtain the likelihood.
+% This likelihood assigns a probability to all observed labels for a given set of weights.
+% Next, we examine what it can tell us about the concentration parameters. The prior and posterior follow after that.
+\begin{frame}{Categorical Evidential Bayesian Neural Network}
 \label{frm:cat-ebnn}
-\slidemessage{The combined model represents the three uncertainty terms.}
+\label{frm:cat-ebnn-setup}
+\setlength{\abovedisplayskip}{4pt}
+\setlength{\belowdisplayskip}{4pt}
 \begin{itemize}
-\item Categorical evidential Bayesian neural network (Cat-eBNN)
-\begin{itemize}
-\item For input $x$ and data $D$, the weight posterior $p(w\mid D)$ gives epistemic uncertainty.
-\end{itemize}
-\end{itemize}
+\setlength{\itemsep}{5mm}
+\item \textbf{One observed label} per input.
+\item \textbf{Network outputs} $\alpha(x;w)=e(x;w)+1$, %concentration parameters
+% Thesis eq:ebnn-hierarchy and eq:ebnn-categorical.
+\begin{align*}
+p(\pi\mid x,w)&=\mathrm{Dir}\bigl(\pi\mid\alpha(x;w)\bigr),\\[1mm]
+p(y\mid\pi)&=\mathrm{Cat}(y\mid\pi).
+\end{align*}
+\item Marginalising $\pi$ gives observation model $p(y\mid x,w)=m_y(x;w)$.
+\item Assuming conditionally independent labels, \textbf{likelihood} is% Thesis eq:edl-bnn-full-likelihood.
 \[
-p(\pi\mid x,w)=\mathrm{Dir}\bigl(\pi\mid\alpha(x;w)\bigr)
-\qquad \text{distributional uncertainty}
+p(D\mid w)=\prod_{i=1}^{N}p(y_i\mid x_i,w)=\prod_{i=1}^{N}m_{y_i}(x_i;w).
 \]
-\[
-p(y\mid\pi)=\mathrm{Cat}(y\mid\pi)
-\qquad \text{aleatoric uncertainty}
-\]
-\slidepoint{The network gives $\alpha(x;w)$. The random class-probability vector is $\pi$.}
-% Copied from thesis eq:ebnn-hierarchy and eq:ebnn-categorical.
-% Preparation. $x$ is the input, $D$ the observed dataset, and $w$ the shared network weights. The network produces $\alpha(x;w)$.
-% Source detail. Thesis \S4.3.1 and \S4.3.5.
+\end{itemize}
 \end{frame}
 
-% Source. Methods 4.3.2 and 4.3.3, eq:ebnn-likelihood-equivalence,
-% eq:ebnn-likelihood-invariance. Background 2.3, eq:scale-invariance.
-% Delivery. Keep the mean fixed. A change in concentration then leaves the likelihood unchanged.
-\begin{frame}{The single label likelihood}
+% Source. Methods 4.3.1 to 4.3.3, eq:edl-bnn-full-likelihood, eq:ebnn-likelihood-invariance and
+% eq:posterior-odds-unchanged. Background 2.2 and 2.3, eq:general-dirichlet-mean and eq:scale-invariance.
+% Figure. scripts/build_likelihood_concentration.py, figures/likelihood_concentration_single.pdf.
+% Mean vector from run e2_c10h_ebnn_dm_mode50_warm_s0, CIFAR-10 test image 6505, weights at saved sample 6 of 40.
+% The count slide uses the same fixed mean vector. For one label only m_y matters, so the curve is the same for any model.
+% Controlled likelihood illustration. Not a model comparison or a new experimental result.
+% The y axis is the likelihood itself, from 0 to 1. The line sits at m_deer = 0.778.
+% The x axis starts at 1/min_c m_c = 41.3, the smallest alpha_0 the network can produce at this mean vector,
+% because every alpha_c(x;w) > 1 (eq:edl-dirichlet-concentration). Every plotted point is reachable.
+% Details and the selection of the image in likelihood_concentration_sources.json. The ratio for w and w' is in backup.
+% Speaking notes
+% We now ask what the observed labels tell us about the total concentration.
+% We hold the mean vector fixed and compare different values of total concentration.
+% The likelihood measures how well each value explains the observed labels. The labels prefer values with a higher likelihood.
+% In the posterior, the likelihood ratio multiplies the prior ratio. If the likelihood is the same for every value, the labels prefer none of them.
+% Then the labels do not inform total concentration, and the prior ratio stays as it is.
+% For single labels, each likelihood factor is the concentration of the observed class divided by the total concentration.
+% This ratio is the mean probability of the observed class.
+% If we scale all concentration parameters at an input by the same number, that number cancels in the ratio.
+% So the likelihood does not change with total concentration.
+% Here is one factor of this product for a real test image. It shows a deer, and its CIFAR-10 label is deer.
+% We fix the mean vector at one weight sample of our trained model. It gives deer a probability of 0.78.
+% The axis starts at the smallest total concentration the network can produce with this mean vector.
+% Every concentration parameter is above one, so the smallest class probability sets this limit.
+% The plot shows the likelihood of the label. It is 0.78 for every total concentration.
+% The line is flat, so every value is equally preferred.
+% The label prefers no value of total concentration, so it cannot inform it.
+% The labels do inform the mean vectors, because the likelihood changes with them.
+% This holds at fixed mean vectors. In training, total concentration can still change through the shared weights.
+% Next, we see why this matters for the uncertainty allocation.
+\begin{frame}{Single Labels Cannot Inform Total Concentration}
 \label{frm:likelihood-limit}
-\slidemessage{At fixed mean vectors, single labels cannot inform the total concentration parameter.}
-% Copied from thesis eq:ebnn-likelihood-equivalence and eq:edl-predictive.
+\setlength{\abovedisplayskip}{2pt}
+\setlength{\belowdisplayskip}{2pt}
+\begin{itemize}
+\setlength{\itemsep}{5mm}
+\item Single label likelihood \textbf{depends only on mean vector},
+% Since likelihood depends only on the ratio of concentrations to total concentration the model can learn the proportions a/a_0 but it cannot learn the total concentration.
+% Thesis eq:edl-bnn-full-likelihood with eq:general-dirichlet-mean substituted.
 \[
-p(y\mid x,w)=m_y(x;w),
-\qquad m(x;w)=\frac{\alpha(x;w)}{\alpha_0(x;w)}.
+p(D\mid w)=\prod_{i=1}^{N}m_{y_i}(x_i;w)=\prod_{i=1}^{N}\frac{\alpha_{y_i}(x_i;w)}{\alpha_0(x_i;w)}
+.
 \]
+\item Likelihood \textbf{does not inform total concentration} because
+observed labels provide no evidence favouring one concentration over another,
+at fixed mean vectors.
+% meaning that there is not some concentrations that give higher likelihoods than others.
+
+% \item Labels \textit{inform total concentration}
+% when some concentrations give higher likelihoods than others, at fixed mean vectors.
+%where favour means that the labels give evidence for assigning higher probability to those observed labels at one total concentration than at another total concentration
+% \item Labels inform $\alpha_0$ exactly when they prefer some values of $\alpha_0$ over others.
+% \item Thus, “the likelihood informs total concentration” means the observed data provide evidence favouring some total concentrations over others, at fixed mean vectors.
+% IN BNN TRAINING THIS IS THE PRACTICAL IMPLICATION ####################
+% In SGLD, the practical difference is whether the observed labels push the weights towards particular total concentrations.
+% Each update combines three contributions
+% - The likelihood gradient pushes towards weights that favour a certain total concentration  that better explains the observations.
+% - The prior gradient pushes towards weights favoured by the prior.
+% - Random noise enables sampling rather than simply finding an optimum.
+% \begin{itemize}
+% \item At a fixed mean vector, preferred values give a higher likelihood.
+% \end{itemize}
+\end{itemize}
+\par\medskip\vspace{4mm}
+{\centering
+\begin{minipage}[c]{0.2\textwidth}
+\raggedleft
+{\scriptsize $y=\mathrm{deer}$\par %Fixed mean vector:
+\par $m_{\mathrm{deer}}=0.778$\par}
+\end{minipage}\hspace{0.015\textwidth}%
+\begin{minipage}[c]{0.14\textwidth}
+\centering
+% Align with the plotting area rather than the graph's full box, which includes axis labels.
+\raisebox{0.15\linewidth}[\height][\depth]{%
+\includegraphics[width=\linewidth]{figures/likelihood_example_input.png}}
+\end{minipage}\hspace{0.02\textwidth}%
+\begin{minipage}[c]{0.48\textwidth}
+\centering
+\includegraphics[width=\linewidth]{figures/likelihood_concentration_single.pdf}
+\end{minipage}\par}
 \medskip
-% Thesis eq:scale-invariance. Generic Dirichlet vector and scalar, not network functions.
+% \begin{itemize}
+% \item \textbf{Same likelihood for every $\alpha_0$. So single labels cannot inform $\alpha_0$.}
+% \end{itemize}
+\end{frame}
+
+
+% Speaking notes
+% We use natural logarithms, so these values are measured in nats.
+% The single label likelihood gives no preference between concentrations at the same mean. Why does this matter?
+% Concentration changes how predictive uncertainty is divided into aleatoric and distributional uncertainty.
+% The total predictive uncertainty stays unchanged because the mean class probabilities stay unchanged.
+% We illustrate this with two classes, each with mean probability one half. This is a mathematical example, not an experimental result.
+% The dashed line shows the unchanged predictive entropy.
+% As concentration increases, the blue aleatoric curve rises and the orange distributional curve falls.
+% At every concentration, these two values add up to the dashed line.
+% At the left limit, class-probability vectors concentrate near the simplex vertices.
+% Knowing the class probabilities then almost determines the label. Aleatoric uncertainty tends to zero.
+% At the right limit, class-probability vectors concentrate at the mean.
+% Knowing them adds no information beyond the mean. Distributional uncertainty tends to zero and all uncertainty is aleatoric.
+% These are limits of the general Dirichlet family. Our EDL parameterisation only uses total concentrations above two for this mean.
+% The monotonic relationship still holds within that allowed range.
+% This comparison concerns the conditional Dirichlet distribution, not a change in the weight posterior.
+% Single labels cannot distinguish these uncertainty allocations at fixed means.
+% We therefore state an explicit concentration assumption through the prior.
+\begin{frame}{Total Concentration Controls the Uncertainty Split}
+\label{frm:mean-concentration}
+\begin{itemize}
+\setlength{\itemsep}{2mm}
+\item At fixed mean vector, \textbf{total concentration} controls \textbf{aleatoric--distributional} allocation.
+% THIS SHOULD BE SPOKEN:
+% \begin{itemize}
+% \item Increasing total concentration increases aleatoric uncertainty and decreases distributional uncertainty.
+% \item \textbf{Total predictive uncertainty remains unchanged.}
+% \end{itemize}
+\par\vspace{4mm}
+{\centering
+{\scriptsize Dirichlet--categorical model, $\alpha_c>0$ $\forall c$, $\alpha_0>0$\par
+Two-class illustration, $m=(0.5,0.5)$\par}
+\smallskip
+\includegraphics[width=0.76\textwidth]{figures/concentration_split_comparison.pdf}\par}
+\vspace{3mm}
+\item Single labels \textbf{cannot inform} % the total concentration and therefore cannot inform:
+this uncertainty allocation.
+\end{itemize}
+\end{frame}
+
+% In the thesis nothing is wrong, and i just make the point that higher total concentration gives relatively more aleatoric uncertainty and less distributional uncertainty.
+% But I also don't question the fact that the evidence parameterisation restricts the uncertainty split, and that this is a limitation.
+% I kind of just blindly too EDL as it is without questioning it. And I think there is a case to be made that this is a limitation not worth having for the gain that EDL gives, which is just the subjective logic interpretation.
+% Speaking notes
+% This reveals a limitation of our choice to use the evidence parameterisation.
+% Adding one keeps every concentration parameter above 1 in our implementation.
+% For equal mean probabilities in two classes, total concentration must therefore be greater than 2.
+% The same uncertainty decomposition still holds, but only part of its allocation range is available.
+% In particular, we cannot approach a fully distributional allocation at this fixed mean.
+% The open circles show the excluded boundary. We can approach it with softplus outputs.
+% At that boundary, aleatoric uncertainty is one half nat and distributional uncertainty is log two minus one half.
+% Natural logarithms give the units of nats.
+% We adopt EDL's evidence interpretation, but this restriction is not required by the Dirichlet model itself.
+% Allowing any positive concentration parameters would permit the full limiting range.
+% This makes the parameterisation worth reconsidering. It does not establish that our choice gives worse predictions.
+% We would need a comparison to assess that. We do not report such a comparison here.
+% Either parameterisation still leaves single labels unable to inform total concentration at fixed mean vectors.
+% We next make that concentration assumption explicit through the prior.
+\begin{frame}{A Limitation of the Evidence Parameterisation}
+\label{frm:mean-concentration-edl}
+\begin{itemize}
+\item EDL \textbf{restricts} the aleatoric--distributional split.
+\begin{itemize}
+\item Fully distributional allocation cannot be approached. % at a fixed mean vector.
+\end{itemize}
+\par\vspace{4mm}
+{\centering
+{\scriptsize EDL model, $\alpha_c>1$ $\forall c$, $\alpha_0>2$\par
+Two-class illustration, $m=(0.5,0.5)$\par}
+\smallskip
+\includegraphics[width=0.76\textwidth]{figures/concentration_split_edl.pdf}\par}
+\vspace{2mm}
+\item Would \textbf{less restrictive} parameterisation $\alpha_c>0$ $\forall c$ be preferable?
+\end{itemize}
+\end{frame}
+
+% Source. Methods 4.3.1 and 4.3.4, eq:gamma-prior-weights,
+% eq:edl-bnn-weight-posterior and eq:assumed-total-concentration.
+% Speaking notes
+% We return to what single labels can tell us, regardless of the evidence parameterisation.
+% At fixed mean vectors, the likelihood cannot distinguish total concentrations or their uncertainty splits.
+% A Bayesian model still assigns weight to these possibilities through its prior assumptions.
+% We make the concentration assumption explicit through Gamma factors in the Gaussian weight prior.
+% The Gamma form is our modelling choice. It is not the only possible prior. A log normal for example would also work, as long at it is a density on the positive reals whose mode can be placed at an attainable total concentration and which has a second parameter for the spread.
+% This Gamma prior supplies an assumption where the labels provide no preference. It does not add information from the labels.
+% Each factor evaluates the total concentration produced at a training input, without using its label.
+% Total concentration is a network output, not a separate sampled parameter.
+% The Gamma mode states the preferred concentration. Its standard deviation describes the spread of that assumption.
+% We place the mode above the number of classes because that is the range allowed by our evidence parameterisation.
+% Combining this prior with the categorical likelihood gives the weight posterior.
+% The prior supplies an assumption. It does not make concentration identifiable from single labels at fixed means.
+% We can now examine the completed model's uncertainty decomposition.
+\begin{frame}{Prior on Total Concentration}\label{frm:gamma-prior}
+\begin{itemize}
+\setlength{\itemsep}{3mm}
+\item At fixed mean vectors, single labels \textbf{do not inform total concentration}.
+\begin{itemize}
+\item And therefore not the uncertainty allocation.
+\end{itemize}
+\item State the \textbf{total concentration assumption} through prior,
+% Thesis eq:gamma-prior-weights.
 \[
-\frac{\lambda\alpha}{\lambda\alpha_0}
-=\frac{\alpha}{\alpha_0}=m,
-\qquad \lambda>0.
+\tilde p(w)\propto p(w)\prod_{i=1}^{N}
+\mathrm{Gamma}\bigl(\alpha_0(x_i;w)\mid\kappa,\beta\bigr).
 \]
-\medskip
-\slidepoint{Rescaling changes total concentration without changing the mean vector or label likelihood.}
-% Preparation. The identity concerns rescaled Dirichlet parameters. The network result compares weights with equal mean vectors on the training inputs.
-% Source detail. Thesis \S2.3, \S4.3.2, and \S4.3.3.
+\begin{itemize}
+\item Shape $\kappa>1$, rate $\beta>0$.
+\item Prior mode $(\kappa-1)/\beta>C$ and standard deviation $\sqrt{\kappa}/\beta$. %mode states the preferred total concentration level and standard deviation describes the spread of that assumption.
+\end{itemize}
+\item Prior $\tilde p(w)$ and categorical likelihood give weight posterior,
+% Thesis eq:edl-bnn-weight-posterior.
+\[
+p(w\mid D)\propto\tilde p(w)\prod_{i=1}^{N}m_{y_i}(x_i;w).
+\]
+\end{itemize}
 \end{frame}
 
 % Source. Methods 4.3.1 and 4.3.4, eq:gamma-prior-weights,

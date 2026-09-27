@@ -1,19 +1,269 @@
-% Backup frames support questions after the conclusion.
-\section*{Backup}
+% Appendix frames support questions after the closing slide.
+\section*{Appendix}
 
+
+
+
+% Source. Background 2.1, eq:categorical-likelihood and eq:likelihood-factorization.
+% Speaking notes
+% The categorical distribution assigns each label the corresponding class probability from the network output.
+% In this product over classes, the indicator selects the probability of the observed label.
+% That class has exponent one. Every other class has exponent zero and contributes a factor of one.
+% We then multiply the observed-label probabilities across conditionally independent training examples to obtain the likelihood.
+\begin{frame}{Categorical Observation Model}
+    \label{frm:backup-categorical-observation}
+    \begin{itemize}
+    \item For input $x$ and weights $w$, $f(x;w)$ lists probabilities for $C$ classes.
+    \item $y$ is the label. $\mathbb I[y=c]$ is 1 when $y=c$ and 0 otherwise.
+    \end{itemize}
+    % Copied from thesis eq:categorical-likelihood.
+    \[
+    p(y\mid x,w)=\mathrm{Cat}\bigl(y\mid f(x;w)\bigr)
+    =\prod_{c=1}^{C}f_c(x;w)^{\mathbb I[y=c]}=f_y(x;w).
+    \]
+    \begin{itemize}
+    \item $D$ contains $N$ labelled pairs $(x_i,y_i)$.
+    \item Conditional independence gives the product over observations.
+    \end{itemize}
+    % Thesis eq:likelihood-factorization and eq:categorical-likelihood.
+    \[
+    p(D\mid w)=\prod_{i=1}^{N}p(y_i\mid x_i,w)=\prod_{i=1}^{N}f_{y_i}(x_i;w).
+    \]
+    \end{frame}
+    
+    
+    % Source. Author-requested supporting theory for Methods 4.2.1, sec:edl-model-setup.
+    % Sensoy et al. 2018, Section 3, pp. 3--4. Jøsang 2016 UAI tutorial, slides 12, 20, 29 and 33--35.
+    % Verified primary-source details are in VERIFIED_SOURCES.md.
+    % Speaking notes
+    % Consider a prediction of fifty percent bird and fifty percent frog.
+    % The model might have little evidence for either class.
+    % Alternatively, it might have substantial but balanced evidence for both classes.
+    % The class probabilities alone do not distinguish these situations.
+    % Subjective logic lets us represent this distinction through assigned and unassigned belief.
+    % With little evidence, most belief remains unassigned. With strong evidence, more belief is assigned to the supported classes.
+    % Base probabilities specify how unassigned belief contributes to the predicted class probabilities.
+    % The two situations can therefore give the same prediction, despite different amounts of unassigned belief.
+    % This describes what the representation can express. It does not guarantee that a trained network estimates evidence correctly.
+    % The following example makes the distinction explicit using the same notation.
+    \begin{frame}{Theory of Evidence and Subjective Logic}
+    \label{frm:backup-subjective-logic}
+    \begin{itemize}
+    \setlength{\itemsep}{1mm}
+    \item A $(0.5,0.5)$ bird--frog class probability prediction can reflect
+    \begin{itemize}
+    \item \textbf{Little evidence} for either class.
+    \item \textbf{Evidence} that supports both classes equally.
+    \end{itemize}
+    \item For $C$ classes, subjective logic represents the model's belief about the class label using
+    \begin{itemize}
+    \item $b_c$, belief assigned to class $c$.
+    \item $u$, belief not assigned to any individual class.
+    % Sensoy Section 3. Jøsang slide 20. Class count is C in thesis notation.
+    \[
+    b_c\geq0,\qquad u\geq0,\qquad \sum_{c=1}^{C}b_c+u=1.
+    \]
+    \item $a_c$, base probability is fraction of unassigned belief allocated to class $c$
+    \[
+    a_c\geq0,\qquad \sum_{c=1}^{C}a_c=1.
+    \]
+    \end{itemize}
+    \item Probability of class $c$ is a function of its \textbf{assigned} and \textbf{unassigned} belief,
+    \[
+    p(y=c)=\underbrace{b_c}_{\text{assigned belief}}
+    +\underbrace{a_cu.}_{\text{share of unassigned belief}}
+    \]
+    \end{itemize}
+    \end{frame}
+    
+    % Source. Author-requested illustration of Jøsang 2016, slides 12 and 20.
+    % Values follow from the projected probability p(y=c)=b_c+a_c u.
+    % Supporting context. Methods 4.2.1, sec:edl-model-setup. This is not an experimental result.
+    % Speaking notes
+    % Suppose the two possible classes are bird and frog.
+    % First, we have no evidence that supports either class specifically.
+    % Class belief means the mass assigned to one particular class. Here both class belief masses are zero.
+    % Unassigned belief is the mass left without choosing an individual class. Here all the mass remains unassigned.
+    % We still need class probabilities. Base probabilities specify how to distribute the unassigned mass.
+    % We choose equal base probabilities, so half goes to bird and half to frog.
+    % Each class therefore gets zero assigned belief plus half the unassigned mass, giving fifty percent.
+    % Now consider a different opinion. Half the belief is assigned to bird and half to frog.
+    % Nothing remains unassigned. Each class still receives fifty percent probability.
+    % The prediction is identical, but one opinion leaves all belief unassigned and the other assigns it all.
+    % Thus, no unassigned belief does not mean we know which class label applies.
+    % In EDL, fully assigned balanced belief is approached as equal evidence increases without bound.
+    % Finite EDL evidence always leaves some unassigned belief.
+    \begin{frame}{Theory of Evidence and Subjective Logic Example}
+    \label{frm:backup-belief-example}
+    \setlength{\abovedisplayskip}{4pt}
+    \setlength{\belowdisplayskip}{4pt}
+    \begin{itemize}
+    \setlength{\itemsep}{3mm}
+    \item Consider $C=2$ classes, bird ($c=1$) and frog ($c=2$).
+    \begin{itemize}
+    \item \textbf{Base probabilities $a_c$} distribute unassigned belief. Choose $a_1=a_2=0.5$.
+    \end{itemize}
+    \item \textbf{No assigned belief}
+    \begin{itemize}
+    \item \textbf{Class belief $b_c$} assigned to class $c$.
+    No belief assigned $b_1=b_2=0$.
+    \item \textbf{Unassigned belief} $u=1$ (since $\sum_c b_c+u=1$).
+    \[
+    p(y=c)=b_c+a_cu=0+0.5\times1=0.5,
+    \qquad c\in\{1,2\}.
+    \]
+    \item $(0.5,0.5)$ predicted class probability reflects \textbf{no evidence supporting belief for either class}.
+    \end{itemize}
+    \item \textbf{Belief assigned}
+    \begin{itemize}
+    \item Suppose \textbf{evidence supports assigning belief} to each class. $b_1=b_2=0.5$ and $u=0$.
+    \[
+    p(y=c)=b_c+a_cu=0.5+0.5\times0=0.5,
+    \qquad c\in\{1,2\}.
+    \]
+    \item $(0.5,0.5)$ predicted class probability reflects \textbf{evidence supporting belief for equal classes.}
+    \end{itemize}
+    \end{itemize}
+    \end{frame}
+    
+    % Source. Sensoy et al. 2018, Section 3, pp. 3--4, and Section 4, opening paragraphs.
+    % Background 2.2, eq:dirichlet-density. Methods 4.2.1, eq:edl-softplus-evidence,
+    % eq:edl-dirichlet-concentration and eq:edl-dirichlet.
+    % Speaking notes
+    % We have described subjective belief. We now construct the distribution that EDL uses to represent it.
+    % The network predicts a nonnegative amount of support for each class, called evidence.
+    % These outputs are learned from labelled examples. They are not observed counts or class probabilities.
+    % We first need a baseline for the case where there is no evidence for any class.
+    % EDL chooses a uniform Dirichlet distribution over possible class-probability vectors.
+    % This distribution has all concentration parameters equal to one.
+    % Its density is constant because each exponent is the concentration parameter minus one.
+    % EDL adds the learned evidence to these baseline parameters, giving one plus evidence.
+    % The resulting concentration vector specifies the Dirichlet distribution for the input.
+    % This distribution describes possible class probabilities, not possible evidence outputs.
+    % The baseline is a modelling choice, not a requirement of subjective logic alone.
+    % In our softplus implementation, zero evidence is approached only as a limit.
+    % Next, we read assigned belief, unassigned belief and base probabilities from the Dirichlet parameters.
+    \begin{frame}{Evidential Deep Learning }
+    \label{frm:backup-edl-evidence-meaning}
+    \begin{itemize}
+    \setlength{\itemsep}{5mm}
+    \item The network outputs evidence $e_c(x;w)\geq0$, \textbf{learned support for class $c$}.
+    \item EDL chooses a \textbf{uniform Dirichlet distribution at zero evidence}.
+    \begin{itemize}
+    \item Baseline concentration of one for every class.
+    \end{itemize}
+    \item Learned evidence adds to this baseline,
+    % Thesis eq:edl-dirichlet-concentration. Sensoy Section 3.
+    \[
+    \alpha_c(x;w)=\underbrace{1}_{\text{baseline}}
+    +\underbrace{e_c(x;w).}_{\text{learned class evidence}}
+    \]
+    \item Concentration parameters specify a distribution over random class probability vectors $\pi$,
+    % Thesis eq:edl-dirichlet.
+    \[
+    p(\pi\mid x,w)=\mathrm{Dir}\bigl(\pi\mid\alpha(x;w)\bigr).
+    \]
+    \end{itemize}
+    \end{frame}
+    
+
+% Source. Background 2.2, eq:dirichlet-density and eq:general-dirichlet-mean.
+% Sensoy et al. 2018, Section 3, pp. 3--4, uniform baseline at zero evidence.
+% Figure. scripts/build_edl_baseline.py. Samples from the Dirichlet density, not experimental results.
+% Speaking notes
+% Each green dot represents three class probabilities. The corners give one class probability one.
+% The red dot marks the mean, one third for each class, in all three triangles.
+% 1) Small positive concentration parameters favour the corners. One class receives almost all the probability, but each corner is equally favoured.
+% 2) Parameters of one give constant density across the triangle. Equal areas have equal probability.
+% This favours neither balanced nor unequal class probabilities.
+% 3) Parameters of five favour vectors near the centre, with roughly 1/3 probability for each class.
+% None favours a particular class. They differ in which probability vectors they favour.
+% Zero concentration parameters are invalid. The left plot uses small positive values.
+% EDL chooses the uniform density as its zero evidence baseline. Adding one implements this choice.
+\begin{frame}{The Dirichlet Baseline at Zero Evidence}
+\label{frm:appendix-edl-zero-evidence}
+\begin{itemize}
+    \setlength{\itemsep}{2mm}
+\item Each dot is a sampled class-probability vector.
+\begin{itemize}
+\item Vertices assign probability one to a class. 
+\item The centre assigns $1/3$ probability to each class.
+\end{itemize}
+\begin{center}
+\includegraphics[width=.85\textwidth]{figures/edl_zero_evidence_baselines.pdf}
+\end{center}
+\item EDL chooses \textbf{uniform density at zero evidence}
+\end{itemize}
+\end{frame}
+
+    % Source. Sensoy et al. 2018, Section 3, Eqs. (1)--(2) and inverse belief mapping after Eq. (1).
+    % Jøsang 2016 UAI tutorial, slides 20--24, opinion and Dirichlet correspondence.
+    % Methods 4.2.1, eq:edl-dirichlet-concentration and eq:edl-predictive.
+    % Speaking notes
+    % We adopt the interpretation specified by Sensoy and colleagues.
+    % Learned evidence supplies support assigned to individual classes. The unit baseline represents unassigned belief.
+    % The network learns evidence values. The meaning of the belief quantities is part of the chosen model.
+    % We divide the evidence for each class by total concentration to obtain its assigned belief.
+    % Unassigned belief is what remains after summing all assigned belief.
+    % The remaining baseline has one unit per class, giving the number of classes divided by total concentration.
+    % Each class receives an equal share of that baseline, so its base probability is one divided by the number of classes.
+    % These are the assigned belief, unassigned belief and base probabilities from our earlier example.
+    % We now calculate a class probability by adding its assigned belief and its share of unassigned belief.
+    % The result equals the Dirichlet mean. The equation shows the same class probability in both representations.
+    % The opinion also retains unassigned belief, which the class probabilities alone do not specify.
+    % This mapping uses EDL's chosen baseline. Unassigned belief is not the thesis distributional mutual information.
+    \begin{frame}{Subjective Logic Interpretation of Dirichlet Model}
+    \label{frm:backup-opinion-dirichlet}
+    \label{frm:backup-edl-evidence}
+    \setlength{\abovedisplayskip}{5pt}
+    \setlength{\belowdisplayskip}{5pt}
+    \begin{itemize}
+    \setlength{\itemsep}{2mm}
+    \item Following Sensoy et al. (2018) normalised evidence gives \textbf{assigned class belief}, normalised baseline gives \textbf{unassigned belief}.
+    \begin{itemize}
+    \item Normalise by $\alpha_0(x;w)=\sum_c\alpha_c(x;w)$ gives belief masses,
+    % Sensoy Eq. (1). The second line follows from sum_c b_c+u=1.
+    \[
+    \begin{aligned}
+    b_c(x;w)&=\frac{e_c(x;w)}{\alpha_0(x;w)},\\[2mm]
+    u(x;w)&=1-\sum_{c=1}^{C}b_c(x;w)=\frac{C}{\alpha_0(x;w)}.
+    \end{aligned}
+    \]
+    \item $a_c=1/C$ base probabilities $\forall c$ since each class has one baseline unit.
+    \end{itemize}
+    % \item Both representations give the same class probabilities.
+    % % Jøsang slide 20. Sensoy Eq. (2). Thesis eq:edl-predictive, evaluated at class c.
+    % \[
+    % \underbrace{p(y=c\mid x,w)}_{\text{class probability}}
+    % =\underbrace{b_c(x;w)+a_cu(x;w)}_{\text{subjective logic}}
+    % =\underbrace{\frac{\alpha_c(x;w)}{\alpha_0(x;w)}}_{\text{Dirichlet mean}}.
+    % \]
+    \item Gives \textbf{subjective logic interpretation} of Dirichlet--categorical observation model,
+    \[
+    \underbrace{p(y=c\mid x,w)}_{\text{observation model}}
+    =
+    \underbrace{b_c(x;w)+a_cu(x;w)}_{\text{subjective logic}}
+    =
+    \underbrace{\frac{\alpha_c(x;w)}{\alpha_0(x;w)}.}_{\text{Dirichlet mean}}
+    \]
+    \end{itemize}
+    \end{frame}
+
+    
 % Source. Background 2.6, eq:shannon-entropy, eq:expected-conditional-entropy,
 % eq:mutual-information and eq:general-entropy-decomposition.
 % Speaking notes
-% Entropy measures uncertainty about the class label y.
-% Let xi be another random quantity. Conditional entropy averages the label entropy remaining when xi is known.
-% Mutual information is the average reduction in label entropy from knowing xi.
-% Rearranging its definition gives the generic entropy decomposition at the bottom.
-\begin{frame}{Backup. Generic Entropy Decomposition}
+% Entropy measures uncertainty about the class label.
+% Suppose another quantity becomes known. We calculate the remaining label entropy for each possible value of that quantity.
+% Averaging gives expected conditional entropy.
+% The difference from the original entropy is mutual information, the average reduction obtained by knowing that quantity.
+% Rearranging gives the entropy decomposition shown below.
+\begin{frame}{Entropy and its Decomposition}
 \label{frm:backup-entropy-decomposition}
 \setlength{\abovedisplayskip}{4pt}
 \setlength{\belowdisplayskip}{4pt}
 \begin{itemize}
-\setlength{\itemsep}{3mm}
+\setlength{\itemsep}{5mm}
 \item \textbf{Entropy} measures label uncertainty,
 % Thesis eq:shannon-entropy.
 \[
@@ -41,13 +291,12 @@
 % Source. Background 2.7, eq:weight-level-decomposition,
 % eq:fixed-weight-decomposition and eq:three-way-decomposition.
 % Speaking notes
-% Apply the generic entropy decomposition first to weights, then to class probabilities at given weights.
-% The aleatoric term averages label entropy when pi is known, over both pi and w.
-% The distributional term measures the average reduction from knowing pi at given weights, then averages over weights.
-% The epistemic term measures the average reduction from knowing the weights.
-% The input x and training data D remain fixed. The mutual information notation suppresses this context, as in the thesis.
-% The next slide shows which term disappears for each simpler model.
-\begin{frame}{Backup. Decomposition of Predictive Uncertainty}
+% We apply the generic decomposition first to the weights, then to class probabilities at given weights.
+% The aleatoric term averages the label entropy remaining with known class probabilities.
+% The distributional term averages the reduction obtained by knowing those probabilities at given weights.
+% The epistemic term measures the average reduction obtained by knowing the weights.
+% The input and training data remain fixed throughout.
+\begin{frame}{Decomposition of Predictive Uncertainty}
 \label{frm:backup-three-way-decomposition}
 \begin{itemize}
 \setlength{\itemsep}{4mm}
@@ -67,18 +316,12 @@
 % Source. Background 2.8 and 2.9, eq:aleatoric-epistemic-decomposition,
 % eq:aleatoric-distributional-split and sec:bg-dirichlet-point-estimate.
 % Speaking notes
-% The categorical BNN represents a posterior over weights.
-% Given x and w, pi equals f(x;w). Its conditional distribution is a point mass.
-% Knowing pi then adds no information about the label. The distributional term is zero.
-% The two remaining terms are aleatoric and epistemic uncertainty.
-% The deterministic Dirichlet network instead represents a distribution over pi but fixes the weights at one fitted value.
-% Its weight distribution is a point mass, so knowing the weights adds no information. The epistemic term is zero.
-% The two remaining terms are aleatoric and distributional uncertainty.
-% These zeros follow from model structure. They do not establish that a source is absent from the problem.
-% The terms in the two models need not have the same numerical values.
-% Combining a weight posterior with a conditional Dirichlet distribution permits all three terms.
-% We next construct this combined model and study what determines its allocation.
-\begin{frame}{Backup. Model-Specific Decompositions}
+% For the categorical Bayesian network, a given input and set of weights specify one class-probability vector.
+% Knowing the vector then adds no information, so the distributional term is zero.
+% The deterministic Dirichlet network instead uses one fitted weight vector.
+% Knowing those weights adds no information, so the epistemic term is zero.
+% These zeros follow from model structure. They do not show that the corresponding source is absent from the problem.
+\begin{frame}{Model-Specific Uncertainty Decompositions}
 \label{frm:backup-model-decompositions}
 \begin{itemize}
 \item \textbf{Categorical BNN}\quad Given $x,w$, $p(\pi=f(x;w)|x,w) = 1$.\\
@@ -109,9 +352,178 @@ Epistemic term is zero.
 }
 \medskip
 \begin{itemize}
-\item \textbf{Combining a weight posterior with a Dirichlet distribution for class probabilities allows all three terms.}
+\item Combining a \textbf{weight posterior} with a \textbf{Dirichlet distribution} for class probabilities allows all three terms.
 \end{itemize}
 \end{frame}
+
+% Source. Background eq:general-entropy-decomposition, eq:expected-conditional-entropy,
+% eq:aleatoric-distributional-split, eq:mean-total-concentration-parameterisation,
+% eq:aleatoric-as-function-of-total-concentration and eq:digamma-function.
+% Appendix A.1 uses the same generic Dirichlet categorical setup.
+% Speaking notes
+% Start with the generic identity. Label entropy is the expected entropy remaining after another quantity is known, plus the information it provides.
+% For the Dirichlet categorical model, that quantity is the class-probability vector.
+% Marginalising this vector gives a categorical label distribution parameterised by the Dirichlet mean.
+% Substituting the two distributions gives the predictive entropy split into aleatoric and distributional uncertainty.
+% We then name the aleatoric term as a function of total concentration, indexed by the mean vector.
+% Its closed form uses the digamma function.
+% The decomposition itself does not require a comparison at fixed mean.
+% For the propositions that follow, we hold the mean fixed and study how this function changes with total concentration.
+\begin{frame}{Backup. Dirichlet Categorical Uncertainty Decomposition}
+\label{frm:backup-dirichlet-categorical-split}
+\setlength{\abovedisplayskip}{4pt}
+\setlength{\belowdisplayskip}{4pt}
+\begin{itemize}
+\setlength{\itemsep}{4mm}
+% \item Generic entropy decomposition
+% % Thesis eq:general-entropy-decomposition.
+% \[
+% \mathcal H[p(y)]=\mathcal H[y\mid\xi]+\mathcal I(y;\xi).
+% \]
+\item $p(\pi\mid\alpha)=\mathrm{Dir}(\pi\mid\alpha)$, $p(y\mid\pi)=\mathrm{Cat}(y\mid\pi)$, $\alpha_c>0$.
+\item Marginalising $\pi$ gives $p(y\mid\alpha)=m_y=\mathrm{Cat}(y\mid m)$ 
+\begin{itemize}
+\item $m=\alpha/\alpha_0$, $\alpha_0=\sum_c\alpha_c$ 
+\end{itemize}
+\item Predictive uncertainty decomposes as
+\end{itemize}
+% Thesis eq:aleatoric-distributional-split, generic form in Appendix A.1.
+\[
+\underbrace{\mathcal H[\mathrm{Cat}(y\mid m)]}_{\text{predictive}}
+=\underbrace{\mathbb E_{\mathrm{Dir}(\pi\mid\alpha)}
+\bigl[\mathcal H[\mathrm{Cat}(y\mid\pi)]\bigr]}_{\text{aleatoric}}
++\underbrace{\mathcal I(y;\pi)}_{\text{distributional}}.
+\]
+\begin{itemize}
+\item Closed form aleatoric term with $\alpha=\alpha_0m$,
+% Thesis eq:aleatoric-as-function-of-total-concentration.
+\begin{align*}
+A_m(\alpha_0)
+:=\mathbb E_{\mathrm{Dir}(\pi\mid\alpha_0m)}
+\bigl[\mathcal H[\mathrm{Cat}(y\mid\pi)]\bigr]
+=\sum_{c=1}^{C}m_c\bigl[\psi(\alpha_0+1)-\psi(\alpha_0m_c+1)\bigr],
+\end{align*}
+\begin{itemize}
+\item $\psi(t)=\frac{d}{dt}\log\Gamma(t)$ is the digamma function.
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+% Source. Background prop:aleatoric-monotonicity (Proposition 2.1).
+% Proof. Appendix app:aleatoric-monotonicity and eq:g-function.
+% The appendix invokes Li (2008), Theorem 1, for monotonicity of g.
+% Speaking notes
+% Keep the mean vector fixed, with every class probability strictly between zero and one.
+% Proposition two point one says that aleatoric uncertainty strictly increases with total concentration.
+% To prove this, we differentiate its closed form while keeping the mean fixed.
+% The appendix uses a known monotonicity result for a function of the trigamma function.
+% Since each mean component is less than one, that result makes every derivative contribution positive.
+% The complete derivative is therefore positive.
+\begin{frame}{Backup. Proposition 2.1. Aleatoric Monotonicity}
+\label{frm:backup-aleatoric-monotonicity}
+\begin{itemize}
+\setlength{\itemsep}{5mm}
+\item Fix Dirichlet mean vector $m$, $0<m_c<1$ $\forall c$.
+\item \textbf{Proposition:} $A_m(\alpha_0)$ is strictly increasing for $\alpha_0>0$.
+\item \textbf{Proof} summary: Differentiate at fixed $m$.
+% Derivative copied from Appendix app:aleatoric-monotonicity.
+\[
+A_m'(\alpha_0)
+=\sum_{c=1}^{C}m_c
+\bigl[\psi'(\alpha_0+1)-m_c\psi'(\alpha_0m_c+1)\bigr].
+\]
+\begin{itemize}
+\item The function $g(t)=t\psi'(t+1)$ is strictly increasing for $t>0$ 
+(Li et al. 2008, Thm. 1).
+\item Since $0<\alpha_0m_c<\alpha_0$, $g(\alpha_0m_c)<g(\alpha_0)$, so
+\[
+\psi'(\alpha_0+1)-m_c\psi'(\alpha_0m_c+1)>0.
+\]
+\end{itemize}
+\end{itemize}
+\[
+A_m'(\alpha_0)>0.
+\]
+\end{frame}
+
+% Source. Background prop:aleatoric-limits (Proposition 2.2), eq:aleatoric-limits.
+% Proof. Appendix app:aleatoric-limits. EDL scope from eq:edl-dirichlet-concentration.
+% Speaking notes
+% Proposition two point two gives the two limits of the aleatoric term at a fixed mean.
+% As total concentration tends to zero, the aleatoric term tends to zero.
+% In the closed form, both digamma arguments tend to one, so their difference tends to zero.
+% As total concentration tends to infinity, the aleatoric term tends to the predictive entropy.
+% For large arguments, the digamma function behaves like the logarithm.
+% The difference therefore tends to minus the log of the corresponding mean probability.
+% Summing gives the entropy of the mean categorical distribution.
+% These limits concern the unrestricted Dirichlet family. Our evidence parameterisation cannot approach zero total concentration.
+\begin{frame}{Backup. Proposition 2.2. Aleatoric Limits}
+\label{frm:backup-aleatoric-limits}
+\begin{itemize}
+\setlength{\itemsep}{4mm}
+\item Fix Dirichlet mean vector $m$, $0<m_c<1$ $\forall c$.
+\[
+A_m(\alpha_0)
+=\sum_{c=1}^{C}m_c\bigl[\psi(\alpha_0+1)-\psi(\alpha_0m_c+1)\bigr].
+\]
+\item \textbf{Proposition:}
+% Thesis eq:aleatoric-limits.
+\[
+\lim_{\alpha_0\to0^+}A_m(\alpha_0)=0,
+\qquad
+\lim_{\alpha_0\to\infty}A_m(\alpha_0)
+=\mathcal H[\mathrm{Cat}(y\mid m)].
+\]
+\item \textbf{Proof} summary:
+\begin{itemize}
+\item As $\alpha_0\to0^+$, continuity gives $\psi(\alpha_0+1)-\psi(\alpha_0m_c+1)\to0$.
+\item As $z\to\infty$, $\psi(z)=\log z+\mathcal O(z^{-1})$ (e.g. Abramowitz and Stegun 1972, Eq. 6.4.1) gives
+$\psi(\alpha_0+1)-\psi(\alpha_0m_c+1)\to-\log m_c$.
+% and if we plug this into A then A tends to the predictive entropy 
+\end{itemize}
+% \item These limits concern the unrestricted Dirichlet family.
+% EDL requires $\alpha_c>1$ here, so it excludes $\alpha_0\to0^+$.
+\end{itemize}
+\end{frame}
+
+% Source. Background cor:distributional-monotonicity (Corollary 2.3).
+% Proof. Appendix app:distributional-monotonicity, using Propositions 2.1 and 2.2.
+% Speaking notes
+% At the same fixed mean, distributional uncertainty is the predictive entropy minus the aleatoric term.
+% Predictive entropy stays constant. Proposition two point one shows the aleatoric term increases.
+% Distributional uncertainty must therefore decrease.
+% Subtracting the two aleatoric limits gives the distributional limits.
+% At zero concentration, all predictive uncertainty is distributional. At infinite concentration, none is distributional.
+% Thus concentration changes the allocation between the two terms without changing their sum.
+% These are generic Dirichlet results. The same monotonic relationship holds within the concentration range allowed by our network.
+\begin{frame}{Backup. Corollary 2.3. Distributional Uncertainty}
+\label{frm:backup-distributional-monotonicity}
+\begin{itemize}
+\setlength{\itemsep}{4mm}
+\item Fix Dirichlet mean vector $m$, $0<m_c<1$ $\forall c$.
+% Appendix app:distributional-monotonicity, generic form of eq:distributional-remainder.
+\[
+\mathcal I(y;\pi)=\mathcal H[\mathrm{Cat}(y\mid m)]-A_m(\alpha_0).
+\]
+\item \textbf{Corollary:} $\mathcal I(y;\pi)$ is strictly decreasing for $\alpha_0>0$, and
+% Limits in cor:distributional-monotonicity.
+\[
+\lim_{\alpha_0\to0^+}\mathcal I(y;\pi)=\mathcal H[\mathrm{Cat}(y\mid m)],
+\qquad
+\lim_{\alpha_0\to\infty}\mathcal I(y;\pi)=0.
+\]
+\item \textbf{Proof} summary:
+\begin{itemize}
+\item At fixed $m$, $\mathcal H[\mathrm{Cat}(y\mid m)]$ is constant.
+Proposition 2.1 gives $A_m(\alpha_0)$ strictly increasing, so $\mathcal I(y;\pi)$ strictly decreasing.
+\item Proposition 2.2 gives $A_m(\alpha_0)\to0$ as $\alpha_0\to0^+$ and
+$A_m(\alpha_0)\to\mathcal H[\mathrm{Cat}(y\mid m)]$ as $\alpha_0\to\infty$.
+Subtracting these limits from $\mathcal H[\mathrm{Cat}(y\mid m)]$ gives limits for $\mathcal I(y;\pi)$.
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
 
 % Source. Methods 4.3.1 and 4.3.4, eq:gamma-prior-weights,
 % eq:assumed-total-concentration. Background 2.10, eq:gamma-mean-variance.
@@ -367,3 +779,4 @@ Warm SGLD epochs & 100 / 300 & 1000\\
 % The gradient norm falls while majority label accuracy stays near chance.
 % Source detail. Thesis \S5.3.2. Current training minibatches, before each update. No BMA.
 \end{frame}
+

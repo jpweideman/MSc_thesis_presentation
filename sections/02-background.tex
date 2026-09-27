@@ -94,31 +94,32 @@ p(\pi\mid\alpha)=\mathrm{Dir}(\pi\mid\alpha).
 % Source. Background 2.4 and 2.9, eq:dirichlet-classification-label,
 % eq:fixed-weight-dirichlet and eq:fixed-weight-dirichlet-marginal.
 % Methods 4.2.1, eq:edl-softplus-evidence and eq:edl-dirichlet-concentration.
-% Speaking notes
-% We want label probabilities for an input x.
-% The network outputs alpha(x;w), specifying a Dirichlet distribution over class-probability vectors pi.
-% Given pi, we model the label with a categorical distribution, so p(y|pi) equals pi_y.
-% Together, these distributions define the Dirichlet-categorical model.
-% The vector pi is unobserved in this model. We marginalise it to obtain p(y|x,w).
-% The integral runs over all probability vectors in the simplex.
-% Substituting p(y|pi) = pi_y gives the expectation of pi_y under the Dirichlet distribution.
-% This is the corresponding mean component, alpha_y(x;w) divided by alpha_0(x;w).
-% Thus the Dirichlet mean gives the label probabilities for x. (For one predicted class, choose their largest component.)
-% We adopt the evidence parameterisation of evidential deep learning, or EDL, motivated by subjective logic.
-% Subjective logic represents support for each class and a remaining mass not assigned to any class.
-% EDL learns nonnegative evidence e_c for each class and maps it to Dirichlet parameters through alpha_c = e_c + 1.
-% The +1 supplies one baseline unit per class. Zero evidence therefore gives the uniform Dirichlet Dir(1,...,1).
-% This baseline is EDL's choice within subjective logic. A general Dirichlet distribution only requires alpha_c > 0.
-% Our softplus output gives e_c > 0, so alpha_c > 1 and zero evidence is a limiting case.
-% We adopt this parameterisation and later add a posterior over network weights. Evidence is a learned output, not an observed count.
 % Source. Sensoy et al. 2018, Section 3, Eq. (1) and the zero-evidence example on page 4.
-% We can now explain how the model decomposes predictive uncertainty.
+% Speaking notes
+% We want predicted label probabilities for an input.
+% The network outputs concentration parameters, which define a Dirichlet distribution over possible class-probability vectors.
+% Given one such vector, the label follows a categorical distribution.
+% Since we do not observe this vector, we marginalise it to obtain the label probabilities.
+% The integral averages the probability assigned to each label over the Dirichlet distribution.
+% This is the Dirichlet mean. To select one class, we take the largest predicted probability.
+% Sensoy et al. distinguish little evidence for any class from strong evidence supporting several classes equally.
+% This distinguishes little support for any class from strong but balanced support, even when both give equal label probabilities.
+% They treat network outputs as nonnegative evidence and add one baseline unit per class. [alpha_c = e_c + 1]
+% No evidence then gives a uniform density over probability vectors, rather than one known uniform probability vector.
+% Adding evidence changes the class belief masses and reduces the unassigned mass. [b_c = e_c/alpha_0, u = C/alpha_0]
+% Their original loss also regularises misleading evidence towards this uniform baseline.
+% We adopt the parameterisation. Our Bayesian model uses its likelihood and concentration prior instead of their full training objective.
+% The benefit is this evidence interpretation and explicit baseline. Adding one is not required for a Dirichlet model or our entropy decomposition.
+% It also restricts the Dirichlet shapes, and thus the uncertainty allocations, that the model can represent.
+% Our softplus implementation gives concentrations above one, so the uniform zero-evidence baseline is approached only as a limit.
+% Their unassigned belief mass is not the distributional mutual information in our decomposition.
+% We do not establish that this restriction performs better than allowing all positive concentration parameters.
 \begin{frame}{Dirichlet Networks for Classification}
 \label{frm:bg-dirichlet-network}
-\setlength{\abovedisplayskip}{6pt}
-\setlength{\belowdisplayskip}{6pt}
+\setlength{\abovedisplayskip}{3pt}
+\setlength{\belowdisplayskip}{3pt}
 \begin{itemize}
-\setlength{\itemsep}{7mm}
+\setlength{\itemsep}{4mm}
 \item Dirichlet-categorical network outputs $\alpha(x;w)$. 
 % Thesis eq:fixed-weight-dirichlet and eq:dirichlet-classification-label.
 \begin{align*}
@@ -139,31 +140,72 @@ p(y\mid x,w)
 \item \textbf{Evidential deep learning (EDL)} parameterises the concentrations through evidence $e_c(x;w)>0$, with %we use softplus for our evidence, sensoy proposed relu. But we used edl pytorch library, which used softplus, maybe because its more stable?
 % Methods eq:edl-softplus-evidence and eq:edl-dirichlet-concentration.
 $\alpha_c(x;w)=e_c(x;w)+1$. % 
+\begin{itemize}
+\item Use subjective logic to interpret evidence as support for classes.
+\item Zero evidence corresponds to uniform Dirichlet.
+\end{itemize}
 \end{itemize}
 \end{frame}
 
+% % Source. Sensoy et al. 2018, Section 3, Eq. (1) and Eq. (2), pages 3 to 4.
+% % Verified in VERIFIED_SOURCES.md. Examples below follow by direct substitution, not from experimental data.
+% % Thesis Methods eq:edl-softplus-evidence and eq:edl-dirichlet-concentration.
+% % Restriction follows from alpha_c = e_c + 1. Decomposition from eq:aleatoric-distributional-split.
+% % Speaking notes
+% % The number of classes is denoted by C.
+% % Consider two classes. A fifty-fifty prediction can arise with no evidence for either class, or with strong evidence for both.
+% % Sensoy and colleagues want their representation to distinguish these cases.
+% % The network reports a nonnegative evidence value for each class. These are learned outputs, not observed label counts.
+% % Adding one per class gives a total baseline of C. The fraction due to that baseline is their unassigned belief mass.
+% % With no evidence, this fraction is one. More evidence makes it smaller. It is not a probability of an extra unknown class.
+% % For example, zero evidence for both classes gives a fifty-fifty mean and unassigned mass one.
+% % Evidence of nine for each class still gives a fifty-fifty mean, but unassigned mass one tenth.
+% % This distinguishes the amount of reported evidence, although the predicted label probabilities are identical.
+% % Our softplus implementation approaches the zero-evidence example only as a limit.
+% % This measure is not the distributional mutual information in our entropy decomposition.
+% % Adding one restricts the Dirichlet shapes available. Our entropy decomposition does not require that restriction.
+% % The thesis does not establish that this restricted parameterisation performs better than allowing all positive concentration parameters.
+% \begin{frame}{Why Evidential Deep Learning Uses Evidence}
+% \label{frm:bg-edl-motivation}
+% \setlength{\abovedisplayskip}{5pt}
+% \setlength{\belowdisplayskip}{5pt}
+% \begin{itemize}
+% \setlength{\itemsep}{4mm}
+% \item The same class probabilities can arise from little evidence or strong, balanced evidence.
+% \item For $C$ classes, EDL predicts nonnegative evidence $e_c(x;w)$.
+% Sensoy's unassigned belief mass $u$ measures missing evidence.
+% % Sensoy Section 3, Eq. (1), with S replaced by alpha_0.
+% \[
+% \alpha_c(x;w)=e_c(x;w)+1,
+% \qquad
+% u=\frac{C}{\alpha_0(x;w)}=\frac{C}{C+\sum_{c=1}^{C}e_c(x;w)}.
+% \]
+% \begin{itemize}
+% \item $C=2$, $e(x;w)=(0,0)$ gives $m(x;w)=(0.5,0.5)$ and $u=1$.
+% \item $C=2$, $e(x;w)=(9,9)$ gives $m(x;w)=(0.5,0.5)$ and $u=0.1$.
+% \end{itemize}
+% \item The +1 restricts the available uncertainty allocations.
+% \item The +1 is there so that the zero-evidence case gives a uniform distribution over probability vectors.
+% \begin{itemize}
+% \item The entropy decomposition does not require this restriction. Its distributional term is not $u$.
+% \end{itemize}
+% \end{itemize}
+% \end{frame}
 % Source. Background 2.6 to 2.9, eq:expected-conditional-entropy,
 % eq:mutual-information, eq:three-way-decomposition,
 % eq:aleatoric-epistemic-decomposition and eq:aleatoric-distributional-split.
 % Speaking notes
-% Predictive uncertainty is the entropy of the model's predicted label distribution for an input.
-% Aleatoric uncertainty is the expected conditional entropy obtained by conditioning on the class-probability vector.
-% It measures the label uncertainty remaining once that vector is known.
-% The vector is f(x;w) for the categorical BNN and pi for Dirichlet models.
-% In the categorical BNN, average the categorical label entropy over the weight posterior.
-% In the deterministic Dirichlet network, average it over the Dirichlet distribution of pi.
-% Epistemic uncertainty is mutual information between the label y and weights w.
-% It measures the reduction in label uncertainty obtained by knowing the weights.
-% Distributional uncertainty is mutual information between y and pi at given weights.
-% It measures the reduction in label uncertainty obtained by knowing pi, with the weights given.
-% In the combined model, this conditional mutual information is also averaged over the weight posterior.
-% These expectations use the model distributions at the same input. They do not average over different inputs.
-% A deterministic Dirichlet network fixes w at one fitted value, equivalent to a point mass over weights.
-% Knowing w then supplies no additional information, so its epistemic term is zero.
-% A categorical BNN fixes the class probabilities at f(x;w) once x,w are given.
-% In the general hierarchy, this is a point mass for pi at f(x;w), so its distributional term is zero.
-% A point mass is a degenerate distribution. The variable can still be written as a random variable mathematically.
-% These zeros follow from model assumptions, not evidence that the corresponding source is absent from the problem.
+% Predictive uncertainty is the entropy of the model's predicted label probabilities.
+% Aleatoric uncertainty is the label uncertainty remaining once the class probabilities are known.
+% In the categorical Bayesian network, we calculate label entropy from each network output and average over the weight posterior.
+% In the deterministic Dirichlet network, we calculate label entropy for each possible probability vector and average over its distribution.
+% Epistemic uncertainty measures the reduction in label uncertainty obtained by knowing the weights.
+% Distributional uncertainty measures the reduction obtained by knowing the class probabilities, with the weights given.
+% In the combined model, we also average this contribution over the weight posterior.
+% These averages concern model quantities at the same input, not different inputs.
+% The deterministic Dirichlet network represents the weights by a point mass at one fitted value. Its epistemic term is zero.
+% The categorical Bayesian network represents a point mass over class probabilities once the input and weights are given.
+% Its distributional term is therefore zero. These zeros follow from model assumptions, not evidence that a source is absent.
 \begin{frame}{Decomposing Predictive Uncertainty}
 \label{frm:predictive-entropy}
 \label{frm:aleatoric-intuition}
@@ -174,18 +216,21 @@ $\alpha_c(x;w)=e_c(x;w)+1$. %
 % we use the shannon entropy to measure this. whcih is defined in the appendix.
 \item \textbf{Aleatoric:}\quad Label uncertainty that remains once class probabilities are known.
 %either f(x;w) for categorical BNN or pi for deterministic Dirichlet network
-\item \textbf{Epistemic:}\quad Reduction in label uncertainty obtained by knowing the weights $w$.
-%i.e the mutual information between the label and weights
-% if we have fixed weights, this implicitly assumes a point mass distribution over the weihgts. I.e. that the weights are known (and are not a random variable with a distribution). Therefore in the dirichlet network, this is zero.
-\begin{itemize}
-    \item \emph{Deterministic Dirichlet network}: Point mass $P(w=\hat w)=1$.
-    \item Assumes no uncertainty about weights. Epistemic uncertainty is zero.\end{itemize}
 \item \textbf{Distributional:}\quad Reduction in label uncertainty obtained by knowing $\pi$, given weights $w$.
 %i.e the mutual information between the label and the class probabilities given the weights
 % if we known class probabilities (f in the case of categorical BNN), this implicitly assumes a point mass distribution over the class probabilities. I.e. that the class probabilities are known (and are not a random variable with a distribution). Therefore in the dirichlet network, this is zero.
 \begin{itemize}
     \item \emph{Categorical BNN}: Point mass $P(\pi=f(x;w)|x,w)=1$.
-    \item Assumes no uncertainty about the class probabilities. Distributional uncertainty is zero.
+    \item %Assumes no uncertainty about the class probabilities. 
+    Zero distributional uncertainty.
+\end{itemize}
+\item \textbf{Epistemic:}\quad Reduction in label uncertainty obtained by knowing the weights $w$.
+%i.e the mutual information between the label and weights
+% if we have fixed weights, this implicitly assumes a point mass distribution over the weihgts. I.e. that the weights are known (and are not a random variable with a distribution). Therefore in the dirichlet network, this is zero.
+\begin{itemize}
+    \item \emph{Deterministic Dirichlet network}: Point mass $P(w=\hat w)=1$.
+    \item %Assumes no uncertainty about weights. 
+    Zero epistemic uncertainty.
 \end{itemize}
 \item \textbf{Combining weight posterior with a Dirichlet distribution over class probabilities represents all three uncertainty terms.} % and that is the models which we develop in the thesis.
 \end{itemize}
