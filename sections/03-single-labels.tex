@@ -220,7 +220,7 @@ Two-class illustration, $m=(0.5,0.5)$\par}
 % We place the mode above the number of classes because that is the range allowed by our evidence parameterisation.
 % Combining this prior with the categorical likelihood gives the weight posterior.
 % The prior supplies an assumption. It does not make concentration identifiable from single labels at fixed means.
-% We can now examine the completed model's uncertainty decomposition.
+% We now examine how the prior affects concentration and uncertainty allocation in the trained models.
 \begin{frame}{Prior on Total Concentration}\label{frm:gamma-prior}
 \begin{itemize}
 \setlength{\itemsep}{3mm}
@@ -246,71 +246,102 @@ p(w\mid D)\propto\tilde p(w)\prod_{i=1}^{N}m_{y_i}(x_i;w).
 \end{itemize}
 \end{frame}
 
-% Source. Methods 4.3.1 and 4.3.4, eq:gamma-prior-weights,
-% eq:assumed-total-concentration. Background 2.10, eq:gamma-mode.
-% Delivery. The Gamma factors act on network outputs, not on a new sampled variable.
-\begin{frame}{An explicit Gamma prior}
-\label{frm:gamma-prior}
-\slidepoint{{\large The Gamma prior states an assumption about the\par total concentration parameter.}}
-\begin{center}
-\includegraphics[width=0.70\textwidth]{figures/gamma_prior.pdf}
-\end{center}
-\begin{itemize}
-\item Gamma factors act on network outputs at the training inputs.
-\item Illustrative prior mode 100.
-\begin{itemize}
-\item Standard deviations are relative to this mode.
-\end{itemize}
-\end{itemize}
-% Preparation. Illustrative prior mode 100. Standard deviations are relative to this mode.\par
-% The prior acts on network outputs at the training inputs.
-% Source detail. Thesis \S4.3.1 and \S4.3.4. Gamma factors are evaluated at the $N$ training inputs.
-\end{frame}
-
-% Source. Experiments 5.2.2, tab:e2-mode-sweep, eq:realised-total-concentration.
-% Delivery. Read the prior mode, realised value, and direction of the shares. Do not read every number.
-\begin{frame}{The prior changes the reported allocation}
+% Source. Experiments 5.2.2, tab:e2-mode-sweep, eq:realised-total-concentration. Discussion 6.2.
+% Table. scripts/build_cat_mode_decomposition.py, tables/cat_mode_decomposition.tex.
+% Speaking notes
+% We have introduced a prior because single labels cannot inform total concentration at fixed mean vectors.
+% We now vary this prior assumption and examine the resulting uncertainty allocation.
+% We use Fashion-MNIST and CIFAR-10, with ResNet-20 and approximate posterior sampling through stochastic gradient Langevin dynamics.
+% We vary the prior mode and keep the prior standard deviation at twenty percent of that mode.
+% Each entry summarises three seeds. Final predictions use all ten retained weight samples.
+% Mode thirty uses warm initialisation. The higher modes use shifted initialisation.
+% Parentheses show seed ranges for predictive entropy. The three uncertainty shares are mean percentages.
+% Predictive entropy uses natural logarithms, so its units are nats.
+% On both datasets, higher prior modes give higher realised concentration, larger aleatoric shares and smaller distributional shares.
+% This agrees with the direction of the fixed mean theory, but the trained mean vectors and weight posteriors also change.
+% The reported allocation therefore depends on the prior assumption we supply.
+% These results do not establish which allocation is correct or isolate the effect of concentration at fixed means.
+% We next examine whether the model improves label prediction.
+\begin{frame}{Uncertainty Allocation Depends on Prior Assumption}
 \label{frm:prior-mode-results}
-\slidemessage{Higher prior modes correspond to a lower distributional share in these runs.}
+\begin{itemize}
+\setlength{\itemsep}{2mm}
+\item Vary \textbf{prior mode}, prior standard deviation $20\%$ of mode.
+\end{itemize}
 \begin{center}
 \small
-\renewcommand{\arraystretch}{1.5}
-\setlength{\tabcolsep}{7pt}
-\input{tables/mode_extract}
+\renewcommand{\arraystretch}{1.0}
+\setlength{\tabcolsep}{3pt}
+\scalebox{0.9}{\input{tables/cat_mode_decomposition}}
 \end{center}
 \begin{itemize}
-\item The trained mean vectors also change across runs.
-\item CIFAR-10. Means and ranges over three seeds.
+\setlength{\itemsep}{2mm}
+% Say that small epistemic uncertainty is because in one chain all samples we draw are very similar. Even just pooling the samples from the 3 seeds gives much different samples and 4x higher epistemic uncertainty. Thus single chain sampling misses a lot of disagreement. This is a limitation of our posterior approximation.
+\item Higher prior mode $\Rightarrow$ \textbf{larger aleatoric} and \textbf{smaller distributional} shares.
 \begin{itemize}
-\item Final Bayesian model averaging (BMA) over ten samples.
+\item Uncertainty allocation depends on the \textbf{prior assumption}.
+\item Prior assumption moves allocation as theory predicts. %but mean vectors and weight posteriors also change.
 \end{itemize}
 \end{itemize}
-% Preparation. CIFAR-10, ResNet-20. Final Bayesian model averaging (BMA) over ten samples.\par
-% Three seeds. Prior standard deviation 20\%. Mode 30 uses warm initialisation. Higher modes use shifted initialisation.\par
-% Parentheses show the seed range. Shares are percentages of average predictive uncertainty.
-% Source detail. Thesis \S5.2.2.
 \end{frame}
 
-% Source. Experiments 5.2.4, tab:e2-predictive. Results keep the thesis precision.
-% Delivery. State the absence of a consistent predictive gain, then return to the likelihood limitation.
-\begin{frame}{Prediction with single labels}
+% Source. Experiments 5.2.4, tab:e2-predictive. Discussion 6.2.
+% Table. scripts/build_figures.py, tables/predictive_extract.tex.
+% Speaking notes
+% We compare label predictions on Fashion-MNIST and CIFAR-10.
+% The table reports means and ranges over three seeds. Final predictions average all ten retained weight samples.
+% Accuracy measures correct classification. Negative log likelihood measures predictive fit, with lower values being better.
+% The categorical BNN starts from a softmax checkpoint.
+% The evidential model uses shifted initialisation, prior mode one hundred, and prior standard deviation twenty percent.
+% Its accuracy is higher on CIFAR-10 and lower on Fashion-MNIST.
+% The categorical BNN has lower negative log likelihood on both datasets.
+% We therefore find no consistent predictive improvement under the tested training procedures and sampling budgets.
+% Predictive performance alone also does not validate the interpretation of the uncertainty allocation.
+\begin{frame}{Predictive Performance}
 \label{frm:single-prediction}
-\slidemessage{Negative log likelihood favours the Cat-BNN on both datasets.}
 \begin{itemize}
-\item Negative log likelihood (NLL).
-\begin{itemize}
-\item Lower is better.
-\end{itemize}
-\item Accuracy results are mixed.
+\item Compare predictive performance of Cat-eBNN against Cat-BNN.
 \end{itemize}
 \begin{center}
 \small
-\renewcommand{\arraystretch}{1.22}
+\renewcommand{\arraystretch}{1.18}
 \input{tables/predictive_extract}
 \end{center}
-\par\medskip
-\slidepoint{Means and ranges over three seeds. Final BMA over ten samples.}
-% Preparation. Mean and range over three seeds. Final BMA over ten samples.\par
-% Cat-BNN uses warm initialisation. Cat-eBNN uses shifted initialisation, prior mode 100, and prior standard deviation 20\%.
-% Source detail. Thesis \S5.2.4.
+\begin{itemize}
+\setlength{\itemsep}{3mm}
+\item Competitive, but \textbf{no consistent predictive improvement}. 
+\end{itemize}
+\end{frame}
+
+% Source. Methods 4.3.3, eq:ebnn-likelihood-invariance and eq:posterior-odds-unchanged.
+% Methods 4.3.4, sec:gamma-prior. Discussion 6.2 and 6.4. Conclusion, Chapter 7.
+% Speaking notes
+% The model represents the uncertainty allocation, but its interpretation still depends on an assumption.
+% At fixed mean vectors, single labels cannot distinguish total concentrations and the corresponding uncertainty splits.
+% Our prior makes the concentration assumption explicit. The prior comparison shows that the trained allocation is sensitive to it.
+% This does not mean the prior alone determines every trained output. Shared weights and finite sampling also matter.
+% To interpret the allocation, we need a reason to trust the concentration assumption.
+% These experiments do not establish a correct allocation or test whether using it improves decisions.
+% We therefore leave its practical value open.
+% This leads to the next question. Can richer observations inform the allocation?
+% We next retain repeated labels for each input and examine what they add to the likelihood.
+\begin{frame}{What Does the Decomposition Establish?}
+\label{frm:cat-ebnn-interpretation}
+\begin{itemize}
+\setlength{\itemsep}{5mm}
+\item Cat-eBNN allow decomposition into all three uncertainty terms.
+\item At fixed means, single labels cannot inform total concentration
+\begin{itemize}
+\item Neither aleatoric-distributional allocation.
+\end{itemize}
+\item Prior supplies the concentration assumption that influences the allocation.
+%The prior comparison shows that the trained allocation is sensitive to it.
+\item Not clear practical value. % Think for example about the introduction slides. If we have to make a decision based on this allocation, this decision would be made on the result of our prior choice, not on a total concentration that was learned from the data.
+% Recall the decision examples from the introduction.
+% Total concentration controls the aleatoric--distributional split at fixed mean vectors.
+% Single labels cannot distinguish total concentrations at those means, so they cannot inform that split.
+% Our prior supplies this assumption and affects the resulting split, as the experiments show.
+% Decisions based on this split therefore depend on an assumption and not on something the labels identify.
+\item \textbf{Can data inform uncertainty allocation?}
+\end{itemize}
 \end{frame}

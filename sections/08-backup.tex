@@ -1,5 +1,36 @@
-% Appendix frames support questions after the closing slide.
-\section*{Appendix}
+
+
+% % Source. Methods 4.3.5, sec:ebnn-uncertainty-decomposition. Background eq:three-way-decomposition.
+% % Speaking notes
+% % The completed model has a posterior distribution over weights.
+% % Knowing the weights can reduce label uncertainty. This gives the epistemic contribution.
+% % Given the weights, the Dirichlet still describes possible class-probability vectors.
+% % Knowing the class probabilities can further reduce label uncertainty. This gives the distributional contribution, averaged over weights.
+% % Even known class probabilities can leave several labels possible. The average remaining label entropy is the aleatoric contribution.
+% % These terms concern label uncertainty. They are not simply the variances of weights or class probabilities.
+% % We have seen how concentration changes the split. We now evaluate how the prior affects the trained model.
+% \begin{frame}{How the Model Represents All Three Terms}
+% \label{frm:cat-ebnn-uncertainty}
+% \begin{itemize}
+% \setlength{\itemsep}{6mm}
+% \item \textbf{Epistemic}\quad Weight posterior $p(w\mid D)$.
+% \begin{itemize}
+% \item Reduction in label uncertainty from knowing $w$.
+% \end{itemize}
+% \item \textbf{Distributional}\quad Dirichlet distribution $p(\pi\mid x,w)$.
+% \begin{itemize}
+% \item Reduction in label uncertainty from knowing $\pi$, given $w$.
+% \end{itemize}
+% \item \textbf{Aleatoric}\quad Categorical label model $p(y\mid\pi)$.
+% \begin{itemize}
+% \item Label uncertainty remaining once $\pi$ is known.
+% \end{itemize}
+% \end{itemize}
+% \end{frame}
+
+
+
+
 
 
 
@@ -23,7 +54,7 @@
     \]
     \begin{itemize}
     \item $D$ contains $N$ labelled pairs $(x_i,y_i)$.
-    \item Conditional independence gives the product over observations.
+    \item Conditional independence gives the likelihood as the product over observations.
     \end{itemize}
     % Thesis eq:likelihood-factorization and eq:categorical-likelihood.
     \[
@@ -369,7 +400,7 @@ Epistemic term is zero.
 % Its closed form uses the digamma function.
 % The decomposition itself does not require a comparison at fixed mean.
 % For the propositions that follow, we hold the mean fixed and study how this function changes with total concentration.
-\begin{frame}{Backup. Dirichlet Categorical Uncertainty Decomposition}
+\begin{frame}{Dirichlet-Categorical Uncertainty Decomposition}
 \label{frm:backup-dirichlet-categorical-split}
 \setlength{\abovedisplayskip}{4pt}
 \setlength{\belowdisplayskip}{4pt}
@@ -419,7 +450,7 @@ A_m(\alpha_0)
 % The appendix uses a known monotonicity result for a function of the trigamma function.
 % Since each mean component is less than one, that result makes every derivative contribution positive.
 % The complete derivative is therefore positive.
-\begin{frame}{Backup. Proposition 2.1. Aleatoric Monotonicity}
+\begin{frame}{Proposition 2.1. Aleatoric Monotonicity}
 \label{frm:backup-aleatoric-monotonicity}
 \begin{itemize}
 \setlength{\itemsep}{5mm}
@@ -457,7 +488,7 @@ A_m'(\alpha_0)>0.
 % The difference therefore tends to minus the log of the corresponding mean probability.
 % Summing gives the entropy of the mean categorical distribution.
 % These limits concern the unrestricted Dirichlet family. Our evidence parameterisation cannot approach zero total concentration.
-\begin{frame}{Backup. Proposition 2.2. Aleatoric Limits}
+\begin{frame}{Proposition 2.2. Aleatoric Limits}
 \label{frm:backup-aleatoric-limits}
 \begin{itemize}
 \setlength{\itemsep}{4mm}
@@ -496,7 +527,7 @@ $\psi(\alpha_0+1)-\psi(\alpha_0m_c+1)\to-\log m_c$.
 % At zero concentration, all predictive uncertainty is distributional. At infinite concentration, none is distributional.
 % Thus concentration changes the allocation between the two terms without changing their sum.
 % These are generic Dirichlet results. The same monotonic relationship holds within the concentration range allowed by our network.
-\begin{frame}{Backup. Corollary 2.3. Distributional Uncertainty}
+\begin{frame}{Corollary 2.3. Distributional Uncertainty}
 \label{frm:backup-distributional-monotonicity}
 \begin{itemize}
 \setlength{\itemsep}{4mm}
@@ -525,32 +556,568 @@ Subtracting these limits from $\mathcal H[\mathrm{Cat}(y\mid m)]$ gives limits f
 
 
 
-% Source. Methods 4.3.1 and 4.3.4, eq:gamma-prior-weights,
-% eq:assumed-total-concentration. Background 2.10, eq:gamma-mean-variance.
-\begin{frame}{Backup. Gamma prior over weights}
-\label{frm:backup-prior}
-\slidemessage{The Gamma factors act on network outputs at the training inputs.}
-% Copied from eq:gamma-prior-weights.
+% % Source. Methods 4.3.1 and 4.3.4, eq:gamma-prior-weights,
+% % eq:assumed-total-concentration. Background 2.10, eq:gamma-mean-variance.
+% % Speaking notes
+% % The Gamma factors evaluate the total concentration produced at each training input.
+% % They use inputs but not labels, and modify the Gaussian weight prior.
+% % The mode states the preferred concentration. The standard deviation states its spread.
+% % The mode must exceed the number of classes under our evidence parameterisation.
+% \begin{frame}{Gamma prior over weights}
+% \label{frm:backup-prior}
+% \slidemessage{The Gamma factors act on network outputs at the training inputs.}
+% % Copied from eq:gamma-prior-weights.
+% \[
+% \tilde p(w)\propto p(w)\prod_{i=1}^{N}
+% \mathrm{Gamma}\bigl(\alpha_0(x_i;w)\mid\kappa,\beta\bigr),
+% \quad \kappa>1,\ \beta>0.
+% \]
+% % Copied from eq:assumed-total-concentration.
+% \[
+% \bar\alpha_0=\frac{\kappa-1}{\beta}>C.
+% \]
+% \begin{itemize}
+% \item The Gamma prior standard deviation is $\sqrt{\kappa}/\beta$.
+% \item The Gamma factors use the training inputs but no labels.
+% \item $p(w)$ is the Gaussian weight prior. $C$ counts classes. $N$ counts training inputs.
+% \end{itemize}
+% % Preparation. $p(w)$ is the Gaussian weight prior. $C$ is the number of classes. $N$ is the number of training inputs.
+% % Source detail. Thesis \S4.3.1, \S4.3.4, and \S2.10.
+% \end{frame}
+
+
+% Source. Background 2.10, eq:gamma-density, eq:gamma-mean-variance and eq:gamma-mode.
+% Methods 4.3.4, sec:gamma-prior and eq:assumed-total-concentration.
+% Figure. scripts/build_gamma_parameters.py. Theoretical densities, not trained outputs.
+% Settings. Thesis tables/mode_sweep.tex and BNN-EDL/configs/cifar10_dirichlet_bnn_sgld.yaml.
+% Speaking notes
+% The shape and rate plots looked similar because both parameters can change the location and absolute spread.
+% Their effects differ. Shape changes relative spread and skewness. Rate only rescales the distribution at fixed shape.
+% Here we show the setting used for the thesis comparisons with standard deviation approximately twenty percent of the prior mode.
+% We fix shape at twenty-seven and choose the rate for each desired prior mode.
+% The ratio of standard deviation to mode depends only on shape. The rate cancels from that ratio.
+% The plot shows modes of thirty, one hundred and three hundred.
+% Increasing the mode moves the curve right and increases its absolute spread. The density becomes lower to keep its area one.
+% Fixed shape preserves the same relative spread and skewness while changing the concentration scale.
+% These curves illustrate the specified Gamma factors, not the distribution of trained network outputs.
+% The separate prior standard deviation experiment changes the shape as well.
+\begin{frame}{Gamma Prior with Fixed Relative Spread}
+\label{frm:appendix-gamma-parameters}
+% \setlength{\abovedisplayskip}{4pt}
+% \setlength{\belowdisplayskip}{4pt}
+% Thesis eq:gamma-density, in the shape-rate convention.
+\setlength{\belowdisplayskip}{3pt}
+\setlength{\belowdisplayshortskip}{3pt}
 \[
-\tilde p(w)\propto p(w)\prod_{i=1}^{N}
-\mathrm{Gamma}\bigl(\alpha_0(x_i;w)\mid\kappa,\beta\bigr),
-\quad \kappa>1,\ \beta>0.
+\mathrm{Gamma}(t\mid\kappa,\beta)
+=\frac{\beta^\kappa}{\Gamma(\kappa)}t^{\kappa-1}e^{-\beta t},
+\qquad t>0,\quad\kappa>0,\quad\beta>0,
 \]
-% Copied from eq:assumed-total-concentration.
 \[
-\bar\alpha_0=\frac{\kappa-1}{\beta}>C.
+\text{Mode}=\frac{\kappa-1}{\beta}\quad(\kappa>1),\qquad
+\text{SD}=\frac{\sqrt{\kappa}}{\beta}.\qquad
 \]
 \begin{itemize}
-\item The Gamma prior standard deviation is $\sqrt{\kappa}/\beta$.
-\item The Gamma factors use the training inputs but no labels.
-\item $p(w)$ is the Gaussian weight prior. $C$ counts classes. $N$ counts training inputs.
+\setlength{\itemsep}{2mm}
+\item \textbf{Fix shape} $\kappa=27$, so SD stays approximately $20\%$ of the prior mode. %the standard deviation is approximately $20\%$ of the prior mode.
+\item \textbf{Vary rate} $\beta=26/\bar\alpha_0$ to set prior modes $\bar\alpha_0\in\{30,100,300\}$.
 \end{itemize}
-% Preparation. $p(w)$ is the Gaussian weight prior. $C$ is the number of classes. $N$ is the number of training inputs.
-% Source detail. Thesis \S4.3.1, \S4.3.4, and \S2.10.
+% Thesis eq:gamma-mean-variance and eq:gamma-mode. SD is the square root of the variance.
+{\centering
+\includegraphics[width=.8\textwidth]{figures/gamma_shape_rate.pdf}\par}
 \end{frame}
 
+% Source. Experiments sec:exp-prior-sd and tab:e2-sd-sweep.
+% Background 2.10, eq:gamma-density, eq:gamma-mean-variance and eq:gamma-mode.
+% Settings. BNN-EDL/experiments_e1.yaml and configs/cifar10_dirichlet_bnn_sgld.yaml.
+% Figure. scripts/build_gamma_sd_sweep.py. Configured prior densities, not empirical model outputs.
+% Speaking notes
+% We now keep the prior mode at one hundred and change the standard deviation.
+% The plot shows five, twenty and sixty percent of the prior mode.
+% These correspond to standard deviations of approximately five, twenty and sixty.
+% The experiment also includes one thousand percent, which is omitted from this illustration.
+% Both shape and rate change. Their ratio keeps the mode at one hundred, up to configuration rounding.
+% All three curves peak near one hundred. The dotted line marks that fixed mode.
+% A smaller standard deviation concentrates the density more tightly around the preferred concentration.
+% A larger standard deviation spreads it out and makes the right tail longer.
+% These are densities of the configured Gamma factors, not distributions of the trained network outputs.
+% The mean does not stay fixed when we fix the mode and vary the standard deviation.
+\begin{frame}{Gamma Prior Standard Deviation at a Fixed Mode}
+\label{frm:appendix-gamma-sd-sweep}
+% Thesis eq:gamma-density, in the shape-rate convention.
+\[
+\mathrm{Gamma}(t\mid\kappa,\beta)
+=\frac{\beta^\kappa}{\Gamma(\kappa)}t^{\kappa-1}e^{-\beta t},
+\qquad t>0,\quad\kappa>0,\quad\beta>0,
+\]
+% Thesis eq:gamma-mode and eq:gamma-mean-variance.
+\[
+\text{Mode}=\frac{\kappa-1}{\beta}\quad(\kappa>1),\qquad
+\text{SD}=\frac{\sqrt{\kappa}}{\beta}.
+\]
+\begin{itemize}
+\setlength{\itemsep}{2mm}
+\item \textbf{Fix prior mode} $\bar\alpha_0=100$, so $\beta=(\kappa-1)/100$.
+\item \textbf{Vary shape and rate} to set SD to $5\%$, $20\%$ and $60\%$ of the prior mode.
+\end{itemize}
+{\centering
+\includegraphics[width=.8\textwidth]{figures/gamma_sd_sweep.pdf}\par}
+\end{frame}
+
+% Source. Methods 4.2.1, eq:edl-softplus-evidence and eq:edl-dirichlet-concentration.
+% Methods 4.3.4, sec:gamma-prior and eq:assumed-total-concentration.
+% Background 2.2, eq:general-dirichlet-mean.
+% Speaking notes
+% Both datasets have ten classes. Our evidence parameterisation contributes more than one to each class concentration.
+% Total concentration is therefore ten plus the sum of all evidence outputs.
+% If total concentration approaches ten, that evidence sum approaches zero.
+% Every evidence output is positive, so each must approach zero. None can cancel another.
+% Every class concentration then approaches one, and each predicted class probability approaches one tenth.
+% A prior mode close to ten can encourage this regime, especially if the prior is narrow.
+% It does not guarantee that the trained concentration reaches the prior mode.
+% The likelihood can favour unequal class probabilities, which require concentration further above ten under this parameterisation.
+% The prior standard deviation and the other factors in the weight posterior therefore also matter.
+% A mode of exactly ten is unreachable with finite softplus outputs. We can only approach this boundary.
+% The predicted class probabilities approach a uniform vector. The Dirichlet density also approaches the uniform density over the simplex.
+% This does not mean each random class-probability vector equals the uniform vector.
+\begin{frame}{Prior Mode Near the Minimum Total Concentration}
+\label{frm:appendix-prior-near-minimum}
+\begin{itemize}
+\setlength{\itemsep}{4mm}
+\item For $C=10$, the EDL parameterisation gives
+% Sum of eq:edl-dirichlet-concentration, using eq:edl-softplus-evidence.
+\[
+\alpha_0(x;w)=10+\sum_{c=1}^{10}e_c(x;w)>10.
+\]
+\item Approaching the lower bound forces \textbf{uniform predicted class probabilities}.
+% Limit stated in Methods sec:gamma-prior, with eq:general-dirichlet-mean.
+\[
+\alpha_0(x;w)\to10^+
+\quad\Longrightarrow\quad
+\alpha_c(x;w)\to1
+\quad\Longrightarrow\quad
+m_c(x;w)\to\frac{1}{10}\quad\forall c.
+\]
+\end{itemize}
+\end{frame}
+
+
+
+% Appendix frames support questions after the closing slide.
+\section*{Appendix}
+
+% Source. Experiments 5.1.1, sec:exp-setup, Datasets.
+% Speaking notes
+% We use three datasets, each with ten classes.
+% The counts on the slide give the training, validation and test split sizes.
+% Fashion-MNIST contains clothing images. CIFAR-10 contains natural images.
+% CIFAR-10H gives repeated human labels for the original CIFAR-10 test images.
+% We aggregate those labels by class into one count vector per image.
+% There are five hundred and eleven thousand labels. The mean count total is 51.1.
+% The stratified CIFAR-10H split has eight hundred training images and one hundred validation and test images per class.
+% The data split uses a fixed seed and remains identical across training seeds.
+\begin{frame}{Experimental Setup: Datasets}
+\label{frm:cat-ebnn-evaluation}
+\begin{itemize}
+\setlength{\itemsep}{4mm}
+\item \textbf{Fashion-MNIST}, ten classes.
+\begin{itemize}
+\item 54000 training, 6000 validation, 10000 test images.
+\end{itemize}
+\item \textbf{CIFAR-10}, ten classes.
+\begin{itemize}
+\item 45000 training, 5000 validation, 10000 test images.
+\end{itemize}
+\item \textbf{CIFAR-10H}, repeated labels for the CIFAR-10 test images.
+\begin{itemize}
+\item Stratified split of 8000 training, 1000 validation, 1000 test images.
+\item 47--63 labels per image, mean 51.1. Aggregate by class.
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+% % Source. Experiments 5.1.2--5.1.4, sec:exp-models-training, sec:exp-training-setup and sec:exp-count-training-setup.
+% % Speaking notes
+% % For single labels we compare deterministic Softmax and EDL models with the categorical BNN and categorical evidential BNN.
+% % Softmax and the categorical BNN use categorical likelihoods.
+% % EDL and the categorical evidential BNN use Dirichlet outputs with categorical labels.
+% % For repeated labels we compare the multinomial BNN and Dirichlet multinomial evidential BNN.
+% % Their deterministic counterparts provide warm initialisation checkpoints.
+% % All sampled models use a zero mean Gaussian weight prior with standard deviation one, at temperature one.
+% % The evidential Bayesian models also use the Gamma factors specified in the prior experiments.
+% \begin{frame}{Experimental Setup: Model Comparisons}
+% \label{frm:appendix-setup-models}
+% \begin{itemize}
+% \setlength{\itemsep}{4mm}
+% \item \textbf{Single labels}, Fashion-MNIST and CIFAR-10.
+% \begin{itemize}
+% \item Deterministic Softmax and EDL models.
+% \item Cat-BNN and Cat-eBNN.
+% \end{itemize}
+% \item \textbf{Repeated labels}, CIFAR-10H.
+% \begin{itemize}
+% \item M-BNN and DM-eBNN, with matching deterministic pretraining models.
+% \end{itemize}
+% \end{itemize}
+% \end{frame}
+
+% Source. Experiments 5.1.1--5.1.2, sec:exp-setup and sec:exp-models-training. Methods eq:edl-softplus-evidence and eq:edl-dirichlet-concentration.
+% Speaking notes
+% All models use ResNet-20, with one input channel for Fashion-MNIST.
+% We replace batch normalisation with filter response normalisation.
+% Batch normalisation otherwise introduces dependencies between examples in the likelihood.
+% Evidential models use softplus evidence and add one to obtain concentration parameters.
+% Training inputs use random crops, horizontal flips and per-channel normalisation.
+% Fashion-MNIST uses a twenty-eight pixel crop. CIFAR-10H uses the CIFAR-10 transforms.
+% Random augmentation changes the likelihood used during sampling. This limits the exact posterior interpretation.
+% \begin{frame}{Experimental Setup: Networks and Inputs}
+% \label{frm:appendix-setup-networks}
+% \begin{itemize}
+% \setlength{\itemsep}{4mm}
+% \item \textbf{ResNet-20}. Single input channel for Fashion-MNIST.
+% \item Filter response normalisation replaces batch normalisation.
+% \item Training augmentation uses random crops and horizontal flips.
+% \item Inputs use per-channel normalisation.
+% \end{itemize}
+% \end{frame}
+
+
+% Source. Experiments 5.1.2--5.1.4 and 5.1.7, sec:exp-models-training, sec:exp-training-setup, sec:exp-count-training-setup and sec:exp-reporting.
+% Speaking notes
+% All models use ResNet-20. We run three seeds, with one SGLD chain per seed at temperature one.
+% The first two columns concern single labels. CIFAR-10H uses repeated labels aggregated into count vectors.
+% Cold runs start from random weights and use the full cold SGLD budget.
+% Warm runs first use deterministic pretraining with stochastic gradient descent and cosine learning rate decay.
+% We select the checkpoint with the best validation accuracy, using majority label accuracy for count models.
+% The warm SGLD budget is additional to pretraining. Shifted single label runs use the same budget as warm runs.
+% SGLD uses a constant learning rate. The count models use different rates to account for likelihood gradient scales.
+% We retain ten samples for single labels and forty for count models, counted backwards from the final epoch.
+% Earlier SGLD epochs serve as burn in. Final predictions average observation probabilities over all retained samples within each run.
+% The three seeds are evaluated separately. We report their mean and range, without pooling their samples.
+% Cold and warm count runs have different budgets, so their comparison does not isolate initialisation alone.
+% Batch sizes are 1024 for single labels and 128 for count models. All sampled models use a standard Gaussian weight prior.
+\begin{frame}{Experimental Setup: Training and Sampling}
+\label{frm:appendix-setup-summary}
+\begin{itemize}
+\item ResNet-20, filter response normalisation.
+\item Training augmentation: random crops, horizontal flips and per-channel normalisation.
+\item Three seeds. 
+\item One SGLD chain per seed.
+\end{itemize}
+\begin{center}
+\small
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+ & Fashion-MNIST & CIFAR-10 & CIFAR-10H\\
+\midrule
+Cold SGLD epochs & 150 & 600 & 3000\\
+Deterministic pretraining epochs & 50 & 300 & 400\\
+Warm SGLD epochs & 100 & 300 & 1000\\
+Constant SGLD learning rate & $0.01$ & $0.01$ & \shortstack{M-BNN $0.0002$\\DM-eBNN $0.0012$}\\
+Retained weight samples & 10 & 10 & 40\\
+Sample spacing in epochs & 5 & 20 & 20\\
+\bottomrule
+\end{tabular}
+\end{center}
+% \begin{itemize}
+% \setlength{\itemsep}{2mm}
+% % \item Retain samples backwards from the final epoch. Earlier epochs are burn in.
+% % \item Final BMApredictions average all retained samples \textbf{within each run}.
+% \end{itemize}
+\end{frame}
+
+
+% Source. Experiments 5.1.3--5.1.4, sec:exp-training-setup and sec:exp-count-training-setup.
+% Methods sec:edl-learning-objective, sec:edl-regularizer, eq:mbnn-likelihood and eq:dm-ebnn-dataset-likelihood.
+% Evaluation eq:sample-bma-predictive and eq:sample-count-bma-predictive.
+% Speaking notes
+% Pretraining uses stochastic gradient descent. Each sampled run uses one stochastic gradient Langevin dynamics chain.
+% All sampled models use a standard Gaussian weight prior and temperature one.
+% The table gives the epoch budgets and number of retained samples.
+% We count backwards from the final epoch. Earlier sampling epochs serve as burn in.
+% The cold and warm count experiments have different budgets, so they do not isolate initialisation alone.
+% For single labels, the batch size is 1024.
+% Softmax minimises categorical negative log likelihood. EDL uses the Dirichlet mean probabilities and adds the EDL regulariser.
+% Its regularisation coefficient increases linearly from zero to one, reaching one at epoch forty or 240.
+% These values correspond to Fashion-MNIST and CIFAR-10.
+% Single label pretraining starts at learning rate 0.1, with momentum 0.9 and weight decay 0.0001.
+% It uses cosine learning rate decay. Single label SGLD uses constant learning rate 0.01.
+% For repeated labels, the batch size is 128.
+% Pretraining minimises count negative log likelihood. The Dirichlet multinomial model also includes the negative log Gamma prior term.
+% Pretraining rates are 0.002 for the multinomial model and 0.012 for the Dirichlet multinomial model.
+% Both use momentum 0.9, weight decay 0.000125 and cosine learning rate decay.
+% Constant SGLD rates are 0.0002 for the multinomial BNN and 0.0012 for the Dirichlet multinomial evidential BNN.
+% The multinomial rates divide the single label rates by fifty, for roughly fifty labels per input.
+% The measured multinomial likelihood gradient norm is about six times the Dirichlet multinomial norm.
+% The Dirichlet multinomial rates are therefore six times the multinomial rates.
+% A constant step size and finite sampling budget limit the posterior approximation.
+% \begin{frame}{Experimental Setup. Training and Sampling}
+% \label{frm:backup-sampling}
+% \label{frm:appendix-setup-single-training}
+% \label{frm:appendix-setup-count-training}
+% \begin{itemize}
+% \item Pretraining uses stochastic gradient descent. Sampling uses one SGLD chain per run.
+% \item Gaussian weight prior with mean $0$, SD $1$. SGLD temperature $1$.
+% \end{itemize}
+% \begin{center}
+% \small
+% \renewcommand{\arraystretch}{1.15}
+% \begin{tabular}{@{}lcc@{}}
+% \toprule
+%  & Single labels & Repeated labels\\
+% \midrule
+% Final BMA samples & 10 & 40\\
+% Cold initialisation epochs & 150 / 600 & 3000\\
+% Warm pretraining epochs & 50 / 300 & 400\\
+% Warm SGLD epochs & 100 / 300 & 1000\\
+% \bottomrule
+% \end{tabular}
+% \end{center}
+% \begin{itemize}
+% \item The paired single label values refer to Fashion-MNIST / CIFAR-10.
+% \item Sample spacing is 5 / 20 epochs for single labels, 20 epochs for repeated labels.
+% \item Retain the final samples. Earlier SGLD epochs are burn in.
+% \end{itemize}
+% % Preparation. Warm initialisation uses the best validation checkpoint. Earlier SGLD epochs serve as burn in.\par
+% % The count experiments use different cold and warm budgets. They do not isolate the effect of initialisation.
+% % Source detail. Thesis \S5.1.3 and \S5.1.4.
+% \end{frame}
+
+% Source. Experiments 5.2.1--5.2.4, sec:exp-starts, sec:exp-prior-mode, sec:exp-prior-sd and sec:exp-predictive. Tables tab:e2-mode-sweep and tab:e2-sd-sweep.
+% Speaking notes
+% We first compare cold, warm and shifted initialisation within fixed budgets.
+% The prior mode experiment keeps the prior standard deviation at twenty percent of the mode.
+% Fashion-MNIST includes the additional mode fifty-eight, while both datasets include thirty, one hundred and three hundred.
+% The standard deviation experiment fixes the mode at one hundred and varies the standard deviation from five to one thousand percent.
+% The final predictive comparison uses prior mode one hundred and standard deviation twenty percent, with shifted initialisation.
+% This configuration is selected before evaluating the test results.
+% \begin{frame}{Experimental Setup. Experiments with Single Labels}
+% \label{frm:appendix-setup-single-priors}
+% \begin{itemize}
+% \setlength{\itemsep}{3mm}
+% \item Compare cold, warm and shifted initialisation within fixed budgets.
+% \item \textbf{Prior mode experiment}, SD $20\%$ of the mode.
+% \begin{itemize}
+% \item Fashion-MNIST modes $30,58,100,300$. CIFAR-10 modes $30,100,300$.
+% \item Mode $30$ uses warm initialisation. Higher modes use shifted initialisation.
+% \end{itemize}
+% \item \textbf{Prior SD experiment}, mode $100$ and SD $5\%,20\%,60\%,1000\%$ of the mode.
+% \item \textbf{Predictive comparison}, Cat-eBNN mode $100$, SD $20\%$, shifted initialisation. Cat-BNN uses warm initialisation.
+% \end{itemize}
+% \end{frame}
+
+% % Source. Experiments 5.3.1--5.3.2, sec:exp-count-prediction and sec:exp-count-prior-sensitivity. Tables tab:e2-count-prediction and tab:e2-count-prior-sensitivity.
+% % Speaking notes
+% % The main count prediction experiment compares both models under cold and warm initialisation.
+% % The Dirichlet multinomial evidential model uses prior modes fifty and two hundred, with standard deviation twenty percent.
+% % For the prior sensitivity experiment, warm chains start from checkpoints trained with those modes and standard deviation twenty percent.
+% % During sampling we retain the checkpoint mode but use standard deviation twenty percent, one hundred percent, or no Gamma factors.
+% % We also include cold chains without Gamma factors.
+% % The Gaussian weight prior remains when the Gamma factors are removed.
+% \begin{frame}{Experimental Setup. Experiments with Repeated Labels}
+% \label{frm:appendix-setup-count-priors}
+% \begin{itemize}
+% \setlength{\itemsep}{3mm}
+% \item \textbf{Count prediction}, compare cold and warm M-BNN and DM-eBNN runs.
+% \begin{itemize}
+% \item DM-eBNN prior modes $50$ and $200$, with SD $20\%$ of the mode.
+% \end{itemize}
+% \item \textbf{Prior sensitivity}, warm checkpoints use those modes and SD $20\%$.
+% \begin{itemize}
+% \item During SGLD, use SD $20\%$, SD $100\%$, or no Gamma factors.
+% \item Also include cold chains without Gamma factors.
+% \end{itemize}
+% \end{itemize}
+% \end{frame}
+
+% Source. Experiments 5.1.5--5.1.6, sec:exp-metrics-single and sec:exp-metrics-count. Equations eq:sample-bma-predictive, eq:sample-count-bma-predictive, eq:evaluation-accuracy, eq:evaluation-nll and eq:count-nll.
+% Speaking notes
+% We average observation probabilities over retained weight samples to obtain the final Bayesian model average.
+% We take the logarithm after averaging probabilities. We do not average the negative log likelihoods of individual weight samples.
+% Single label accuracy checks the predicted class. Negative log likelihood evaluates the probability of the observed label.
+% Count negative log likelihood evaluates the entire observed count vector.
+% Majority label accuracy compares the predicted class with the class having the largest observed count.
+% The mean matched control replaces each Dirichlet multinomial probability with a multinomial probability at the same mean and weight sample.
+% This isolates the predictive effect of finite total concentration for those fixed mean vectors and samples.
+\begin{frame}{Experimental Setup. Predictive Evaluation}
+\label{frm:appendix-setup-predictive-evaluation}
+\begin{itemize}
+\setlength{\itemsep}{3mm}
+\item Average observation probabilities over all retained weight samples before evaluating predictions.
+\item \textbf{Single labels}, accuracy and label negative log likelihood (NLL).
+\item \textbf{Repeated labels}, majority label accuracy and count NLL for the complete count vector.
+\item \textbf{Mean matched control}, replace each Dirichlet multinomial probability with a multinomial probability at the same mean vector and weight sample.
+\end{itemize}
+\end{frame}
+
+% Source. Experiments 5.1.5--5.1.7, sec:exp-metrics-single, sec:exp-metrics-count and sec:exp-reporting. Equation eq:realised-total-concentration.
+% Speaking notes
+% Both experiments decompose predictive uncertainty in the class label, including models trained with count data.
+% We average each uncertainty term over the evaluation inputs.
+% A reported share divides the average term by average predictive uncertainty. It is not the average of per-image percentages.
+% Realised total concentration averages over inputs and retained weight samples.
+% Results report the mean and minimum to maximum range over three seeds.
+% The data split is fixed across seeds. Seeds change initialisation, minibatch order, augmentation and sampling noise.
+% Validation data guide modelling decisions and checkpoint selection. Final results use the test split.
+% Deterministic models use the best validation accuracy checkpoint, using majority label accuracy for count models.
+% Sampled models use the final Bayesian model average over all retained samples, without best epoch selection.
+% \begin{frame}{Experimental Setup. Uncertainty and Reporting}
+% \label{frm:appendix-setup-reporting}
+% \begin{itemize}
+% \setlength{\itemsep}{3mm}
+% \item Average predictive entropy and each uncertainty term over evaluation inputs.
+% \begin{itemize}
+% \item Report each average term as a percentage of average predictive entropy.
+% \end{itemize}
+% \item Report the mean and minimum--maximum range over \textbf{three seeds}, with fixed data splits.
+% \item Validation guides decisions. Final results use test data.
+% \item Deterministic models use best validation checkpoints. Sampled models use the \textbf{final BMA}, without best epoch selection.
+% \end{itemize}
+% \end{frame}
+
+% Source. Experiments 5.1.4, sec:exp-count-training-setup. Methods SGLD update and count likelihoods.
+% Speaking notes
+% The gradient describes how changing each weight changes the log likelihood.
+% Its norm measures the overall size of those derivatives across the weights.
+% A larger learning rate multiplies the likelihood gradient by a larger number.
+% We measure a multinomial likelihood gradient norm about six times the Dirichlet multinomial norm.
+% With the same learning rate, the multinomial likelihood therefore gives a larger contribution to the weight update.
+% We use six times the learning rate for the Dirichlet multinomial model to compensate for its smaller gradients.
+% This roughly matches the size of the likelihood contribution at the measured settings, not the update direction.
+% It does not make the prior contributions or SGLD noise equal, or establish optimal learning rates.
+% The multinomial rates first divide the single label rates by fifty, for approximately fifty labels per image.
+% A multinomial log likelihood sums the log class probabilities weighted by their observed counts.
+% Those repeated label contributions can increase the gradient size compared with one label per image.
+% Dividing the rate by fifty is a scale adjustment, not a claim that every gradient is exactly fifty times larger.
+% Pretraining uses cosine decay from the listed initial rates. SGLD keeps the listed rates constant.
+% \begin{frame}{Learning Rates for Count Models}
+% \label{frm:appendix-count-learning-rates}
+% \begin{itemize}
+% \setlength{\itemsep}{4mm}
+% \item The \textbf{gradient norm} measures the overall size of the likelihood derivatives across weights.
+% \item The measured M-BNN likelihood gradient norm is about \textbf{six times} the DM-eBNN norm.
+% \item A larger learning rate compensates for a smaller likelihood gradient.
+% \begin{itemize}
+% \item Use \textbf{six times the learning rate} for the Dirichlet multinomial model.
+% \end{itemize}
+% % Rates from thesis sec:exp-count-training-setup. Left values are multinomial, right values are Dirichlet multinomial.
+% \[
+% \begin{aligned}
+% \text{Initial pretraining rate}\qquad &0.002\times6=0.012,\\[2mm]
+% \text{Constant SGLD rate}\qquad &0.0002\times6=0.0012.
+% \end{aligned}
+% \]
+% \item This approximately matches the \textbf{size of the likelihood contribution} to the weight update.
+% \end{itemize}
+% \end{frame}
+
+% Source. Experiments 5.1.3--5.1.4 and 5.2.1, sec:exp-training-setup, sec:exp-count-training-setup, sec:exp-starts, eq:bias-shift-condition.
+% Speaking notes
+% Cold initialisation starts from random weights.
+% Warm initialisation loads the deterministic checkpoint with the best validation accuracy.
+% The categorical BNN loads Softmax weights. The categorical evidential BNN loads EDL weights.
+% The count models load deterministic checkpoints trained with their respective count likelihoods.
+% Shifted initialisation adds the same scalar to every output bias of the warm EDL checkpoint.
+% Bisection selects that scalar to match the median total concentration on the probe inputs to the prior mode.
+% This preserves the predicted class, but can change its probability.
+% The final single label predictive comparison uses warm initialisation for the categorical BNN and shifted initialisation for the evidential model.
+\begin{frame}{Experimental Setup: Initialisation}
+    \label{frm:appendix-setup-initialisation}
+    \begin{itemize}
+    \setlength{\itemsep}{3mm}
+    \item \textbf{Cold initialisation} uses random weights.
+    \item \textbf{Warm initialisation} loads the best validation checkpoint,
+    \begin{itemize}
+    \item Cat-BNN from Softmax,
+    \item Cat-eBNN from EDL,
+    \item Count models use matching count likelihoods.
+    \end{itemize}
+    \item \textbf{Shifted initialisation} adjusts the warm EDL output biases.
+    \begin{itemize}
+    \item Match the initial median total concentration of training subset to the prior mode.
+    \item Predicted classes are preserved. 
+    \item Class probabilities can change.
+    \end{itemize}
+    \end{itemize}
+    \end{frame}
+
+% Source. Experiments 5.2.1, sec:exp-starts, eq:shifted-total-concentration and eq:bias-shift-condition.
+% Implementation detail. BNN-EDL/src/utils/bias_shift.py, shift_output_bias_to_prior_mode.
+% Speaking notes
+% The pretrained network can start far from the concentration encouraged by the Gamma prior.
+% We adjust its output biases before sampling to reduce this initial mismatch.
+% We add the same number to every class bias. All other weights stay unchanged.
+% The total concentration increases continuously as we increase this shift.
+% We record the outputs before softplus for five training batches. These stay fixed during the search.
+% Our target is the median total concentration over these inputs, rather than the concentration of every input.
+% We first find a lower shift with a median below the target and an upper shift with a median above it.
+% The code obtains these bounds from the smallest and largest recorded outputs using inverse softplus.
+% We evaluate the midpoint shift using the recorded outputs. If the median is too low, this becomes the lower shift bound.
+% If the median is too high, the midpoint becomes the new upper bound.
+% Each step halves the search interval. These bounds concern the shift, not the concentration.
+% We stop within a relative tolerance of one in ten thousand, or after sixty steps.
+% Candidate shifts do not accumulate. We apply only the final shift to the network biases, then start SGLD.
+% The common shift preserves class ordering and therefore predicted classes. It can change class probabilities.
+% This changes the initialisation, not the posterior targeted by sampling.
+\begin{frame}{Experimental Setup: Shifted Initialisation}
+\label{frm:appendix-shifted-initialisation}
+\setlength{\abovedisplayskip}{4pt}
+\setlength{\belowdisplayskip}{4pt}
+\begin{itemize}
+\setlength{\itemsep}{4mm}
+\item Add $b$ to every output bias of $w_{\mathrm{warm}}$, giving weights $w_b$.
+% Thesis eq:shifted-total-concentration.
+\[
+\alpha_0(x;w_b)
+=\sum_{c=1}^{C}\mathrm{softplus}\bigl(z_c(x;w_{\mathrm{warm}})+b\bigr)+C.
+\]
+\item Match median over subset of training inputs $P$ to the prior mode $\bar\alpha_0$.
+% Thesis eq:bias-shift-condition.
+\[
+\operatorname*{median}_{x\in P}\left[
+\sum_{c=1}^{C}\mathrm{softplus}\bigl(z_c(x;w_{\mathrm{warm}})+b\bigr)+C
+\right]=\bar\alpha_0.
+\]
+\item Solve for $b$ with \textbf{Bisection}: $b_{\mathrm{low}},b_{\mathrm{high}}$ and tests $b_{\mathrm{mid}}=(b_{\mathrm{low}}+b_{\mathrm{high}})/2$.
+\begin{itemize}
+\item Median concentration below $\bar\alpha_0$ $\Rightarrow$ set $b_{\mathrm{low}}=b_{\mathrm{mid}}$.
+\item Median concentration above $\bar\alpha_0$ $\Rightarrow$ set $b_{\mathrm{high}}=b_{\mathrm{mid}}$.
+\item Repeat until close to $\bar\alpha_0$. 
+\item Apply the final shift $b$ once at initialisation before starting SGLD.
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+% Source. Experiments 5.2.1, fig:start-trajectory, tab:e2-start-procedure.
+% Both assets are copied unchanged from the thesis figures folder.
+% Speaking notes
+% These curves show how initialisation affects training within the tested budget on Fashion-MNIST.
+% The prior mode is three hundred. Lines show seed means and shading shows the seed range.
+% The curves use individual weight checkpoints. They do not select the reported final prediction average.
+\begin{frame}{Experimental Setup: Shifted vs Warm Initialisation Diagnostics}
+    \label{frm:backup-starts}
+    \slidemessage{Initialisation affects predictive performance within budget.}
+    \begin{center}
+    \includegraphics[width=0.44\textwidth]{figures/start_trajectory_accuracy.pdf}\hfill
+    \includegraphics[width=0.44\textwidth]{figures/start_trajectory_alpha0.pdf}
+    \end{center}
+    \par\medskip
+    % Preparation. Cat-eBNN on Fashion-MNIST. Means over three seeds. Shading shows the seed range.\par
+    % Prior mode 300 and prior standard deviation 20\%. Curves use individual weight checkpoints.
+    % Source detail. Thesis \S5.2.1. These diagnostic curves do not select the reported final BMA.
+    \end{frame}
+
+
+
 % Source. Methods 4.3.3, eq:ebnn-likelihood-invariance, eq:posterior-odds-unchanged.
-\begin{frame}{Backup. Equal mean vectors and posterior odds}
+% Speaking notes
+% Consider two weight configurations that give the same mean vectors at every training input.
+% They assign the same probabilities to the observed labels, so their likelihoods are equal.
+% Their posterior odds therefore equal their prior odds.
+% This is a comparison at fixed means. During training, both the means and total concentration can change.
+\begin{frame}{Equal mean vectors and posterior odds}
 \label{frm:backup-invariance}
 \slidemessage{Equal mean vectors leave the posterior odds equal to the prior odds.}
 \slidepoint{Consider weights $w$ and $w'$ with equal mean vectors on every training input.}
@@ -719,26 +1286,6 @@ Warm SGLD epochs & 100 / 300 & 1000\\
 % Source detail. Thesis \S5.3.1.
 \end{frame}
 
-% Source. Experiments 5.2.1, fig:start-trajectory, tab:e2-start-procedure.
-% Both assets are copied unchanged from the thesis figures folder.
-\begin{frame}{Backup. Initialisation diagnostics}
-\label{frm:backup-starts}
-\slidemessage{Initialisation affects predictive performance within the tested budget.}
-\begin{center}
-\includegraphics[width=0.44\textwidth]{figures/start_trajectory_accuracy.pdf}\hfill
-\includegraphics[width=0.44\textwidth]{figures/start_trajectory_alpha0.pdf}
-\end{center}
-\par\medskip
-\begin{itemize}
-\item Fashion-MNIST. Prior mode 300. Current weight checkpoints.
-\begin{itemize}
-\item Lines show means over three seeds. Shading shows the seed range.
-\end{itemize}
-\end{itemize}
-% Preparation. Cat-eBNN on Fashion-MNIST. Means over three seeds. Shading shows the seed range.\par
-% Prior mode 300 and prior standard deviation 20\%. Curves use individual weight checkpoints.
-% Source detail. Thesis \S5.2.1. These diagnostic curves do not select the reported final BMA.
-\end{frame}
 
 % Source. Experiments 5.3.2, fig:count-cold-collapse, tab:e2-count-prior-sensitivity.
 % Panels copied unchanged from the thesis figures folder.
