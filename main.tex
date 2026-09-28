@@ -52,7 +52,7 @@
 \newcommand{\mytitle}{Evidential Bayesian Neural Networks for Uncertainty-Aware Classification}
 \newcommand{\myshorttitle}{Evidential Bayesian Neural Networks}
 \newcommand{\myname}{John-Pierre Weideman}
-\newcommand{\mydate}{TODO: defence date}
+\newcommand{\mydate}{September 29, 2026}
 
 \addtobeamertemplate{frametitle}{}{%
 	\begin{textblock*}{100mm}(0.88\textwidth,-0.5cm)
@@ -74,9 +74,16 @@
 %----------------------------------------------------------------------------------------
 
 {
-\usebackgroundtemplate{\includegraphics[width=\paperwidth]{lmu-background.pdf}}
+\usebackgroundtemplate{%
+\begin{pgfpicture}{0pt}{0pt}{\paperwidth}{\paperheight}
+\pgftext[left,bottom,at={\pgfpoint{0pt}{0pt}}]{%
+\includegraphics[width=\paperwidth]{lmu-background.pdf}}
+% Centre within the white panel, below the header and above the footer.
+\pgftext[at={\pgfpoint{0.72\paperwidth}{0.40\paperheight}}]{%
+\includegraphics[width=0.43\paperwidth,height=0.60\paperheight,keepaspectratio]{figures/dirichlet_cover_contours.pdf}}
+\end{pgfpicture}}
 % Source. Thesis main.tex title page and Background 2.2, eq:dirichlet-density.
-\begin{frame}[noframenumbering, plain]
+\begin{frame}
 \label{frm:title}
 \begin{columns}[onlytextwidth]
 	\begin{column}{0.38\textwidth}
@@ -92,8 +99,9 @@
 	\begin{column}{0.48\textwidth}
 		\vspace{2cm}
 		\begin{center}
-			% Source. Background 2.2, eq:dirichlet-density. Illustration from scripts/build_figures.py.
-			\includegraphics[width=1\textwidth]{figures/dirichlet_cover.pdf}
+			% Source. Background 2.2, eq:dirichlet-density. Illustration from scripts/build_dirichlet_cover_contours.py.
+			% Preserve the title text layout. The visible simplex is placed above in page coordinates.
+			\phantom{\includegraphics[width=1\textwidth]{figures/dirichlet_cover_contours.pdf}}
 		\end{center}
 	\end{column}
 \end{columns}
