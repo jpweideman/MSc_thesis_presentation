@@ -1,77 +1,319 @@
-% Repeated Labels. Slides 17 to 22.
-\section{Repeated Labels}
+% The Dirichlet Multinomial Evidential BNN.
+\section{Dirichlet Multinomial Evidential BNN}
 
-% Source. Experiments 5.1.1, sec:exp-setup. CIFAR-10H image and counts.
-% Delivery. Introduce the CIFAR-10H image. These are observed human labels, not a model illustration.
-% Delivery. Retaining these labels preserves information that one selected label hides.
-% Preparation. Do not assign this observed disagreement to a validated uncertainty component.
-\begin{frame}{Repeated labels reveal disagreement}
+% Source. Experiments 5.1.1, sec:exp-setup. Discussion 6.3, sec:discussion-counts.
+% Figure. scripts/build_repeated_label_example.py. Provenance in figures/repeated_label_example.sources.json.
+% Speaking notes
+% Single labels cannot inform total concentration at fixed mean vectors. We now consider richer observations.
+% Repeated labels are multiple observed labels for the same input, for example from different human annotators.
+% This image has fifty-two human labels spread across nine classes.
+% Thirteen labels say frog, nine say deer and nine say dog. Six each say bird and cat.
+% The original CIFAR-10 label is deer. The bars show human annotations, not network probabilities.
+% We select this image for strong disagreement. It is not representative of the whole dataset.
+% Retaining all their labels preserves disagreement that one selected label would hide.
+% We aggregate the labels by class into a count vector, which becomes our observation.
+% This observed disagreement does not by itself identify a particular uncertainty component.
+\begin{frame}{Repeated Labels Preserve Disagreement}
 \label{frm:observed-disagreement}
-\slidemessage{Retaining repeated labels preserves observed disagreement.}
-\begin{columns}[T,onlytextwidth]
-\begin{column}{0.28\textwidth}
+\input{tables/repeated_label_example}
+\begin{itemize}
+\item \textbf{Repeated labels} are multiple observed labels for same input.
+\end{itemize}
+\par\vspace{3mm}
+\begin{columns}[c,onlytextwidth]
+\begin{column}{0.24\textwidth}
 \centering
-\vspace{3mm}
-\includegraphics[width=0.88\linewidth]{figures/cifar10h_example.png}
-\par\smallskip
-{\small One CIFAR-10H image}
+% Raise the image to the plotting area centre, accounting for the chart's larger bottom margin.
+\raisebox{0.11\linewidth}[\height][\depth]{%
+\includegraphics[width=0.78\linewidth,height=0.35\textheight,keepaspectratio]{figures/cifar10h_multiclass_input.png}}
 \end{column}
-\begin{column}{0.70\textwidth}
-\includegraphics[width=\linewidth]{figures/observed_counts.pdf}
+\begin{column}{0.71\textwidth}
+\includegraphics[width=\linewidth,height=0.44\textheight,keepaspectratio]{figures/cifar10h_multiclass_counts.pdf}
 \end{column}
 \end{columns}
-\par\medskip
-\slidepoint{\exampletotal{} observed human labels for the same input.}
-% Preparation. \exampletotal{} human labels. The counts describe how labels differ for one input.
-% Source detail. Thesis \S5.1.1. CIFAR-10H image \exampleindex{}.
+\par\vspace{3mm}
+\begin{itemize}
+\setlength{\itemsep}{2mm}
+\item CIFAR-10H example with 52 human labels.
+\item A single selected label hides this \textbf{observed disagreement}. % Retaining all their labels preserves disagreement that one selected label would hide.
+%“These labels reveal disagreement that one selected label would hide. Can this additional information inform total concentration?”
+\end{itemize}
 \end{frame}
 
-% Source. Methods 4.4.1 and 4.4.2, eq:mbnn-observation, eq:dm-ebnn-likelihood.
-% Delivery. Both models use the same count vectors. Their observation models differ.
-\begin{frame}{A model for complete count vectors}
+% Source. Methods 4.4.2, sec:dm-ebnn-model, eq:dm-ebnn-observation, eq:dm-ebnn-likelihood and eq:dm-ebnn-dataset-likelihood.
+% Background eq:count-vector, eq:multinomial-mass and eq:dm-mass.
+% Speaking notes
+% We replace one label per input with a count vector. Each entry counts the number of labels assigned to one class.
+% The network still supplies the concentration parameters of a Dirichlet distribution over possible class probabilities.
+% Given one shared probability vector, the repeated labels are independent. Their counts follow a multinomial distribution.
+% We marginalise that vector to obtain a Dirichlet multinomial probability for the observed counts.
+% Count vectors from different inputs are independent given the inputs and weights, so their probabilities multiply into the likelihood.
+% The model retains its weight posterior and Gamma prior. We now ask what the count likelihood adds.
+\begin{frame}{Dirichlet Multinomial Evidential BNN (DM-eBNN)}
 \label{frm:count-model}
-\slidemessage{Repeated labels change the observation model.}
+\setlength{\abovedisplayskip}{4pt}
+\setlength{\belowdisplayskip}{4pt}
 \begin{itemize}
-\item Labels are aggregated by class into a count vector $n$.
-\begin{itemize}
-\item The count total is $R=\sum_c n_c$.
-\end{itemize}
-\end{itemize}
-\medskip
-{\small Multinomial Bayesian neural network (M-BNN)}
-% Copied from thesis eq:mbnn-observation.
+\setlength{\itemsep}{6mm}
+\item \textbf{Repeated labels} per input give counts $n=(n_1,\ldots,n_C) %gives counts per class, which is the number of labels observed per class. And n is the count vector.
+$, with $R=\sum_c n_c$.
+\item \textbf{Network outputs} $\alpha(x;w)=e(x;w)+1$.
+% Thesis eq:dm-ebnn-observation.
+\begin{align*}
+p(\pi\mid x,w)&=\mathrm{Dir}\bigl(\pi\mid\alpha(x;w)\bigr),\\[1mm]
+p(n\mid\pi,R)&=\mathrm{Mult}(n\mid R,\pi). %“Instead of modelling one label, we model the class counts from repeated labels. Given the shared class probabilities, these counts follow a multinomial distribution.”
+\end{align*}
+\item Marginalising $\pi$ gives observation model $p(n\mid x,w)=\mathrm{DM}\bigl(n\mid R,\alpha(x;w)\bigr)$.
+\item For count data $D_{\mathrm{count}}=\{(x_i,n_i)\}_{i=1}^{N}$, the \textbf{likelihood} is
+% Thesis eq:dm-ebnn-dataset-likelihood, with conditionally independent count vectors given inputs and weights.
 \[
-p(n\mid x,w)=\mathrm{Mult}\bigl(n\mid R,f(x;w)\bigr).
+p(D_{\mathrm{count}}\mid w)
+=\prod_{i=1}^{N}p(n_i\mid x_i,w)
+=\prod_{i=1}^{N}\mathrm{DM}\bigl(n_i\mid R_i,\alpha(x_i;w)\bigr).
 \]
-{\small Dirichlet multinomial evidential Bayesian neural network (DM-eBNN)}
-% Copied from thesis eq:dm-ebnn-likelihood.
-\[
-p(n\mid x,w)=\mathrm{DM}\bigl(n\mid R,\alpha(x;w)\bigr).
-\]
-\par\medskip
-\slidepoint{$f(x;w)$ is the class-probability vector of the M-BNN.}
-% Preparation. Both models use a posterior over shared weights. The DM-eBNN retains its Gamma prior.
-% Source detail. Thesis \S4.4.1 and \S4.4.2.
+\end{itemize}
 \end{frame}
 
-% Source. Methods 4.4.3 and 4.4.4, eq:dm-ebnn-posterior-odds, eq:count-variance-ratio.
-% Figure comes from Background eq:multinomial-mass and eq:dm-mass.
-% Delivery. State the fixed mean and count total before comparing the spread.
-\begin{frame}{Count variance}
-\label{frm:count-variance}
-\slidemessage{The count likelihood can inform the total concentration parameter.}
+
+% Speaking notes
+% The likelihood multiplies the probabilities of the observed count vectors across inputs.
+% We write each concentration vector as its total concentration multiplied by its mean vector.
+% Expanding the Dirichlet multinomial shows how total concentration enters separately from the mean.
+% For one label, the Gamma ratios simplify to the corresponding mean probability. With repeated labels, this invariance no longer holds.
+% We hold the mean vectors fixed throughout this comparison.
+% We ask the same question as for single labels, keeping the mean fixed and changing total concentration.
+% The left curve uses one label and remains flat. The right curve uses all fifty-one labels for the same image.
+% These are the actual CIFAR-10H counts for this image, with thirty-nine deer labels, five ship labels and seven others.
+% The mean comes from one saved weight sample. We keep all ten mean components fixed and vary total concentration.
+% Each curve evaluates the observation probability for this image, which is one factor in the dataset likelihood above.
+% The compact summary groups other labels only for display. The calculation uses every class count separately.
+% Reference only. Image 6505. Class order is airplane, automobile, bird, cat, deer, dog, frog, horse, ship, truck.
+% Reference only. Full count vector is (1,1,2,0,39,0,1,0,5,2), with total 51.
+% Source. figures/likelihood_concentration_sources.json and scripts/build_likelihood_concentration.py.
+% The observed counts give higher likelihoods to some total concentrations than others.
+% That is what we mean when we say that count data can inform total concentration.
+% Total concentration controls the aleatoric and distributional split at fixed means, so the counts can inform that split.
+% This example is selected to show an interior maximum. Other count vectors can favour a boundary instead.
+% The plot is a controlled likelihood comparison, not a posterior or a concentration selected by training.
+% The count probability is small because it concerns this exact count vector. Its axis uses units of ten to the minus seven.
+% The Gamma prior remains. Data information does not remove the influence of assumptions.
+\begin{frame}{Repeated Labels Can Inform Total Concentration}
+\label{frm:count-concentration-information}
+\setlength{\abovedisplayskip}{3pt}
+\setlength{\belowdisplayskip}{3pt}
+\begin{itemize}
+\setlength{\itemsep}{5mm}
+\item Count likelihood \textbf{depends on total concentration}, % at fixed mean vectors
+% “Even at fixed mean vectors, changing total concentration changes the likelihood of the observed counts. Some values of total concentration explain these counts better than others. The count data can therefore inform total concentration.”
+{\small
+\[
+\begin{aligned}
+p(D_{\mathrm{count}}\mid w)
+% &=\prod_{i=1}^{N}\mathrm{DM}\bigl(n_i\mid R_i,\alpha_0(x_i;w)\,m(x_i;w)\bigr)\\[2mm]
+&=\prod_{i=1}^{N}\left[
+\frac{R_i!}{\prod_{c=1}^{C}n_{ic}!}\,
+\frac{\Gamma\bigl(\alpha_0(x_i;w)\bigr)}{\Gamma\bigl(\alpha_0(x_i;w)+R_i\bigr)}
+\prod_{c=1}^{C}
+\frac{\Gamma\bigl(\alpha_0(x_i;w)m_c(x_i;w)+n_{ic}\bigr)}
+{\Gamma\bigl(\alpha_0(x_i;w)m_c(x_i;w)\bigr)}
+\right].
+\end{aligned}
+\]
+}
+\item Likelihood \textbf{can inform total concentration} because
+observed counts provide evidence favouring some total concentrations over others,
+at fixed mean vectors.
+\begin{itemize}
+\item Count data can therefore inform aleatoric–distributional allocation.
+\end{itemize}
+\end{itemize}
+\par\vspace{7mm}
+% Shift the complete visual group left to leave more space at the right edge.
+\noindent\hspace*{-2mm}\makebox[\linewidth][c]{%
+\begin{minipage}[c]{0.17\textwidth}
+\raggedleft
+{\scriptsize
+Fixed mean\par
+$m_{\mathrm{deer}}=0.778$\par
+\medskip
+Observed counts\par
+39 deer, 5 ship\par
+7 other labels\par
+$R=51$\par}
+\end{minipage}\hspace{0.03\textwidth}%
+\begin{minipage}[c]{0.15\textwidth}
+\centering
+\raisebox{0.12\linewidth}[\height][\depth]{%
+\includegraphics[width=\linewidth]{figures/likelihood_example_input.png}}
+\end{minipage}\hspace{0.03\textwidth}%
+\begin{minipage}[c]{0.68\textwidth}
+\centering
+\includegraphics[width=\linewidth]{figures/likelihood_concentration_counts.pdf}
+\end{minipage}%
+}\par
+\end{frame}
+
+
+
+% Speaking notes
+% We have shown that counts can inform total concentration, which controls the aleatoric and distributional split at fixed means.
+% Here is the resulting class label decomposition after training on count data.
+% The multinomial Bayesian neural network uses its network output directly as the class probabilities for a multinomial model.
+% Given the weights and inputs, we assume count vectors are independent and multiply their multinomial probabilities to form the likelihood.
+% It has a weight posterior, but no distribution over class probabilities conditional on the weights. Its distributional term is zero.
+% The evidential model represents all three terms. Its count likelihood can inform the aleatoric and distributional split alongside the prior.
+% The table illustrates these representations. The preceding likelihood argument establishes why counts can inform the split.
+% We do not claim that these percentages identify the true uncertainty sources or establish better decisions.
+% We now turn to a separate question. Does modelling a distribution over class probabilities improve prediction of observed counts?
+% Settings. CIFAR-10H test, warm initialisation, three seeds, final BMA over forty weight samples per seed.
+% DM-eBNN uses Gamma prior mode 200 and SD 20 percent of the mode. The mode column is omitted because only one setting is shown.
+% Shares are the mean uncertainty terms divided by mean predictive uncertainty across inputs and seeds, not means of individual percentages.
+% The predictive column gives the mean and seed range. The dash denotes the absent distributional term in M-BNN.
+% The full decomposition, prior sensitivity and cold collapse diagnostic remain in the appendix.
+\begin{frame}{Uncertainty Decomposition from Count Data}
+\label{frm:count-allocation-results}
+\setlength{\abovedisplayskip}{2pt}
+\setlength{\belowdisplayskip}{2pt}
+\setlength{\abovedisplayshortskip}{2pt}
+\setlength{\belowdisplayshortskip}{2pt}
+\begin{itemize}
+\item \textbf{Multinomial BNN} (M-BNN) provides count prediction baseline,
+\[
+p(D_{\mathrm{count}}\mid w)
+=\prod_{i=1}^{N}\mathrm{Mult}\bigl(n_i\mid R_i,f(x_i;w)\bigr).
+\]
+\begin{itemize}
+\setlength{\topsep}{0pt}
+\setlength{\partopsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\itemsep}{0pt}
+\item Given $x,w$,  class probability vector $f(x;w)$ fixed.
+\end{itemize}
+\end{itemize}
+\par\vspace{5mm}
+{\centering
+\small
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.25}
+\input{tables/count_decomposition_comparison}\par}
+\vspace{3mm}
+\begin{itemize}
+\setlength{\itemsep}{1mm}
+\item DM-eBNN can decompose into all \textbf{three uncertainty terms}.
+\item Counts \textbf{can inform} the aleatoric--distributional split.
+\item Does data driven decomposition support \textbf{better decisions?}
+\end{itemize}
+\end{frame}
+
+
+% Speaking notes
+% We have shown a decomposition into three terms, with a data informed aleatoric--distributional split, but we have not tested whether it supports better decisions.
+% We now ask a separate question. Does the evidential model also predict observed counts better?
+% We compare it with the multinomial Bayesian baseline using the same warm configuration as the decomposition table.
+% Warm initialisation starts from a pretrained checkpoint. Pretraining without the Gamma prior collapses in our tests.
+% The Gamma prior mode is two hundred, with standard deviation twenty percent of the mode.
+% We keep this configuration for consistency across the three tables, not because it gives the lowest count NLL.
+% The appendix retains both prior modes, both initialisations and the prior diagnostics.
+% Majority label accuracy measures agreement with the most frequent human label for each image.
+% Count negative log likelihood evaluates predictions of complete held out count vectors.
+% Lower values mean that the observed counts receive higher predictive probabilities.
+% This configuration gives lower count NLL and higher mean majority label accuracy than M-BNN.
+% The accuracy ranges overlap. These means do not establish a statistically significant improvement.
+% The appendix also shows cold results. There, count NLL improves but majority label accuracy does not.
+% The models have different mean predictions and different count distributions. Which contributes to the improvement?
+% Settings. CIFAR-10H test, means and ranges over three seeds, final BMA over forty samples per run.
+% All DM-eBNN rows use Gamma prior SD twenty percent of the mode.
+% Cold and warm budgets differ. Comparisons between models within each initialisation use matching sampling budgets.
+\begin{frame}{Better Prediction of Observed Counts}
+\label{frm:count-prediction}
+\begin{itemize}
+\item Beyond uncertainty decomposition, evaluate \textbf{count prediction}.
+% \begin{itemize}
+% \item Compare with M-BNN at prior mode $200$. Prior SD is $20\%$ of the mode.
+% \end{itemize}
+\end{itemize}
+\vspace{3mm}
 \begin{center}
-\includegraphics[width=0.90\textwidth]{figures/count_variance.pdf}
+\small
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.08}
+\input{tables/count_predictive_warm}
 \end{center}
+\vspace{3mm}
 \begin{itemize}
-\item The mean vector and count total stay fixed. The count probabilities differ.
+\setlength{\itemsep}{3mm}
+\item DM-eBNN \textbf{improves predictive fit.} % to observed counts.
+\item Why?
+\end{itemize}
+\end{frame}
+
+% Source. Methods 4.4.4, sec:count-comparison, eq:count-variance-ratio.
+% Background eq:multinomial-moments, eq:dm-moments and eq:dm-multinomial-limit.
+% Figure. scripts/build_count_variance_concentration.py, mathematical illustration, not experimental results.
+% Speaking notes
+% We set the multinomial class-probability vector and the Dirichlet mean vector equal to a common vector.
+% These are the network probability output and Dirichlet mean from the earlier model definitions [f(x;w) and m(x;w)].
+% We use the same number of labels for both distributions.
+% For the multinomial, these probabilities are fixed. For the Dirichlet multinomial, they are the mean of the random probabilities.
+% They then give the same expected count for each class.
+% For the multinomial, these quantities also fix the count variance.
+% The Dirichlet multinomial multiplies that variance by a factor controlled by total concentration.
+% For more than one label, the factor is greater than one at finite total concentration.
+% The plot illustrates two equally likely classes and twenty labels. Both distributions have expected count ten for the first class.
+% Lower total concentration gives more probability to counts away from ten.
+% As total concentration increases, the Dirichlet multinomial approaches the multinomial.
+% The plotted total concentrations are illustrative values, not prior modes or fitted model results.
+% The curves connect probabilities at integer counts. They are not continuous probability densities.
+% This concerns variation in observed count vectors, not the decomposition of uncertainty about one class label.
+% Additional count variance could explain better count prediction. The next comparison tests its contribution at the same mean vectors.
+\begin{frame}{What Could Explain Predictive Fit Improvement?}
+\label{frm:count-variance}
+% we compare the distributions of the multinomial and Dirichlet multinomial count distributions to see how the DM gives a more flexible distribution compared to the Mult.
+\begin{columns}[c,onlytextwidth]
+\begin{column}{0.51\textwidth}
+\small
 \begin{itemize}
-\item Two class illustration with mean vector $(0.5,0.5)$ and count total 20.
+\setlength{\itemsep}{2mm}
+\item Compare count distributions of multinomial and Dirichlet multinomial.
+\item Set $q$ $=$ multinomial class-probability vector ($f(x;w)$) $=$ Dirichlet mean vector ($m(x;w)$).
+\begin{itemize}
+\item Count total $R>1$.
 \end{itemize}
+\item \textbf{Expected counts}: $\mathbb E[n_c]=Rq_c$. %are equal for both distributions.
+\item \textbf{Variance}: %at fixed $q$ and $R$. “The Dirichlet multinomial variance equals the multinomial variance multiplied by this factor. For more than one label, the factor exceeds one and is controlled by total concentration.”
+$\operatorname{Var}_{\mathrm{DM}}[n_c]
+= \dfrac{\alpha_0+R}{\alpha_0+1}\,
+\operatorname{Var}_{\mathrm{Mult}}[n_c].$
+%
+% Smaller total concentration gives more count variance. As total concentration increases, the Dirichlet multinomial approaches the multinomial.
+%
+ \begin{itemize}
+%     \item Smaller total concentration gives more count variance.
+%     \item $\operatorname{Var}_{\mathrm{DM}}[n_c] \to \operatorname{Var}_{\mathrm{Mult}}[n_c]$ as $\alpha_0 \to \infty$.
+\item Total concentration controls additional count variance 
+% variance in addition to the multinomial variance.
+%at equal $q$ and $R$.
+     \end{itemize}
 \end{itemize}
-% Preparation. Mathematical illustration with two classes, mean vector $(0.5,0.5)$, and count total 20.\par
-% At fixed mean vectors, this dependence on total concentration requires a count total above one.
-% Source detail. Thesis \S4.4.3 and \S4.4.4.
+% Thesis eq:multinomial-moments and eq:dm-moments.
+% Reference. Var_Mult[n_c] = R q_c (1-q_c).
+% Reference. Var_DM[n_c] = R q_c (1-q_c) (alpha_0+R)/(alpha_0+1).
+% Thesis eq:count-variance-ratio. Conditions ensure nonzero denominator and strict inequality.
+% \[
+% \operatorname{Var}_{\mathrm{DM}}[n_c]
+% =\underbrace{\frac{\alpha_0+R}{\alpha_0+1}}_{>1}\,
+% \operatorname{Var}_{\mathrm{Mult}}[n_c].
+% \]
+\end{column}
+\begin{column}{0.47\textwidth}
+\centering
+\includegraphics[width=\linewidth]{figures/count_variance_concentration.pdf}
+\end{column}
+\end{columns}
+\vspace{2mm}
+\begin{itemize}
+\item \textbf{Additional count variance} may explain the improved predictive fit.
+\end{itemize}
 \end{frame}
 
 % Source. Experiments 5.3.1, tab:e2-count-prediction. All four comparisons are shown.
@@ -97,39 +339,77 @@ p(n\mid x,w)=\mathrm{DM}\bigl(n\mid R,\alpha(x;w)\bigr).
 % Source detail. Thesis \S5.3.1. Cold and warm chains have different sampling budgets.
 \end{frame}
 
-% Source. Experiments 5.3.2, tab:e2-count-prior-sensitivity.
-% Delivery. The two trajectories approach each other but remain different within the budget.
-\begin{frame}{Prior sensitivity remains}
-\label{frm:count-prior-sensitivity}
-\slidemessage{The prior and initial checkpoint still affect realised total concentration.}
-\slidepoint{Realised total concentration after sampling on CIFAR-10H.}
-\begin{center}
-\renewcommand{\arraystretch}{1.65}
-\input{tables/count_sensitivity_slide}
-\end{center}
-\slidepoint{Means and ranges over three seeds. Warm initialisation with a fixed sampling budget.}
-% Preparation. Warm initialisation on CIFAR-10H. Mean and range over three seeds. Final BMA over 40 samples.\par
-% Pretraining uses a Gamma prior standard deviation of 20\%. These results concern the fixed sampling budget.
-% Source detail. Thesis \S5.3.2.
-\end{frame}
+% % Speaking notes
+% % We now test whether additional count variance contributes to the improved fit to held out counts.
+% % We separate the effect of the count distribution from differences in the mean probabilities.
+% % The common probability vector from the previous comparison is now the trained evidential model's mean vector.
+% % For each input and retained weight sample, the first line uses the fitted Dirichlet multinomial count distribution.
+% % The second line replaces it with a multinomial using exactly the same mean vector. This is the mean matched control.
+% % We do not use the separately trained multinomial BNN's probability predictions.
+% % Both lines give the same expected counts, but the control removes the additional conditional count variance.
+% % We use the same weight samples and average the count probabilities as before. No model is retrained.
+% % This is the mean matched control for the same warm model at prior mode two hundred and prior SD twenty percent.
+% % Its count NLL is higher. The appendix retains both prior modes and both initialisations.
+% % Additional count variance therefore contributes to the improved predictive fit.
+% % This does not show that count variance explains the entire difference between independently trained M-BNN and DM-eBNN models.
+% % The section establishes two findings. Counts can inform the uncertainty allocation, and additional count variance improves count prediction here.
+% % Whether the uncertainty allocation supports better decisions remains untested.
+% % Settings. CIFAR-10H test, means and ranges over three seeds, forty retained samples per run, Gamma prior SD twenty percent.
+% \begin{frame}{Testing the Effect of Count Variance}
+% \label{frm:count-mean-matched-control}
+% \setlength{\abovedisplayskip}{4pt}
+% \setlength{\belowdisplayskip}{4pt}
+% \begin{itemize}
+% \item For each input $x$ and weight sample $w$, retain the fitted mean vector $m(x;w)$.
+% \end{itemize}
+% % Thesis sec:exp-metrics-count, mean matched control definition.
+% % Substitute eq:mean-total-concentration-parameterisation into eq:dm-ebnn-likelihood.
+% \[
+% \begin{aligned}
+% \text{DM-eBNN}\quad &\mathrm{DM}\bigl(n\mid R,\alpha_0(x;w)m(x;w)\bigr),\\[2mm]
+% \text{Mean matched control}\quad &\mathrm{Mult}\bigl(n\mid R,m(x;w)\bigr).
+% \end{aligned}
+% \]
+% \begin{itemize}
+% \item Same mean vectors and weight samples. \textbf{No retraining}.
+% \end{itemize}
+% \vspace{3mm}
+% \begin{center}
+% \small
+% \setlength{\tabcolsep}{7pt}
+% \renewcommand{\arraystretch}{1.12}
+% \input{tables/count_mean_matched_warm}
+% \end{center}
+% \vspace{3mm}
+% \begin{itemize}
+% \item The control has \textbf{higher held out count NLL}.
+% \begin{itemize}
+% \item Additional count variance contributes to the improvement.
+% \end{itemize}
+% \end{itemize}
+% \end{frame}
 
-% Source. Methods 4.4.5 and Experiments 5.3.3, sec:count-uncertainty-decomposition, tab:e2-count-terms.
-% Delivery. These are terms for one class label, although training uses count vectors.
-\begin{frame}{Decomposition for class labels}
-\label{frm:count-decomposition}
-\slidemessage{The DM-eBNN reports the three terms. Their practical value remains open.}
-\begin{center}
-\renewcommand{\arraystretch}{1.6}
-\setlength{\tabcolsep}{7pt}
-\input{tables/count_shares_slide}
-\end{center}
+
+% Source. Methods 4.4.3--4.4.5, sec:dm-ebnn-concentration-information, sec:count-comparison and sec:count-uncertainty-decomposition.
+% Experiments 5.3, tab:e2-count-prediction, tab:e2-count-prior-sensitivity and tab:e2-count-terms. Discussion 6.3--6.4.
+% Speaking notes
+% Like the single label evidential model, this model represents all three uncertainty terms for a class label.
+% The difference is what the observations can inform. At fixed means, counts can distinguish total concentrations.
+% Since total concentration controls the aleatoric and distributional split, counts can also inform that allocation.
+% This does not make the allocation independent of assumptions. The prior and initialisation still affect the result within our sampling budget.
+% Separately, the model improves prediction of held out count vectors compared with the multinomial Bayesian baseline in the tested settings.
+% Its additional count variance offers a possible explanation for this improvement.
+% Better count prediction does not establish that the uncertainty allocation supports better decisions. We have not tested that practical use.
+\begin{frame}{Repeated-Label Models: Findings and Limitations}
+\label{frm:count-model-interpretation}
 \begin{itemize}
-\item Shares of each model's own predictive uncertainty in a class label.
+\setlength{\itemsep}{5mm}
+\item DM-eBNN represents all three uncertainty terms.
+\item At fixed means, count labels \textbf{can} inform total concentration.
 \begin{itemize}
-\item CIFAR-10H. Averages over inputs and three seeds. Warm initialisation.
+\item Hence the aleatoric--distributional allocation.
 \end{itemize}
+\item DM-eBNN improves held out count prediction in experiments.
+\item Better decisions from the uncertainty decomposition remain untested.
 \end{itemize}
-% Preparation. Shares of each model's own predictive uncertainty, averaged over inputs and three seeds.\par
-% CIFAR-10H test split. Warm initialisation. Final BMA over 40 samples. DM-eBNN prior standard deviation 20\%.
-% Source detail. Thesis \S4.4.5 and \S5.3.3.
 \end{frame}

@@ -61,6 +61,116 @@
     p(D\mid w)=\prod_{i=1}^{N}p(y_i\mid x_i,w)=\prod_{i=1}^{N}f_{y_i}(x_i;w).
     \]
     \end{frame}
+
+
+% Source. Background 2.4, sec:bg-multinomial-distribution, eq:count-vector,
+% eq:multinomial-mass and eq:multinomial-categorical-reduction.
+% Methods 4.4.1--4.4.2, eq:mbnn-observation and eq:dm-ebnn-observation.
+% Speaking notes
+% Start with one input and a class probability vector.
+% We assume that repeated labels are independent categorical draws with these same probabilities.
+% We count how many labels belong to each class. The counts sum to the number of labels.
+% The multinomial gives the probability of the complete count vector.
+% The product gives the probability of one label sequence. The factorial factor counts the sequences with these counts.
+% With one label, this reduces to the categorical probability of that label.
+% In the multinomial BNN, the network outputs the shared class probabilities.
+% In the Dirichlet multinomial model, we instead put a distribution over these shared probabilities.
+\begin{frame}{Multinomial Counts}
+\label{frm:appendix-multinomial-distribution}
+\setlength{\abovedisplayskip}{5pt}
+\setlength{\belowdisplayskip}{5pt}
+\begin{itemize}
+\setlength{\itemsep}{5mm}
+\item For input $x$, class probabilities $q=(q_1,\ldots,q_C)$ satisfy $q_c\geq0$, $\sum_cq_c=1$.
+\item Assume $R$ independent categorical labels drawn with probabilities $q$.
+\begin{itemize}
+\item Their counts are $n=(n_1,\ldots,n_C)$, with $n_c\in\{0,1,\ldots\}$ and $\sum_cn_c=R$.
+\end{itemize}
+\item The count vector has a \textbf{multinomial distribution}.
+% Thesis eq:multinomial-mass.
+\[
+p(n\mid R,q)=\mathrm{Mult}(n\mid R,q)
+=\frac{R!}{\prod_{c=1}^{C}n_c!}\prod_{c=1}^{C}q_c^{n_c}.
+\]
+\item For $R=1$, label $y$ gives $n_y=1$ and all other counts zero.
+\begin{itemize}
+% Thesis eq:multinomial-categorical-reduction.
+\item $p(n\mid1,q)=q_y=\mathrm{Cat}(y\mid q)$.
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+% Source. Background 2.4, sec:bg-dirichlet-multinomial-distribution,
+% eq:dm-hierarchy, eq:dm-joint and eq:dm-mass. Background eq:general-dirichlet-mean.
+% Methods 4.4.2, eq:dm-ebnn-observation and eq:dm-ebnn-likelihood.
+% Speaking notes
+% We keep the same count vector and number of labels.
+% The shared class probability vector now has a Dirichlet distribution, defined by positive concentration parameters.
+% Given this vector, the repeated labels are independent and their counts are multinomial.
+% The same probability vector applies to all labels for this input.
+% We multiply the conditional count probability by the Dirichlet density to obtain their joint distribution.
+% We then marginalise over the shared probability vector.
+% The result is the Dirichlet multinomial probability of the observed count vector.
+% The Dirichlet and conditional multinomial are modelling assumptions. The marginal formula follows from them.
+% In the evidential count model, the network supplies the concentration parameters for each input.
+\begin{frame}{Dirichlet Multinomial Counts}
+\label{frm:appendix-dirichlet-multinomial-distribution}
+\setlength{\abovedisplayskip}{5pt}
+\setlength{\belowdisplayskip}{5pt}
+\begin{itemize}
+\setlength{\itemsep}{3mm}
+\item For input $x$, random class probabilities $\pi$ are \textbf{Dirichlet distributed}.
+% Thesis eq:dm-hierarchy and eq:general-dirichlet-mean.
+\[
+p(\pi\mid x,\alpha)=\mathrm{Dir}(\pi\mid\alpha),
+\qquad \alpha_c>0,\quad \alpha_0=\sum_{c=1}^{C}\alpha_c.
+\]
+\item Given $\pi$, the $R$ labels are independent and their counts are \textbf{multinomial},
+\[
+% Thesis eq:dm-hierarchy.
+p(n\mid R,\pi)=\mathrm{Mult}(n\mid R,\pi).
+\]
+\item \textbf{Marginalise $\pi$} to obtain count probability at input $x$.
+% Thesis eq:dm-mass. Delta is the probability simplex defined in the background.
+\[
+\begin{aligned}
+p(n\mid x,R,\alpha)
+&=\mathrm{DM}(n\mid R,\alpha)\\[1mm]
+&=\int_{\Delta^{C-1}}\mathrm{Mult}(n\mid R,\pi)\,\mathrm{Dir}(\pi\mid\alpha)\,d\pi\\[2mm]
+&=\frac{R!}{\prod_{c=1}^{C}n_c!}\,
+\frac{\Gamma(\alpha_0)}{\Gamma(\alpha_0+R)}
+\prod_{c=1}^{C}\frac{\Gamma(\alpha_c+n_c)}{\Gamma(\alpha_c)}.
+\end{aligned}
+\]
+\end{itemize}
+\end{frame}
+
+    % % Source. Methods 4.4.4, sec:count-comparison, eq:count-variance-ratio.
+    % % Speaking notes
+    % % The two count distributions have the same mean class probabilities and count total.
+    % % For more than one label, finite total concentration permits additional count variance in the Dirichlet multinomial distribution.
+    % % With one label, the variances agree.
+    % % As total concentration increases without bound, the variance ratio approaches one.
+    % \begin{frame}{Count variance}
+    % \label{frm:backup-count-variance}
+    % \slidemessage{Finite total concentration permits additional count variance when $R>1$.}
+    % \slidepoint{Both distributions have class-probability vector $q$ and count total $R$.}
+    % % Copied from the displayed equality in sec:count-comparison.
+    % \[
+    % \mathbb E_{\mathrm{Mult}(n\mid R,q)}[n_c]
+    % =\mathbb E_{\mathrm{DM}(n\mid R,\alpha_0q)}[n_c]=Rq_c.
+    % \]
+    % % Copied from eq:count-variance-ratio.
+    % \[
+    % \frac{\operatorname{Var}_{\mathrm{DM}(n\mid R,\alpha_0q)}[n_c]}
+    % {\operatorname{Var}_{\mathrm{Mult}(n\mid R,q)}[n_c]}
+    % =\frac{\alpha_0+R}{\alpha_0+1}.
+    % \]
+    % \par\medskip
+    % \slidepoint{The variance ratio assumes $0<q_c<1$. It is one when $R=1$.}
+    % % Preparation. The ratio is one when $R=1$. It approaches one as the total concentration parameter increases without bound.
+    % % Source detail. Thesis \S4.4.4. The ratio assumes $0<q_c<1$.
+    % \end{frame}
     
     
     % Source. Author-requested supporting theory for Methods 4.2.1, sec:edl-model-setup.
@@ -932,23 +1042,81 @@ Sample spacing in epochs & 5 & 20 & 20\\
 % \end{itemize}
 % \end{frame}
 
-% Source. Experiments 5.1.5--5.1.6, sec:exp-metrics-single and sec:exp-metrics-count. Equations eq:sample-bma-predictive, eq:sample-count-bma-predictive, eq:evaluation-accuracy, eq:evaluation-nll and eq:count-nll.
+% Source. Experiments 5.1.5, sec:exp-metrics-single, eq:evaluation-nll and eq:sample-bma-predictive.
+% Model probabilities follow eq:categorical-likelihood and eq:fixed-weight-dirichlet-marginal.
 % Speaking notes
-% We average observation probabilities over retained weight samples to obtain the final Bayesian model average.
-% We take the logarithm after averaging probabilities. We do not average the negative log likelihoods of individual weight samples.
-% Single label accuracy checks the predicted class. Negative log likelihood evaluates the probability of the observed label.
-% Count negative log likelihood evaluates the entire observed count vector.
-% Majority label accuracy compares the predicted class with the class having the largest observed count.
-% The mean matched control replaces each Dirichlet multinomial probability with a multinomial probability at the same mean and weight sample.
-% This isolates the predictive effect of finite total concentration for those fixed mean vectors and samples.
-\begin{frame}{Experimental Setup. Predictive Evaluation}
+% We evaluate the probability assigned to each observed label on held out inputs.
+% Softmax and the categorical BNN use the corresponding network probability.
+% EDL and the categorical evidential BNN use the corresponding component of the Dirichlet mean.
+% We average these probabilities over retained weight samples before taking the negative logarithm.
+% We then average over evaluation inputs. Lower NLL means higher predictive probability for the observed labels.
+% A deterministic model uses only its selected checkpoint. Evaluation NLL contains no prior penalties.
+\begin{frame}{Experimental Setup: Predictive Evaluation with Single Labels}
 \label{frm:appendix-setup-predictive-evaluation}
+\setlength{\abovedisplayskip}{5pt}
+\setlength{\belowdisplayskip}{5pt}
+\begin{itemize}
+\setlength{\itemsep}{4mm}
+\item $M$ evaluation inputs. $S$ retained weight samples $w^{(s)}$.
+\item \textbf{Probability of the observed label}
+% Thesis sec:exp-metrics-single, model-specific observation probabilities.
+\[
+p(y_i\mid x_i,w^{(s)})=
+\begin{cases}
+f_{y_i}(x_i;w^{(s)}), & \text{Softmax, Cat-BNN},\\[2mm]
+m_{y_i}(x_i;w^{(s)}), & \text{EDL, Cat-eBNN}.
+\end{cases}
+\]
+\item \textbf{Negative log likelihood}, averaging probabilities before taking logarithms.
+% Thesis eq:evaluation-nll with eq:sample-bma-predictive substituted.
+\[
+\operatorname{NLL}
+=-\frac{1}{M}\sum_{i=1}^{M}
+\log\!\left[\frac{1}{S}\sum_{s=1}^{S}p(y_i\mid x_i,w^{(s)})\right].
+\]
+\item Deterministic models use $S=1$ and $w^{(1)}=\hat w$.
+\end{itemize}
+\end{frame}
+
+% Source. Experiments 5.1.6, sec:exp-metrics-count, eq:count-nll and eq:sample-count-bma-predictive.
+% Mean matched substitution follows the paragraph after eq:count-nll.
+% Speaking notes
+% Count NLL evaluates complete observed count vectors, rather than individual labels.
+% The multinomial BNN uses a multinomial probability with the network output as its class probabilities.
+% The Dirichlet multinomial evidential BNN uses a Dirichlet multinomial probability with its concentration parameters.
+% The mean matched control uses a multinomial probability with the evidential model's mean vector.
+% It retains exactly the same weight samples. We do not retrain the model.
+% For each row, we average count probabilities over weight samples before taking the negative logarithm.
+% The control uses the same count NLL formula. Higher control NLL supports the benefit of additional count variance.
+% These evaluation scores contain no Gaussian or Gamma prior penalties.
+% Deterministic count models use the corresponding observation probability with one selected weight estimate.
+\begin{frame}{Experimental Setup: Predictive Evaluation with Count Vectors}
+\label{frm:appendix-count-nll-models}
+\setlength{\abovedisplayskip}{5pt}
+\setlength{\belowdisplayskip}{5pt}
 \begin{itemize}
 \setlength{\itemsep}{3mm}
-\item Average observation probabilities over all retained weight samples before evaluating predictions.
-\item \textbf{Single labels}, accuracy and label negative log likelihood (NLL).
-\item \textbf{Repeated labels}, majority label accuracy and count NLL for the complete count vector.
-\item \textbf{Mean matched control}, replace each Dirichlet multinomial probability with a multinomial probability at the same mean vector and weight sample.
+\item $M$ evaluation inputs. $S$ weight samples. Count total $R_i=\sum_c n_{ic}$.
+\item \textbf{Probability of the observed count vector}
+% Thesis sec:exp-metrics-count, model probabilities and mean matched control substitution.
+{\small
+\[
+p(n_i\mid x_i,R_i,w^{(s)})=
+\begin{cases}
+\mathrm{Mult}\bigl(n_i\mid R_i,f(x_i;w^{(s)})\bigr), & \text{M-BNN},\\[2mm]
+\mathrm{DM}\bigl(n_i\mid R_i,\alpha(x_i;w^{(s)})\bigr), & \text{DM-eBNN},\\[2mm]
+\mathrm{Mult}\bigl(n_i\mid R_i,m(x_i;w^{(s)})\bigr), & \text{mean matched control}.
+\end{cases}
+\]
+}
+\item \textbf{Count NLL}, using the corresponding probability above.
+% Thesis eq:count-nll with eq:sample-count-bma-predictive substituted.
+\[
+\operatorname{NLL}_{\mathrm{count}}
+=-\frac{1}{M}\sum_{i=1}^{M}
+\log\!\left[\frac{1}{S}\sum_{s=1}^{S}p(n_i\mid x_i,R_i,w^{(s)})\right].
+\]
+\item The control retains DM-eBNN mean vectors and weight samples. No retraining.
 \end{itemize}
 \end{frame}
 
@@ -1111,122 +1279,69 @@ Sample spacing in epochs & 5 & 20 & 20\\
 
 
 
-% Source. Methods 4.3.3, eq:ebnn-likelihood-invariance, eq:posterior-odds-unchanged.
+% % Source. Methods 4.3.3, eq:ebnn-likelihood-invariance, eq:posterior-odds-unchanged.
+% % Speaking notes
+% % Consider two weight configurations that give the same mean vectors at every training input.
+% % They assign the same probabilities to the observed labels, so their likelihoods are equal.
+% % Their posterior odds therefore equal their prior odds.
+% % This is a comparison at fixed means. During training, both the means and total concentration can change.
+% \begin{frame}{Equal mean vectors and posterior odds}
+% \label{frm:backup-invariance}
+% \slidemessage{Equal mean vectors leave the posterior odds equal to the prior odds.}
+% \slidepoint{Consider weights $w$ and $w'$ with equal mean vectors on every training input.}
+% % Copied from eq:ebnn-likelihood-invariance.
+% \[
+% p(D\mid w)=\prod_{i=1}^{N}m_{y_i}(x_i;w)
+% =\prod_{i=1}^{N}m_{y_i}(x_i;w')=p(D\mid w').
+% \]
+% % Copied from eq:posterior-odds-unchanged.
+% \[
+% \frac{p(w\mid D)}{p(w'\mid D)}
+% =\frac{\tilde p(w)}{\tilde p(w')}
+% \frac{p(D\mid w)}{p(D\mid w')}
+% =\frac{\tilde p(w)}{\tilde p(w')}.
+% \]
+% % Preparation. This result holds at fixed mean vectors. Training can change the mean vectors and total concentration together.
+% % Source detail. Thesis \S4.3.3.
+% \end{frame}
+
+
+
+% Source. Experiments 5.2.1, tab:e2-start-procedure.
+% Table copied unchanged from thesis tables/start_procedure.tex, generated by BNN-EDL/analysis/chapter_tables.py.
 % Speaking notes
-% Consider two weight configurations that give the same mean vectors at every training input.
-% They assign the same probabilities to the observed labels, so their likelihoods are equal.
-% Their posterior odds therefore equal their prior odds.
-% This is a comparison at fixed means. During training, both the means and total concentration can change.
-\begin{frame}{Equal mean vectors and posterior odds}
-\label{frm:backup-invariance}
-\slidemessage{Equal mean vectors leave the posterior odds equal to the prior odds.}
-\slidepoint{Consider weights $w$ and $w'$ with equal mean vectors on every training input.}
-% Copied from eq:ebnn-likelihood-invariance.
-\[
-p(D\mid w)=\prod_{i=1}^{N}m_{y_i}(x_i;w)
-=\prod_{i=1}^{N}m_{y_i}(x_i;w')=p(D\mid w').
-\]
-% Copied from eq:posterior-odds-unchanged.
-\[
-\frac{p(w\mid D)}{p(w'\mid D)}
-=\frac{\tilde p(w)}{\tilde p(w')}
-\frac{p(D\mid w)}{p(D\mid w')}
-=\frac{\tilde p(w)}{\tilde p(w')}.
-\]
-% Preparation. This result holds at fixed mean vectors. Training can change the mean vectors and total concentration together.
-% Source detail. Thesis \S4.3.3.
-\end{frame}
-
-% Source. Background 2.9.2, eq:aleatoric-final, eq:distributional-remainder,
-% eq:digamma-function. Methods 4.3.5, sec:ebnn-uncertainty-decomposition.
-\begin{frame}{Backup. Closed forms at fixed weights}
-\label{frm:backup-closed-forms}
-\slidemessage{The aleatoric and distributional terms have closed forms.}
-\slidepoint{$\mathcal H$ denotes entropy. $\mathcal I$ denotes mutual information. $\psi$ is the digamma function.}
-% Copied from eq:aleatoric-final. Line breaks added for the slide.
-\begin{align*}
-\mathbb E_{\mathrm{Dir}(\pi\mid\alpha(x;w))}
-\bigl[\mathcal H[\mathrm{Cat}(y\mid\pi)]\bigr]
-&=\sum_{c=1}^{C}m_c(x;w)
-\bigl[\psi(\alpha_0(x;w)+1)-\psi(\alpha_c(x;w)+1)\bigr].
-\end{align*}
-% First equality of eq:distributional-remainder.
-\begin{align*}
-\mathcal I(y;\pi\mid w)
-&=\mathcal H[\mathrm{Cat}(y\mid m(x;w))]
--\mathbb E_{\mathrm{Dir}(\pi\mid\alpha(x;w))}
-\bigl[\mathcal H[\mathrm{Cat}(y\mid\pi)]\bigr].
-\end{align*}
-\par\medskip
-\slidepoint{The Cat-eBNN and DM-eBNN average these terms over the weight posterior.}
-% Preparation. The Cat-eBNN and DM-eBNN average these terms over the weight posterior.
-% Source detail. Thesis \S2.9.2 and \S4.3.5.
-\end{frame}
-
-% Source. Methods 4.4.4, sec:count-comparison, eq:count-variance-ratio.
-\begin{frame}{Backup. Count variance}
-\label{frm:backup-count-variance}
-\slidemessage{Finite total concentration permits additional count variance when $R>1$.}
-\slidepoint{Both distributions have class-probability vector $q$ and count total $R$.}
-% Copied from the displayed equality in sec:count-comparison.
-\[
-\mathbb E_{\mathrm{Mult}(n\mid R,q)}[n_c]
-=\mathbb E_{\mathrm{DM}(n\mid R,\alpha_0q)}[n_c]=Rq_c.
-\]
-% Copied from eq:count-variance-ratio.
-\[
-\frac{\operatorname{Var}_{\mathrm{DM}(n\mid R,\alpha_0q)}[n_c]}
-{\operatorname{Var}_{\mathrm{Mult}(n\mid R,q)}[n_c]}
-=\frac{\alpha_0+R}{\alpha_0+1}.
-\]
-\par\medskip
-\slidepoint{The variance ratio assumes $0<q_c<1$. It is one when $R=1$.}
-% Preparation. The ratio is one when $R=1$. It approaches one as the total concentration parameter increases without bound.
-% Source detail. Thesis \S4.4.4. The ratio assumes $0<q_c<1$.
-\end{frame}
-
-% Source. Experiments 5.1.3 and 5.1.4, sec:exp-training-setup,
-% sec:exp-count-training-setup, eq:sample-bma-predictive, eq:sample-count-bma-predictive.
-\begin{frame}{Backup. Sampling budgets}
-\label{frm:backup-sampling}
-\slidemessage{Each run uses one chain of stochastic gradient Langevin dynamics (SGLD).}
-\begin{center}
-\small
-\renewcommand{\arraystretch}{1.45}
-\begin{tabular}{@{}lcc@{}}
-\toprule
- & Single labels & Repeated labels\\
-\midrule
-Final BMA samples & 10 & 40\\
-Cold initialisation epochs & 150 / 600 & 3000\\
-Warm pretraining epochs & 50 / 300 & 400\\
-Warm SGLD epochs & 100 / 300 & 1000\\
-\bottomrule
-\end{tabular}
-\end{center}
+% This table compares cold, warm and shifted initialisation on both datasets.
+% We evaluate validation accuracy using the final average over retained weight samples.
+% Each entry reports the mean across three seeds. Parentheses show the minimum and maximum.
+% Bold entries mark the selected initialisations. All evidential rows use prior standard deviation twenty percent of the mode.
+% The categorical BNN has no shifted initialisation.
+% Cold runs at modes thirty and three hundred on CIFAR-10 are omitted to save compute.
+% These results concern the tested training budgets, not differences in the posterior targeted by the initialisations.
+\begin{frame}{Initialisation Results}
+\label{frm:appendix-initialisation-results}
+\appendixresulttable{tables/start_procedure}
 \begin{itemize}
-\item The paired single label values refer to Fashion-MNIST / CIFAR-10.
-\item Cold and warm budgets differ in the count experiments.
+\item Prior SD is $20\%$ of the mode.
+\item Bold mark selected initialisations.
+\item \textbf{Warm and shifted initialisation} outperform cold initialisation within tested budget.
 \end{itemize}
-% Preparation. Warm initialisation uses the best validation checkpoint. Earlier SGLD epochs serve as burn in.\par
-% The count experiments use different cold and warm budgets. They do not isolate the effect of initialisation.
-% Source detail. Thesis \S5.1.3 and \S5.1.4.
 \end{frame}
 
 % Source. Experiments 5.2.4, tab:e2-predictive.
-\begin{frame}{Backup. Full predictive comparison}
+% Speaking notes
+% This is the complete predictive comparison, with means and ranges over three seeds.
+% Deterministic models use their best validation checkpoint. Sampled models average the final ten retained weight samples.
+% The categorical Bayesian baseline uses warm initialisation. The evidential model uses shifted initialisation.
+% The evidential model uses prior mode one hundred and prior standard deviation twenty percent.
+\begin{frame}{Full predictive comparison}
 \label{frm:backup-predictive}
-\begin{center}
-\small
-\renewcommand{\arraystretch}{0.96}
-\input{tables/predictive}
-\end{center}
-\par\medskip
+\appendixresulttable{tables/predictive}
 \begin{itemize}
-\item Means and ranges over three seeds.
-\begin{itemize}
-\item Sampled models use final BMA over ten samples.
-\end{itemize}
+\item Cat-eBNN uses shifted initialisation, prior mode $100$ and prior SD $20\%$ of the mode.
+\item Cat-BNN uses warm initialisation. 
+\item Deterministic models use best validation checkpoint.
+\item Cat-eBNN achieves \textbf{competitive accuracy}.
+\item \textbf{Lower NLL than EDL}, but \textbf{higher NLL than Cat-BNN.}
 \end{itemize}
 % Preparation. Mean and range over three seeds. Sampled models use the final BMA over ten samples.\par
 % Deterministic models use their best validation checkpoint. Cat-BNN uses warm initialisation.\par
@@ -1234,96 +1349,250 @@ Warm SGLD epochs & 100 / 300 & 1000\\
 % Source detail. Thesis \S5.2.4.
 \end{frame}
 
+% Source. Experiments 5.2.2, tab:e2-mode-sweep.
+% Table copied unchanged from thesis tables/mode_sweep.tex.
+% Speaking notes
+% We vary the Gamma prior mode on both datasets, with standard deviation twenty percent of the mode.
+% This is the complete table, including realised total concentration and predictive fit.
+% The uncertainty shares change with the prior mode. Mean vectors and weight posteriors also change between runs.
+% These results show prior sensitivity, not a validated uncertainty allocation.
+\begin{frame}{Gamma Prior Mode Results}
+\label{frm:appendix-prior-mode-results}
+\appendixresulttable{tables/mode_sweep}
+\begin{itemize}
+\item Prior SD is fixed at $20\%$ of the mode.
+\item Mode $30$ uses warm initialisation. Higher modes use shifted initialisation.
+\item Higher prior modes increase realised total concentration 
+\begin{itemize}
+\item \textbf{Shifts allocation} towards aleatoric uncertainty.
+\end{itemize}
+\end{itemize}
+\end{frame}
+
 % Source. Experiments 5.2.3, tab:e2-sd-sweep, eq:realised-total-concentration.
-\begin{frame}{Backup. Prior standard deviation}
+% Table copied unchanged from thesis tables/sd_sweep.tex, generated by BNN-EDL/analysis/chapter_tables.py.
+% Speaking notes
+% We fix the Gamma prior mode at one hundred and vary its standard deviation on both datasets.
+% The standard deviations are percentages of the mode. All runs use shifted initialisation.
+% Each row reports means across three seeds. Parentheses give the minimum and maximum where shown.
+% A tighter prior keeps realised total concentration closer to the mode.
+% The aleatoric share increases and the distributional share decreases as the prior becomes tighter.
+% The trained mean vectors also change. This is not a comparison at fixed means.
+% Predictive fit does not improve consistently as the prior becomes tighter.
+% Uncertainty shares divide each average term by average predictive uncertainty.
+% Sampled predictions use the final ten retained weight samples.
+\begin{frame}{Gamma Prior Standard Deviation Results}
 \label{frm:backup-prior-sd}
-\slidemessage{A tighter Gamma prior keeps realised total concentration closer to the prior mode.}
-\begin{center}
-\small
-\renewcommand{\arraystretch}{1.5}
-\input{tables/sd_extract}
-\end{center}
-\par\medskip
-\slidepoint{CIFAR-10. Prior mode 100. Means and ranges over three seeds.}
-% Preparation. CIFAR-10. Gamma prior mode 100. Shifted initialisation. Final BMA over ten samples.\par
-% Mean and range over three seeds. The trained mean vectors also change.\par
-% Shares are percentages of average predictive uncertainty. Standard deviations are relative to the prior mode.
-% Source detail. Thesis \S5.2.3.
+\appendixresulttable{tables/sd_sweep}
+\begin{itemize}
+\item Prior mode is fixed at $100$. Shifted initialisation. 
+\item Prior SD is varied as a percentage of the mode.
+\item Narrower priors push total concentration closer to the mode 
+\begin{itemize}
+\item Resulting in higher total concentration.
+\item \textbf{Shifts allocation} towards aleatoric uncertainty.
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+% Source. Experiments 5.2.5, tab:e2-terms.
+% Table copied unchanged from thesis tables/terms.tex, generated by BNN-EDL/analysis/measurements.py.
+% Speaking notes
+% These are the complete uncertainty results for models trained with single labels.
+% We average each term over test inputs and three seeds. Parentheses give its share of predictive uncertainty.
+% Cat-BNN uses warm initialisation. Cat-eBNN uses shifted initialisation with prior mode one hundred.
+% Its prior standard deviation is twenty percent of the mode.
+% Different models represent different terms. These values do not establish the correct uncertainty allocation.
+\begin{frame}{Predictive Uncertainty after Training with Single Labels}
+\label{frm:appendix-single-label-terms}
+\appendixresulttable{tables/terms}
+\begin{itemize}
+\item Averages over test inputs and three seeds. Parentheses give uncertainty shares.
+\item Cat-eBNN uses shifted initialisation, prior mode $100$ and prior SD $20\%$ of the mode.
+\item Cat-BNN uses warm initialisation. 
+\item Cat-eBNN represents \textbf{all three uncertainty terms}, 
+\begin{itemize}
+\item Its aleatoric--distributional allocation \textbf{depends on the prior assumption}.
+\end{itemize}
+\end{itemize}
 \end{frame}
 
 % Source. Experiments 5.3.1, tab:e2-count-prediction.
-\begin{frame}{Backup. Count prediction}
+% Speaking notes
+% These are the complete count prediction results on CIFAR-10H.
+% We report means and ranges over three seeds, using the final forty retained weight samples.
+% The evidential model's prior standard deviation is twenty percent of its mode.
+% The cold and warm experiments use different sampling budgets.
+\begin{frame}{Count prediction}
 \label{frm:backup-count-prediction}
-\begin{center}
-\small
-\renewcommand{\arraystretch}{1.15}
-\input{tables/count_predictive_extract}
-\end{center}
-\par\medskip
-\slidepoint{CIFAR-10H. Means and ranges over three seeds. Final BMA over 40 samples.}
+\appendixresulttable{tables/count_prediction}
+\begin{itemize}
+\item DM-eBNN prior SD is $20\%$ of mode.
+\item Cold SGLD $3000$ epochs, warm SGLD $1000$ epochs after $400$ pretraining.
+\item DM-eBNN \textbf{lower count NLL} than M-BNN and  mean matched controls.
+\end{itemize}
 % Preparation. CIFAR-10H. Mean and range over three seeds. Final BMA over 40 samples.\par
 % DM-eBNN Gamma prior standard deviation 20\%. Cold and warm budgets differ.
 % Source detail. Thesis \S5.3.1.
 \end{frame}
 
-% Source. Experiments 5.3.1, tab:e2-count-prediction.
-\begin{frame}{Backup. Mean matched controls}
-\label{frm:backup-count-controls}
-\slidemessage{The controls retain the DM-eBNN mean vectors and weight samples.}
-\begin{center}
-\small
-\renewcommand{\arraystretch}{1.5}
-\input{tables/count_control_extract}
-\end{center}
-\par\medskip
+% % Source. Experiments 5.3.1, tab:e2-count-prediction.
+% % Speaking notes
+% % The control keeps the evidential model's predicted mean vectors and retained weight samples.
+% % It replaces only the count observation model with a multinomial distribution.
+% % This tests the contribution of the additional count variance at the same means.
+% % The results use three seeds and the final forty retained weight samples.
+% \begin{frame}{Mean matched controls}
+% \label{frm:backup-count-controls}
+% \slidepoint{The controls retain the DM-eBNN mean vectors and weight samples.}
+% \appendixresulttable{tables/count_control_extract}
+% \begin{itemize}
+% \item The control uses the multinomial likelihood.
+% \item CIFAR-10H. DM-eBNN prior SD is $20\%$ of the mode.
+% \item Means and ranges over three seeds. Final BMA over $40$ samples.
+% \end{itemize}
+% % Preparation. Only the observation model changes to the multinomial distribution.\par
+% % CIFAR-10H. Mean and range over three seeds. Final BMA over 40 samples.\par
+% % Gamma prior standard deviation 20\%. Cold and warm budgets differ.
+% % Source detail. Thesis \S5.3.1.
+% \end{frame}
+
+
+% Source. Experiments 5.3.2, tab:e2-count-prior-sensitivity. Discussion 6.3, sec:discussion-counts.
+% Complete table copied unchanged from thesis tables/count_prior_sensitivity.tex.
+% Speaking notes
+% Total concentration controls the aleatoric and distributional split at fixed mean vectors. Counts can therefore inform that split.
+% Can we remove the Gamma prior? The cold row starts from random weights and collapses to chance accuracy and concentration ten.
+% Separate deterministic pretraining tests also collapse without the Gamma prior. The appendix contains the diagnostic and details.
+% Warm rows start from checkpoints pretrained with a Gamma prior, using mode fifty or two hundred and standard deviation twenty percent.
+% During SGLD, we keep that prior, widen it, or remove it. The Gaussian weight prior remains throughout.
+% In both warm groups, wider or absent Gamma priors improve held out count NLL relative to the narrow prior.
+% Giving the count likelihood more influence over concentration therefore improves count prediction in these tests.
+% Removing the Gamma prior is not consistently best. The wider prior gives slightly lower count NLL at mode fifty.
+% A prior can regularise finite data estimates, but this experiment does not isolate the cause of that small difference.
+% Weaker priors let the concentrations move closer together, but they remain dependent on the initial checkpoint within the budget.
+% Thus count data can inform the uncertainty split, while the prior and sampling procedure still influence it.
+% Better count prediction does not establish that the split identifies the true sources of uncertainty or improves decisions.
+% We next explain what total concentration adds to count prediction compared with a multinomial model.
+% Details. Cold runs use 3000 SGLD epochs. Warm runs use 400 pretraining epochs and 1000 SGLD epochs.
+% Budgets differ, so this is not a controlled comparison of initialisations. Each row reports mean and range over three seeds.
+% Archived pretraining evidence. pretraining_collapse_verification.md. The cold table row is SGLD, not deterministic pretraining.
+\begin{frame}{Gamma Prior Sensitivity}
+\label{frm:count-prior-sensitivity}
+% \begin{itemize}
+% \item Cold start, or pretrain with a Gamma prior (SD $20\%$ of the mode).
+% \begin{itemize}
+% \item Vary or remove the Gamma prior during SGLD.
+% \end{itemize}
+% \end{itemize}
+\appendixresulttable{tables/count_prior_sensitivity}
 \begin{itemize}
-\item The control uses the multinomial likelihood.
-\item CIFAR-10H. Means and ranges over three seeds.
+\setlength{\itemsep}{2mm}
+\item  Warm pretraining uses prior modes $50$ or $200$, with SD $20\%$ of the mode.
+\item During SGLD, prior SD is $20\%$ or $100\%$ of the mode, or no Gamma prior.
+\item Wider or absent priors result in more \textbf{data informed total concentration} and improve count NLL. 
+\item Cold training without a Gamma prior collapses.
 \end{itemize}
-% Preparation. Only the observation model changes to the multinomial distribution.\par
-% CIFAR-10H. Mean and range over three seeds. Final BMA over 40 samples.\par
-% Gamma prior standard deviation 20\%. Cold and warm budgets differ.
-% Source detail. Thesis \S5.3.1.
+% CIFAR-10H test. Means and ranges over three seeds. Final BMA over forty samples.
 \end{frame}
+
+% Source. Methods 4.4.5 and Experiments 5.3.3, sec:count-uncertainty-decomposition, tab:e2-count-terms.
+% Table copied unchanged from thesis tables/count_uncertainty.tex.
+% Speaking notes
+% We train on count vectors, but this decomposition concerns uncertainty about one class label.
+% We average each absolute uncertainty term over test inputs and then over the three seeds.
+% Each percentage divides the average term by average predictive uncertainty.
+% We evaluate seeds separately, without pooling their weight samples.
+% The evidential model represents all three terms. The multinomial Bayesian baseline has no distributional term.
+% These allocations do not establish that the terms identify the true causes of label variation or improve decisions.
+% All entries use warm initialisation and final predictions from forty retained weight samples.
+\begin{frame}{Decomposition of Predictive Uncertainty for Class Labels}
+\label{frm:count-decomposition}
+\appendixresulttable{tables/count_uncertainty}
+\begin{itemize}
+\setlength{\itemsep}{2mm}
+\item Averages over test inputs and three seeds. Parentheses give uncertainty shares.
+\item Warm initialisation. 
+\item DM-eBNN prior modes $50$ and $200$, with SD $20\%$ of the mode.
+\item DM-eBNN represents \textbf{all three uncertainty} terms, 
+\begin{itemize}
+\item Counts are \textbf{able to inform} the aleatoric--distributional split.
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+% Source. Experiments 5.1.4, sec:exp-count-training-setup, and 5.3.2, sec:exp-count-prior-sensitivity.
+% Methods eq:dm-ebnn-dataset-likelihood, eq:gamma-prior-weights and eq:dm-ebnn-posterior.
+% Speaking notes
+% Counts can inform the uncertainty split. We now ask whether training still needs the Gamma prior.
+% Cold initialisation starts SGLD from random weights. Warm initialisation starts from an SGD checkpoint.
+% Pretraining minimises Dirichlet multinomial count NLL plus the negative log Gamma prior, with weight decay.
+% The warm checkpoint therefore already reflects the Gamma prior, even when we remove it during SGLD.
+% We select the best validation majority label accuracy checkpoint from four hundred pretraining epochs.
+% Cold and warm SGLD budgets differ, so this is not a controlled comparison of initialisations.
+% Separate pretraining tests without the Gamma prior also collapse. The following diagnostic shows cold SGLD.
+% Source for archived pretraining tests. pretraining_collapse_verification.md.
 
 
 % Source. Experiments 5.3.2, fig:count-cold-collapse, tab:e2-count-prior-sensitivity.
-% Panels copied unchanged from the thesis figures folder.
-\begin{frame}{Backup. Cold initialisation}
+% Mechanism. eq:count-variance-ratio, eq:edl-dirichlet-concentration, eq:edl-softplus-evidence.
+% All four panels are copied unchanged from the thesis figures folder.
+% Speaking notes
+% All three tested cold SGLD runs collapse without the Gamma prior. The plots show one diagnostic run.
+% Early updates lower count NLL by reducing concentration. At fixed means, this increases count variance.
+% Near total concentration ten, every concentration approaches one and the mean vector becomes uniform.
+% Accuracy stays near chance. Evidence and softplus derivatives approach zero, weakening the training signal.
+% Separate SGD pretraining runs without the Gamma prior also end near chance accuracy and concentration ten.
+% Thus both training procedures collapse from random initialisation without this prior in our tests.
+% Warm runs without the Gamma prior start from checkpoints trained with it. We next test its influence during sampling.
+% Measurement detail. The plots use current training minibatches before each SGLD update. No BMA.
+% Verification. pretraining_collapse_verification.md. Seeds 0 and 1 have 400 pretraining epochs, seed 2 has 20.
+% Final saved test accuracies are 0.098, 0.100 and 0.100. All three mean concentrations are approximately ten.
+\begin{frame}{Training without the Gamma Prior}
+\label{frm:count-training-prior}
 \label{frm:backup-collapse}
-\begin{center}
-\includegraphics[width=0.44\textwidth]{figures/count_collapse_concentration.pdf}\hfill
-\includegraphics[width=0.44\textwidth]{figures/count_collapse_nll.pdf}
-\end{center}
-\par\medskip
-\begin{itemize}
-\item One DM-eBNN run on CIFAR-10H. Cold initialisation without the Gamma prior.
-\begin{itemize}
-\item Measurements use the current training minibatch before each update.
-\end{itemize}
-\end{itemize}
-% Preparation. One DM-eBNN diagnostic run on CIFAR-10H. Cold initialisation without the Gamma prior.\par
-% Measurements precede each update and use the current training minibatch.
-% Source detail. Thesis \S5.3.2. The full experiment reports collapse in all three tested cold runs without the Gamma prior.
-\end{frame}
-
-% Source. Experiments 5.3.2, fig:count-cold-collapse, tab:e2-count-prior-sensitivity.
-% Panels copied unchanged from the thesis figures folder.
-\begin{frame}{Backup. Accuracy and gradient norm}
 \label{frm:backup-collapse-accuracy}
-\begin{center}
-\includegraphics[width=0.44\textwidth]{figures/count_collapse_accuracy.pdf}\hfill
-\includegraphics[width=0.44\textwidth]{figures/count_collapse_gradient.pdf}
-\end{center}
-\par\medskip
 \begin{itemize}
-\item The same DM-eBNN run without the Gamma prior.
+\item Count data can inform total concentration. Can we remove Gamma prior?
+\end{itemize}
+\vspace{2mm}
+\begin{columns}[c,onlytextwidth]
+\begin{column}{0.64\textwidth}
+\centering
+\includegraphics[width=0.485\linewidth,height=0.40\textheight,keepaspectratio]{figures/count_collapse_concentration.pdf}\hspace{1mm}%
+\includegraphics[width=0.485\linewidth,height=0.40\textheight,keepaspectratio]{figures/count_collapse_nll.pdf}\par
+\vspace{0.5mm}
+\includegraphics[width=0.485\linewidth,height=0.40\textheight,keepaspectratio]{figures/count_collapse_accuracy.pdf}\hspace{1mm}%
+\includegraphics[width=0.485\linewidth,height=0.40\textheight,keepaspectratio]{figures/count_collapse_gradient.pdf}\par
+\end{column}
+\begin{column}{0.35\textwidth}
+% Widen the text towards the graphs without moving its right edge.
+\makebox[\linewidth][r]{%
+\begin{minipage}{\dimexpr\linewidth+5mm\relax}
+\small
 \begin{itemize}
-\item The gradient norm falls while majority label accuracy stays near chance.
+\setlength{\itemsep}{3mm}
+\item Early updates lower count NLL by reducing total concentration.
+% The likelihood gradient points towards higher log likelihood, equivalently lower NLL. In this run, that initially favours lower concentration instead of useful class predictions.
+\begin{itemize}
+\item As $\alpha_0(x;w)\to10$, mean vectors become uniform.
+\item Accuracy stays near chance.
 \end{itemize}
+\item Evidence approaches zero.
+\begin{itemize}
+\item Softplus derivatives vanish. Gradients become small.
 \end{itemize}
-% Preparation. The same DM-eBNN diagnostic run on CIFAR-10H. Cold initialisation without the Gamma prior.\par
-% The gradient norm falls while majority label accuracy stays near chance.
-% Source detail. Thesis \S5.3.2. Current training minibatches, before each update. No BMA.
+% \item \textbf{Deterministic pretraining also collapses} without Gamma prior.
+\end{itemize}
+\end{minipage}%
+}
+\end{column}
+\end{columns}
+\par\vspace{0.5mm}
+% \begin{itemize}
+% \item One diagnostic run shown. Collapse occurs in \textbf{all three tested cold runs}.
+% \end{itemize}
+% Preparation. One DM-eBNN diagnostic run on CIFAR-10H. Cold initialisation without the Gamma prior.
+% Measurements precede each update and use the current training minibatch. No BMA.
 \end{frame}
 

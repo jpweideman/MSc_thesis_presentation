@@ -20,7 +20,7 @@
 % We multiply the observed-label probabilities across training examples to obtain the likelihood.
 % This likelihood assigns a probability to all observed labels for a given set of weights.
 % Next, we examine what it can tell us about the concentration parameters. The prior and posterior follow after that.
-\begin{frame}{Categorical Evidential Bayesian Neural Network}
+\begin{frame}{Categorical Evidential Bayesian Neural Network (Cat-eBNN)}
 \label{frm:cat-ebnn}
 \label{frm:cat-ebnn-setup}
 \setlength{\abovedisplayskip}{4pt}
@@ -86,7 +86,7 @@ p(D\mid w)=\prod_{i=1}^{N}m_{y_i}(x_i;w)=\prod_{i=1}^{N}\frac{\alpha_{y_i}(x_i;w
 .
 \]
 \item Likelihood \textbf{does not inform total concentration} because
-observed labels provide no evidence favouring one concentration over another,
+observed labels provide no evidence favouring one total concentration over another,
 at fixed mean vectors.
 % meaning that there is not some concentrations that give higher likelihoods than others.
 
@@ -325,16 +325,15 @@ p(w\mid D)\propto\tilde p(w)\prod_{i=1}^{N}m_{y_i}(x_i;w).
 % We therefore leave its practical value open.
 % This leads to the next question. Can richer observations inform the allocation?
 % We next retain repeated labels for each input and examine what they add to the likelihood.
-\begin{frame}{What Does the Decomposition Establish?}
-\label{frm:cat-ebnn-interpretation}
+\begin{frame}{Single-Label Models: Findings and Limitations}\label{frm:cat-ebnn-interpretation}
 \begin{itemize}
 \setlength{\itemsep}{5mm}
 \item Cat-eBNN allow decomposition into all three uncertainty terms.
-\item At fixed means, single labels cannot inform total concentration
+\item At fixed means, single labels cannot inform total concentration.
 \begin{itemize}
 \item Neither aleatoric-distributional allocation.
 \end{itemize}
-\item Prior supplies the concentration assumption that influences the allocation.
+\item Prior supplies the total concentration assumption that influences the allocation.
 %The prior comparison shows that the trained allocation is sensitive to it.
 \item Not clear practical value. % Think for example about the introduction slides. If we have to make a decision based on this allocation, this decision would be made on the result of our prior choice, not on a total concentration that was learned from the data.
 % Recall the decision examples from the introduction.
