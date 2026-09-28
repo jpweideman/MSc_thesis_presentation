@@ -1,19 +1,38 @@
-% Conclusion. Slide 25. Remains visible during questions.
+% Conclusion followed by the unchanged closing slide.
 \section{Conclusion}
 
-% Source. Conclusion, Section 7. All claims refer back to the presented models and results.
-% Delivery. Give the three statements, then close with the motivation to retain repeated labels.
-\begin{frame}{Conclusion}
+% Source. Thesis Conclusion, Chapter 7. Discussion 6.2--6.4.
+% Theory. prop:aleatoric-monotonicity, cor:distributional-monotonicity, sec:ebnn-identifiability and sec:dm-ebnn-concentration-information.
+% Models and results. sec:edl-bnn-setup, sec:count-likelihoods and tab:e2-count-prediction.
+% Speaking notes
+% We propose two models that combine a posterior over network weights with a Dirichlet distribution over class probabilities.
+% Both represent aleatoric, distributional and epistemic uncertainty.
+% Our analysis shows how total concentration controls the aleatoric and distributional allocation at fixed mean vectors.
+% Single labels cannot inform this concentration. The categorical model therefore states an explicit assumption through its Gamma prior.
+% Repeated labels change what the likelihood can inform. Their class counts can inform concentration and hence the allocation.
+% The Dirichlet multinomial model also improves held out count prediction compared with the multinomial Bayesian baseline in our CIFAR-10H experiments.
+% This predictive result does not establish better decisions from the uncertainty decomposition.
+% Together, these contributions motivate collecting and retaining repeated labels for uncertainty-aware classification.
+\begin{frame}{Main Contributions}
 \label{frm:conclusion}
-\slidemessage{Repeated labels can inform the total concentration parameter.}
+\label{frm:discussion}
 \begin{itemize}
-\setlength{\itemsep}{5mm}
-\item Both proposed models represent aleatoric, distributional, and epistemic uncertainty.
-\item The Cat-eBNN states the assumption through a Gamma prior.
-\item The DM-eBNN improves count prediction in the tested CIFAR-10H settings.
+\setlength{\itemsep}{4mm}
+\item Cat-eBNN and DM-eBNN represent \textbf{all three uncertainty terms}.
+\item At fixed means, \textbf{total concentration} controls the aleatoric--distributional allocation.
+\begin{itemize}
+\item Single labels cannot inform it. Cat-eBNN states a Gamma prior assumption.
+\item Repeated labels can inform it.
 \end{itemize}
-\medskip
-\slidepoint{The practical value of the uncertainty decomposition remains open.}
-% Preparation. The practical value of the uncertainty decomposition remains open.
-% Source detail. Thesis \S7.
+\item DM-eBNN improves \textbf{held out count prediction} over M-BNN in on CIFAR-10H.
+\item These findings motivate \textbf{collecting and retaining repeated labels} for uncertainty-aware classification.
+\end{itemize}
+\end{frame}
+
+% Speaking notes
+% Thank you for your attention.
+\begin{frame}[noframenumbering]{\strut}
+\label{frm:thank-you}
+\centering
+{\LARGE Thank you for your attention :)\par}
 \end{frame}

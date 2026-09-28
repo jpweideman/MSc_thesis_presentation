@@ -316,28 +316,6 @@ $\operatorname{Var}_{\mathrm{DM}}[n_c]
 \end{itemize}
 \end{frame}
 
-% Source. Experiments 5.3.1, tab:e2-count-prediction. All four comparisons are shown.
-% Delivery. Explain the mean matched control before discussing the values.
-\begin{frame}{Better count prediction on CIFAR-10H}
-\label{frm:count-prediction}
-\slidemessage{Additional count variance contributes to better count prediction.}
-\begin{itemize}
-\item The mean matched control keeps the DM-eBNN mean vectors and weight samples.
-\begin{itemize}
-\item Only the observation model changes to the multinomial distribution.
-\end{itemize}
-\end{itemize}
-\begin{center}
-\small
-\renewcommand{\arraystretch}{1.12}
-\setlength{\tabcolsep}{6pt}
-\input{tables/count_comparison_slide}
-\end{center}
-\slidepoint{CIFAR-10H. Means and ranges over three seeds. Lower count NLL is better.}
-% Preparation. Count negative log likelihood (count NLL). Lower is better. Points show means over three seeds. Bars show seed ranges.\par
-% CIFAR-10H test split. Final BMA over 40 samples. DM-eBNN prior standard deviation 20\%.
-% Source detail. Thesis \S5.3.1. Cold and warm chains have different sampling budgets.
-\end{frame}
 
 % % Speaking notes
 % % We now test whether additional count variance contributes to the improved fit to held out counts.

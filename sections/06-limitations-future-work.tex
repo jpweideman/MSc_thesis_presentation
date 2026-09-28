@@ -1,27 +1,39 @@
-% Limitations and Future Work. Slide 24.
+% Limitations and future work precede the final contribution summary.
 \section{Limitations and Future Work}
 
-% Source. Conclusion, Section 7. Sampling details in Experiments 5.1.3 and 5.1.4.
-% Delivery. Pair each limit with the experiment that could address it.
-\begin{frame}{Limits and next steps}
+% Source. Thesis Conclusion, Chapter 7, and Discussion 6.4, sec:discussion-implications.
+% Sampling setup. Experiments 5.1.3--5.1.4, sec:exp-training-setup and sec:exp-count-training-setup.
+% EDL extension requested by the author. Methods eq:edl-softplus-evidence and eq:edl-dirichlet-concentration.
+% Compare the generic Dirichlet conditions and the earlier presentation slide on the EDL restriction.
+% Speaking notes
+% The first question concerns our choice of the evidential parameterisation.
+% Adding one to positive evidence restricts every concentration parameter to values above one.
+% We could instead predict positive concentrations directly and compare the resulting allocation and predictive fit.
+% This would remove the restriction from the unit baseline, but would not retain its original nonnegative evidence interpretation.
+% We have not tested whether this change improves the model.
+% The thesis also leaves the interpretation and practical value of the uncertainty terms open.
+% Simulated data with known label variation could test their interpretation. Decision tasks could test whether the terms support better decisions.
+% We use one SGLD chain per run. Multiple chains, longer sampling and alternative samplers could assess sensitivity to posterior approximation.
+% The repeated label experiments cover CIFAR-10H only. Further datasets would test how broadly the count prediction benefit holds.
+\begin{frame}{Limitations and Future Work}
 \label{frm:limitations}
 \begin{itemize}
-\setlength{\itemsep}{0pt}
-\item It does not demonstrate improved decisions, and it does not study descision making at all!.
-\setlength{\itemsep}{8mm}
-\item \textbf{One sampling chain per run.}
+\setlength{\itemsep}{4mm}
+\item \textbf{EDL restricts concentrations to $\alpha_c(x;w)>1$.}
 \begin{itemize}
-\item Test several chains, larger budgets, and other samplers.
+\item Test direct positive concentrations, $\alpha_c(x;w)>0$.
 \end{itemize}
-\item \textbf{One dataset with repeated labels.}
+\item \textbf{Practical value of uncertainty decomposition remains untested.}
 \begin{itemize}
-\item Evaluate further datasets with repeated labels.
+\item Test whether the separate uncertainty terms improve decisions.
 \end{itemize}
-\item \textbf{The uncertainty terms need validation.}
+\item \textbf{Training setup}
 \begin{itemize}
-\item Test known label variation and practical decision tasks.
+\item Multiple chains, larger sampling budgets, learning rate schedules and alternative samplers.
+\end{itemize}
+\item \textbf{Count experiments cover only CIFAR-10H.}
+\begin{itemize}
+\item Obtain and evaluate further datasets with repeated labels.
 \end{itemize}
 \end{itemize}
-% Preparation. Representing three terms does not establish that their values support better decisions.
-% Source detail. Thesis \S7.
 \end{frame}
