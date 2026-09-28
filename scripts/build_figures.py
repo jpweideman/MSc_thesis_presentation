@@ -278,14 +278,8 @@ for start,mode in [('Cold','50'),('Cold','200'),('Warm','50'),('Warm','200')]:
     comparison_rows.append(' & '.join([start.lower(),mode]+[two_lines(c) for c in [baseline[4],fitted[4],fitted[5]]])+r' \\')
 tabular('count_comparison_slide.tex',r'initialisation & \shortstack{Gamma prior\\mode} & \shortstack{M-BNN\\count NLL} & \shortstack{DM-eBNN\\count NLL} & \shortstack{mean matched\\control NLL}',comparison_rows,'lcccc')
 
-warm=[cells(line) for line in sensitivity_text.splitlines() if line.startswith('warm &')]
-prior_rows=[]
-for setting in [r'20\%',r'100\%','none']:
-    entries=[]
-    for mode in ['50','200']:
-        entries.append(next(r[4] for r in warm if r[1].startswith(mode+',') and r[3]==(mode+', '+setting if setting!='none' else 'none')))
-    prior_rows.append(' & '.join([setting if setting!='none' else 'no Gamma prior']+entries)+r' \\')
-tabular('count_sensitivity_slide.tex',r'\shortstack{Gamma prior\\standard deviation\\during sampling} & \shortstack{pretraining Gamma\\prior mode 50} & \shortstack{pretraining Gamma\\prior mode 200}',prior_rows,'lcc')
+from build_count_sensitivity_table import build_table as build_count_sensitivity_table
+build_count_sensitivity_table(args.thesis, args.experiments, tables / 'count_sensitivity_slide.tex')
 
 share_rows=[]
 for line in uncertainty_text.splitlines():

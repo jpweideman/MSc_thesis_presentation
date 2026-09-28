@@ -1,0 +1,36 @@
+{
+  "generator": "scripts/build_concentration_split.py",
+  "kind": "Generic Dirichlet closed-form illustration, not experimental results",
+  "mean": [
+    0.5,
+    0.5
+  ],
+  "total_concentration_grid": [
+    0.001,
+    1000,
+    1200,
+    "log spaced"
+  ],
+  "predictive_entropy_nats": 0.6931471805599453,
+  "aleatoric_endpoints": [
+    0.0008215664368084186,
+    0.6926474305598207
+  ],
+  "distributional_endpoints": [
+    0.6923256141231369,
+    0.000499750000124588
+  ],
+  "edl_strict_lower_bound_at_this_mean": 2.0,
+  "limits": "As alpha_0 tends to zero, aleatoric tends to zero. As alpha_0 tends to infinity, distributional tends to zero. Their sum stays at predictive entropy.",
+  "scope": "General Dirichlet family. EDL restricts the comparison to alpha_0 > 2. No change in a weight posterior is depicted.",
+  "thesis_labels": [
+    "eq:aleatoric-as-function-of-total-concentration",
+    "eq:dirichlet-predictive-uncertainty",
+    "eq:distributional-remainder",
+    "prop:aleatoric-monotonicity",
+    "prop:aleatoric-limits",
+    "cor:distributional-monotonicity"
+  ],
+  "thesis_source": "/Users/jpweideman/MSc_thesis/chapters/background.tex",
+  "thesis_sha256": "5ff4f0debb0defab869d314435c22bfe9ecc1f91a340561e30db1dc41d4a82d5"
+}

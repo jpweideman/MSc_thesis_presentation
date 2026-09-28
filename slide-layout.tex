@@ -12,3 +12,23 @@
 \textcolor{introblue}{\rule{4mm}{3mm}}\ Class B\qquad
 #1
 \end{center}}
+
+% Fit appendix result tables within both available dimensions, without enlarging them.
+\newsavebox{\appendixresultbox}
+\newcommand{\appendixresulttable}[1]{%
+\begingroup
+\small
+\setlength{\tabcolsep}{3pt}%
+\renewcommand{\arraystretch}{1.05}%
+\sbox{\appendixresultbox}{\input{#1}}%
+\ifdim\wd\appendixresultbox>\linewidth
+  \sbox{\appendixresultbox}{\resizebox{\linewidth}{!}{\usebox{\appendixresultbox}}}%
+\fi
+\ifdim\dimexpr\ht\appendixresultbox+\dp\appendixresultbox\relax>0.62\textheight
+  \sbox{\appendixresultbox}{\resizebox*{!}{0.62\textheight}{\usebox{\appendixresultbox}}}%
+\fi
+\par\smallskip
+{\centering\usebox{\appendixresultbox}\par}%
+\smallskip
+\endgroup
+}

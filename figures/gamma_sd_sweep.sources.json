@@ -1,0 +1,31 @@
+{
+  "generator": "scripts/build_gamma_sd_sweep.py",
+  "source_files": [
+    "/Users/jpweideman/BNN-EDL/experiments_e1.yaml",
+    "/Users/jpweideman/BNN-EDL/configs/cifar10_dirichlet_bnn_sgld.yaml"
+  ],
+  "kind": "Configured Gamma prior densities, not empirical model outputs",
+  "settings": [
+    {
+      "sd_percent": 5,
+      "shape": 401.9975,
+      "rate": 4.00998,
+      "mode": 99.99987531109882,
+      "sd": 4.999993843194477
+    },
+    {
+      "sd_percent": 20,
+      "shape": 27.0,
+      "rate": 0.26,
+      "mode": 100.0,
+      "sd": 19.985201625794737
+    },
+    {
+      "sd_percent": 60,
+      "shape": 4.5584,
+      "rate": 0.03558,
+      "mode": 100.01124227093872,
+      "sd": 60.00677299643628
+    }
+  ]
+}

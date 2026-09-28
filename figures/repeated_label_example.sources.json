@@ -1,0 +1,36 @@
+{
+  "generator": "scripts/build_repeated_label_example.py",
+  "selection": "Maximum entropy of observed human label proportions across all 10000 images. Illustrative selection, not a representative sample.",
+  "image_index": 6750,
+  "original_cifar10_label": "Deer",
+  "classes": [
+    "Airplane",
+    "Car",
+    "Bird",
+    "Cat",
+    "Deer",
+    "Dog",
+    "Frog",
+    "Horse",
+    "Ship",
+    "Truck"
+  ],
+  "counts": [
+    1,
+    3,
+    6,
+    6,
+    9,
+    9,
+    13,
+    0,
+    3,
+    2
+  ],
+  "label_total": 52,
+  "observed_label_entropy": 1.982523223140713,
+  "sources": {
+    "/Users/jpweideman/BNN-EDL/data/cifar10h/cifar10h-counts.npy": "9b36b4550349af56c79083356312eb4af856cc5fd3caf1f669d40b9d0bbb69ff",
+    "/Users/jpweideman/BNN-EDL/data/cifar-10-batches-py/test_batch": "f53d8d457504f7cff4ea9e021afcf0e0ad8e24a91f3fc42091b8adef61157831"
+  }
+}

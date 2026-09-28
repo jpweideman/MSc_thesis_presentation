@@ -1,0 +1,37 @@
+{
+  "generator": "scripts/build_concentration_split.py",
+  "kind": "Same Dirichlet split restricted to the softplus EDL parameterisation",
+  "mean": [
+    0.5,
+    0.5
+  ],
+  "total_concentration_grid": [
+    2.000001,
+    1000.0,
+    1000,
+    "log spaced"
+  ],
+  "predictive_entropy_nats": 0.6931471805599453,
+  "aleatoric_endpoints": [
+    0.500000072467007,
+    0.6926474305598207
+  ],
+  "distributional_endpoints": [
+    0.19314710809293834,
+    0.000499750000124588
+  ],
+  "edl_strict_lower_bound_at_this_mean": 2.0,
+  "limits": "As alpha_0 tends to zero, aleatoric tends to zero. As alpha_0 tends to infinity, distributional tends to zero. Their sum stays at predictive entropy.",
+  "scope": "Same fixed mean and conditional decomposition. Every computed concentration component is greater than one.",
+  "thesis_labels": [
+    "eq:aleatoric-as-function-of-total-concentration",
+    "eq:dirichlet-predictive-uncertainty",
+    "eq:distributional-remainder",
+    "prop:aleatoric-monotonicity",
+    "prop:aleatoric-limits",
+    "cor:distributional-monotonicity"
+  ],
+  "thesis_source": "/Users/jpweideman/MSc_thesis/chapters/background.tex",
+  "thesis_sha256": "5ff4f0debb0defab869d314435c22bfe9ecc1f91a340561e30db1dc41d4a82d5",
+  "boundary_at_2": "Excluded for softplus. Open circles show limiting aleatoric=0.5 and distributional=log(2)-0.5."
+}

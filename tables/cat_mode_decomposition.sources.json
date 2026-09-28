@@ -1,0 +1,8 @@
+{
+  "generator": "scripts/build_cat_mode_decomposition.py",
+  "source": "/Users/jpweideman/MSc_thesis/tables/mode_sweep.tex",
+  "source_sha256": "85d8d5cf2c61d8924928bca6f25252e9f7812638be19825997b0dfd89877a91a",
+  "thesis_label": "tab:e2-mode-sweep",
+  "selection": "Fashion-MNIST and CIFAR-10, all seven reported rows, prior mode, predictive entropy and three uncertainty shares",
+  "formatting": "Every selected numerical cell is preserved, including the reported seed range."
+}
