@@ -36,7 +36,7 @@ f(x;w)=\bigl(f_1(x;w),\ldots,f_C(x;w)\bigr),
 \quad f_c(x;w)\geq0,\quad \sum_{c=1}^{C}f_c(x;w)=1.
 \]
 
-\item Categorical likelihood and weight prior define the posterior over weights.
+\item<2-> Categorical likelihood and weight prior define the posterior over weights.
 % Thesis eq:likelihood-factorization with eq:categorical-likelihood substituted,
 % and eq:bayes-posterior without its normalising constant.
 \begin{align*}
@@ -66,7 +66,7 @@ p(D\mid w)&=\prod_{i=1}^{N}\mathrm{Cat}\bigl(y_i\mid f(x_i;w)\bigr)
 \setlength{\abovedisplayskip}{4pt}
 \setlength{\belowdisplayskip}{4pt}
 \begin{itemize}
-\setlength{\itemsep}{4mm}
+\setlength{\itemsep}{5mm}
 \item Random class-probability vector $\pi=(\pi_1,\ldots,\pi_C)$,
 $\pi_c\geq0$ $\forall c$, $\sum_{c=1}^{C}\pi_c=1$.
 
@@ -76,18 +76,18 @@ $\pi_c\geq0$ $\forall c$, $\sum_{c=1}^{C}\pi_c=1$.
 p(\pi\mid\alpha)=\mathrm{Dir}(\pi\mid\alpha).
 \]
 
-\item Mean vector and random class-probability variance,
+\item<2-> Mean vector and total concentration parameter,
 % Thesis eq:general-dirichlet-mean and eq:dirichlet-variance.
 \[
 \begin{aligned}
 &m=\mathbb E[\pi]=\frac{\alpha}{\alpha_0},
-\qquad \underbrace{\alpha_0=\sum_{c=1}^{C}\alpha_c,}_{\text{total concentration parameter}}\\[4mm]
-&\operatorname{Var}(\pi_c)=\frac{m_c(1-m_c)}{\alpha_0+1}.
+\qquad \alpha_0=\sum_{c=1}^{C}\alpha_c.\\[4mm]
+% &\operatorname{Var}(\pi_c)=\frac{m_c(1-m_c)}{\alpha_0+1}.
 \end{aligned}
 \]
-\begin{itemize}
-\item At a fixed mean, larger total concentration gives less spread.
-\end{itemize}
+% \begin{itemize}
+%  \item At a fixed mean, larger total concentration gives less spread.
+% \end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -126,7 +126,7 @@ p(\pi\mid\alpha)=\mathrm{Dir}(\pi\mid\alpha).
 p(\pi\mid x,w)&=\mathrm{Dir}\bigl(\pi\mid\alpha(x;w)\bigr),\\
 p(y\mid\pi)&=\mathrm{Cat}(y\mid\pi)=\pi_y.
 \end{align*}
-\item Marginalise $\pi$ to obtain label probabilities for input $x$.
+\item<2-> Marginalise $\pi$ to obtain label probabilities for input $x$.
 % Thesis eq:dirichlet-classification-marginal and eq:fixed-weight-dirichlet-marginal.
 \[
 \begin{aligned}
@@ -137,7 +137,7 @@ p(y\mid x,w)
 =m_y(x;w).
 \end{aligned}
 \]
-\item \textbf{Evidential deep learning (EDL)} parameterises the concentrations through evidence $e_c(x;w)>0$, with %we use softplus for our evidence, sensoy proposed relu. But we used edl pytorch library, which used softplus, maybe because its more stable?
+\item<3-> \textbf{Evidential deep learning (EDL)} parameterises the concentrations through evidence $e_c(x;w)>0$, with %we use softplus for our evidence, sensoy proposed relu. But we used edl pytorch library, which used softplus, maybe because its more stable?
 % Methods eq:edl-softplus-evidence and eq:edl-dirichlet-concentration.
 $\alpha_c(x;w)=e_c(x;w)+1$. % 
 \begin{itemize}
@@ -206,38 +206,65 @@ $\alpha_c(x;w)=e_c(x;w)+1$. %
 % The deterministic Dirichlet network represents the weights by a point mass at one fitted value. Its epistemic term is zero.
 % The categorical Bayesian network represents a point mass over class probabilities once the input and weights are given.
 % Its distributional term is therefore zero. These zeros follow from model assumptions, not evidence that a source is absent.
-\begin{frame}{Decomposing Predictive Uncertainty}
-\label{frm:predictive-entropy}
-\label{frm:aleatoric-intuition}
-\label{frm:distributional-intuition}
-\begin{itemize}
-\setlength{\itemsep}{5mm}
-\item \textbf{Predictive:}\quad Uncertainty about class label under model's predicted probabilities.
-% we use the shannon entropy to measure this. whcih is defined in the appendix.
-\item \textbf{Aleatoric:}\quad Label uncertainty that remains once class probabilities are known.
-%either f(x;w) for categorical BNN or pi for deterministic Dirichlet network
-\item \textbf{Distributional:}\quad Reduction in label uncertainty obtained by knowing $\pi$, given weights $w$.
-%i.e the mutual information between the label and the class probabilities given the weights
-% if we known class probabilities (f in the case of categorical BNN), this implicitly assumes a point mass distribution over the class probabilities. I.e. that the class probabilities are known (and are not a random variable with a distribution). Therefore in the dirichlet network, this is zero.
-\begin{itemize}
-    \item \emph{Categorical BNN}: Point mass $P(\pi=f(x;w)|x,w)=1$.
-    \item %Assumes no uncertainty about the class probabilities. 
-    Zero distributional uncertainty.
-\end{itemize}
-\item \textbf{Epistemic:}\quad Reduction in label uncertainty obtained by knowing the weights $w$.
-%i.e the mutual information between the label and weights
-% if we have fixed weights, this implicitly assumes a point mass distribution over the weihgts. I.e. that the weights are known (and are not a random variable with a distribution). Therefore in the dirichlet network, this is zero.
-\begin{itemize}
-    \item \emph{Deterministic Dirichlet network}: Point mass $P(w=\hat w)=1$.
-    \item %Assumes no uncertainty about weights. 
-    Zero epistemic uncertainty.
-\end{itemize}
-\item \textbf{Combining weight posterior with a Dirichlet distribution over class probabilities represents all three uncertainty terms.} % and that is the models which we develop in the thesis.
-\end{itemize}
-\end{frame}
+% \begin{frame}{Decomposing Predictive Uncertainty}
+% \label{frm:predictive-entropy}
+% \label{frm:aleatoric-intuition}
+% \label{frm:distributional-intuition}
+% \begin{itemize}
+% \setlength{\itemsep}{5mm}
+% \item \textbf{Predictive:}\quad Uncertainty about class label under model's predicted probabilities.
+% % we use the shannon entropy to measure this. whcih is defined in the appendix.
+% \item \textbf{Aleatoric:}\quad Label uncertainty that remains once class probabilities are known.
+% %either f(x;w) for categorical BNN or pi for deterministic Dirichlet network
+% \item<2-> \textbf{Distributional:}\quad Reduction in label uncertainty obtained by knowing $\pi$, given weights $w$.
+% %i.e the mutual information between the label and the class probabilities given the weights
+% % if we known class probabilities (f in the case of categorical BNN), this implicitly assumes a point mass distribution over the class probabilities. I.e. that the class probabilities are known (and are not a random variable with a distribution). Therefore in the dirichlet network, this is zero.
+% \begin{itemize}
+%     \item \emph{Categorical BNN}: Point mass $P(\pi=f(x;w)|x,w)=1$.
+%     \item %Assumes no uncertainty about the class probabilities. 
+%     Zero distributional uncertainty.
+% \end{itemize}
+% \item<2-> \textbf{Epistemic:}\quad Reduction in label uncertainty obtained by knowing the weights $w$.
+% %i.e the mutual information between the label and weights
+% % if we have fixed weights, this implicitly assumes a point mass distribution over the weihgts. I.e. that the weights are known (and are not a random variable with a distribution). Therefore in the dirichlet network, this is zero.
+% \begin{itemize}
+%     \item \emph{Deterministic Dirichlet network}: Point mass $P(w=\hat w)=1$.
+%     \item %Assumes no uncertainty about weights. 
+%     Zero epistemic uncertainty.
+% \end{itemize}
+% \item<3-> \textbf{Combining weight posterior with a Dirichlet distribution over class probabilities represents all three uncertainty terms.} % and that is the models which we develop in the thesis.
+% \end{itemize}
+% \end{frame}
 
 
 
+\begin{frame}{Uncertainty Decomposition in the Two Models}
+    \label{frm:predictive-entropy}
+    \label{frm:aleatoric-intuition}
+    \label{frm:distributional-intuition}
+    \begin{itemize}
+    \setlength{\itemsep}{5mm}
+    %either f(x;w) for categorical BNN or pi for deterministic Dirichlet network
+    %i.e the mutual information between the label and the class probabilities given the weights
+    % if we known class probabilities (f in the case of categorical BNN), this implicitly assumes a point mass distribution over the class probabilities. I.e. that the class probabilities are known (and are not a random variable with a distribution). Therefore in the dirichlet network, this is zero.
+
+        \item \emph{Categorical BNN}: Point mass $P(\pi=f(x;w)|x,w)=1$.
+        \begin{itemize}
+            \item %Assumes no uncertainty about the class probabilities. 
+            Zero distributional uncertainty.
+        \end{itemize}
+    %i.e the mutual information between the label and weights
+    % if we have fixed weights, this implicitly assumes a point mass distribution over the weihgts. I.e. that the weights are known (and are not a random variable with a distribution). Therefore in the dirichlet network, this is zero.
+    
+        \item \emph{Deterministic Dirichlet network}: Point mass $P(w=\hat w)=1$.
+        \begin{itemize} 
+        \item %Assumes no uncertainty about weights. 
+        Zero epistemic uncertainty.
+    \end{itemize}
+    \item Combining \textbf{weight posterior} with a \textbf{Dirichlet distribution} over class probabilities represents all three uncertainty terms. % and that is the models which we develop in the thesis.
+    \end{itemize}
+    \end{frame}
+    
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

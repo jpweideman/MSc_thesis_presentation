@@ -34,24 +34,15 @@
 p(\pi\mid x,w)&=\mathrm{Dir}\bigl(\pi\mid\alpha(x;w)\bigr),\\[1mm]
 p(y\mid\pi)&=\mathrm{Cat}(y\mid\pi).
 \end{align*}
-\item Marginalising $\pi$ gives observation model $p(y\mid x,w)=m_y(x;w)$.
-\item Assuming conditionally independent labels, \textbf{likelihood} is% Thesis eq:edl-bnn-full-likelihood.
+\item<2-> Marginalising $\pi$ gives observation model $p(y\mid x,w)=m_y(x;w)$.
+\item<3-> Assuming conditionally independent labels, \textbf{likelihood} is% Thesis eq:edl-bnn-full-likelihood.
 \[
 p(D\mid w)=\prod_{i=1}^{N}p(y_i\mid x_i,w)=\prod_{i=1}^{N}m_{y_i}(x_i;w).
 \]
 \end{itemize}
 \end{frame}
 
-% Source. Methods 4.3.1 to 4.3.3, eq:edl-bnn-full-likelihood, eq:ebnn-likelihood-invariance and
-% eq:posterior-odds-unchanged. Background 2.2 and 2.3, eq:general-dirichlet-mean and eq:scale-invariance.
-% Figure. scripts/build_likelihood_concentration.py, figures/likelihood_concentration_single.pdf.
-% Mean vector from run e2_c10h_ebnn_dm_mode50_warm_s0, CIFAR-10 test image 6505, weights at saved sample 6 of 40.
-% The count slide uses the same fixed mean vector. For one label only m_y matters, so the curve is the same for any model.
-% Controlled likelihood illustration. Not a model comparison or a new experimental result.
-% The y axis is the likelihood itself, from 0 to 1. The line sits at m_deer = 0.778.
-% The x axis starts at 1/min_c m_c = 41.3, the smallest alpha_0 the network can produce at this mean vector,
-% because every alpha_c(x;w) > 1 (eq:edl-dirichlet-concentration). Every plotted point is reachable.
-% Details and the selection of the image in likelihood_concentration_sources.json. The ratio for w and w' is in backup.
+
 % Speaking notes
 % We now ask what the observed labels tell us about the total concentration.
 % We hold the mean vector fixed and compare different values of total concentration.
@@ -76,18 +67,21 @@ p(D\mid w)=\prod_{i=1}^{N}p(y_i\mid x_i,w)=\prod_{i=1}^{N}m_{y_i}(x_i;w).
 \label{frm:likelihood-limit}
 \setlength{\abovedisplayskip}{2pt}
 \setlength{\belowdisplayskip}{2pt}
-\begin{itemize}
+% \begin{itemize}
 \setlength{\itemsep}{5mm}
-\item Single label likelihood \textbf{depends only on mean vector},
+% \item Single label likelihood \textbf{depends only on mean vector},
 % Since likelihood depends only on the ratio of concentrations to total concentration the model can learn the proportions a/a_0 but it cannot learn the total concentration.
 % Thesis eq:edl-bnn-full-likelihood with eq:general-dirichlet-mean substituted.
 \[
 p(D\mid w)=\prod_{i=1}^{N}m_{y_i}(x_i;w)=\prod_{i=1}^{N}\frac{\alpha_{y_i}(x_i;w)}{\alpha_0(x_i;w)}
-.
 \]
-\item Likelihood \textbf{does not inform total concentration} because
-observed labels provide no evidence favouring one total concentration over another,
+\begin{itemize}
+\item Likelihood \textbf{does not inform total concentration} 
+\begin{itemize}
+\item Does not favour one total concentration over another,
 at fixed mean vectors.
+\end{itemize}
+\end{itemize}
 % meaning that there is not some concentrations that give higher likelihoods than others.
 
 % \item Labels \textit{inform total concentration}
@@ -104,7 +98,7 @@ at fixed mean vectors.
 % \begin{itemize}
 % \item At a fixed mean vector, preferred values give a higher likelihood.
 % \end{itemize}
-\end{itemize}
+% 
 \par\medskip\vspace{4mm}
 {\centering
 \begin{minipage}[c]{0.2\textwidth}
@@ -147,7 +141,7 @@ at fixed mean vectors.
 % This comparison concerns the conditional Dirichlet distribution, not a change in the weight posterior.
 % Single labels cannot distinguish these uncertainty allocations at fixed means.
 % We therefore state an explicit concentration assumption through the prior.
-\begin{frame}{Total Concentration Controls the Uncertainty Split}
+\begin{frame}{Total Concentration Controls the Uncertainty Allocation}
 \label{frm:mean-concentration}
 \begin{itemize}
 \setlength{\itemsep}{2mm}
@@ -228,7 +222,7 @@ Two-class illustration, $m=(0.5,0.5)$\par}
 \begin{itemize}
 \item And therefore not the uncertainty allocation.
 \end{itemize}
-\item State the \textbf{total concentration assumption} through prior,
+\item<2-> State the \textbf{total concentration assumption} through prior,
 % Thesis eq:gamma-prior-weights.
 \[
 \tilde p(w)\propto p(w)\prod_{i=1}^{N}
@@ -238,7 +232,7 @@ Two-class illustration, $m=(0.5,0.5)$\par}
 \item Shape $\kappa>1$, rate $\beta>0$.
 \item Prior mode $(\kappa-1)/\beta>C$ and standard deviation $\sqrt{\kappa}/\beta$. %mode states the preferred total concentration level and standard deviation describes the spread of that assumption.
 \end{itemize}
-\item Prior $\tilde p(w)$ and categorical likelihood give weight posterior,
+\item<3-> Prior $\tilde p(w)$ and categorical likelihood give weight posterior,
 % Thesis eq:edl-bnn-weight-posterior.
 \[
 p(w\mid D)\propto\tilde p(w)\prod_{i=1}^{N}m_{y_i}(x_i;w).
@@ -266,7 +260,7 @@ p(w\mid D)\propto\tilde p(w)\prod_{i=1}^{N}m_{y_i}(x_i;w).
 \label{frm:prior-mode-results}
 \begin{itemize}
 \setlength{\itemsep}{2mm}
-\item Vary \textbf{prior mode}, prior standard deviation $20\%$ of mode.
+\item Vary Gamma \textbf{prior mode} (level of total concentration).%, prior standard deviation $20\%$ of mode.
 \end{itemize}
 \begin{center}
 \small
@@ -329,11 +323,12 @@ p(w\mid D)\propto\tilde p(w)\prod_{i=1}^{N}m_{y_i}(x_i;w).
 \begin{itemize}
 \setlength{\itemsep}{5mm}
 \item Cat-eBNN allow decomposition into all three uncertainty terms.
-\item At fixed means, single labels cannot inform total concentration.
-\begin{itemize}
-\item Neither aleatoric-distributional allocation.
-\end{itemize}
-\item Prior supplies the total concentration assumption that influences the allocation.
+\item But allocation reflects prior assumption, not something model learns from the data.
+% \item At fixed means, single labels cannot inform total concentration.
+% \begin{itemize}
+% \item Neither aleatoric-distributional allocation.
+% \end{itemize}
+% \item Prior supplies the total concentration assumption that influences the allocation.
 %The prior comparison shows that the trained allocation is sensitive to it.
 \item Not clear practical value. % Think for example about the introduction slides. If we have to make a decision based on this allocation, this decision would be made on the result of our prior choice, not on a total concentration that was learned from the data.
 % Recall the decision examples from the introduction.

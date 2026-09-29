@@ -7,26 +7,26 @@
 % In this illustration, the model labels part of the shadowed footpath as road.
 % High estimated uncertainty could prompt a driving system to slow down and avoid relying on that region.
 % This is a conceptual illustration. We now focus on classification.
-\begin{frame}[t]{Why Uncertainty-Aware Modelling Matters}
+\begin{frame}[c]{Why Uncertainty-Aware Modelling Matters}
 \label{frm:uncertainty-motivation}
-\begin{itemize}
-\setlength{\itemsep}{3mm}
-\item Neural networks are widely used in vision, language, speech, etc.
-\item Despite strong performance, their predictions can be overconfident.
-\item Estimating uncertainty in a model’s predictions can support safer decisions.
-% \begin{itemize}
-% \item Help with decisions about how to act on a prediction.
-% \end{itemize}
-\item Especially important when errors have serious consequences.
-\begin{itemize}
-\vspace{1mm}
-\item Autonomous driving, medical, financial, legal, etc.
-\end{itemize}
-\end{itemize}
-\vspace{2mm}
 {\centering
 % Crop only unused white space below the colour scale.
-\includegraphics[width=0.8\textwidth,trim=0 48bp 0 0,clip]{figures/uncertainty_road_triptych_v5.png}\par}
+\raisebox{-4mm}[\height][\depth]{%
+\includegraphics[width=0.8\textwidth,trim=0 48bp 0 0,clip]{figures/uncertainty_road_triptych_v5.png}}\par}
+\par\vspace{5mm}
+\begin{itemize}
+    \setlength{\itemsep}{3mm}
+    % \item Neural networks are widely used in vision, language, speech, etc.
+    \item Estimating uncertainty can support safer decisions.
+    % \begin{itemize}
+    % \item Help with decisions about how to act on a prediction.
+    % \end{itemize}
+    \item Especially important when errors have serious consequences.
+    \begin{itemize}
+    \vspace{1mm}
+    \item Autonomous driving, medical, financial, legal, etc.
+    \end{itemize}
+    \end{itemize}
 \end{frame}
 
 % Speaking notes
@@ -49,7 +49,7 @@
 \input{figures/cifar_ambiguous_prediction}\par}
 \begin{itemize}
     \vspace{1mm}
-\item \emph{Predictive uncertainty} quantifies uncertainty about the class label of an input.
+\item<2-> \emph{Predictive uncertainty} is uncertainty about predicted class label of an input.
 \begin{itemize}
 \vspace{1mm}
 \item Does not by itself guide decisions about how to act.
@@ -75,7 +75,8 @@
 \input{figures/cifar_ambiguous_decomposition}\par}
 \vspace{2mm}
 \begin{itemize}
-\setlength{\itemsep}{2mm}
+\setlength{\itemsep}{3mm}
+\item Different uncertainty sources require different actions.
 \item \textbf{Aleatoric (data) uncertainty} irreducible uncertainty from complexity in the data.
 % is the uncertainty that remains even when the class probabilities are known.
 \par
@@ -93,15 +94,14 @@
 \setlength{\partopsep}{0pt}
 \item Collect more relevant training examples.
 \end{itemize}
-\item \textbf{Distributional uncertainty} is uncertainty about the class probabilities at fixed network weights. % concerns class probabilities at fixed network weights.
+\item \textbf{Distributional uncertainty} is uncertainty about the class probabilities. % concerns class probabilities at fixed network weights.
 \par
 \begin{itemize}
 \setlength{\itemsep}{0pt}
 \setlength{\topsep}{0pt}
 \setlength{\partopsep}{0pt}
-\item If inputs differ from training data, collect representative training examples. % can quote malin gales here
+\item If inputs differ from training data, train on more representative examples. % can quote malin gales here
 \end{itemize}
-\item \textbf{Different uncertainty terms require different actions.}
 \end{itemize}
 \end{frame}
 
@@ -126,7 +126,7 @@
 \item Model a distribution over class probabilities %, using one set of network weights.
 \item Aleatoric and distributional uncertainty.
 \end{itemize}
-\item  Neither decomposes into all three uncertainty terms.
+\item Neither decomposes into all three uncertainty terms.
 \end{itemize}
 \end{frame}
 
@@ -137,14 +137,14 @@
 % We study how observed labels and model assumptions shape the allocation between these terms.
 % The thesis studies representation and allocation. It does not demonstrate improved decisions, and it does not study descision making at all!.
 % We next introduce the background needed to explain the models.
-\begin{frame}{Research Aim and Approach}
+\begin{frame}{Research Aim}
 \label{frm:research-aim}
 \begin{itemize}
 \setlength{\itemsep}{8mm}
 \item Model that represents aleatoric, distributional, and epistemic uncertainty. 
 \begin{itemize}
-\item Combine \textbf{Bayesian posterior} distribution over network weights with a \textbf{Dirichlet distribution} over class probabilities.
+\item Combine \textbf{Bayesian} and \textbf{Dirichlet neural network}.
 \end{itemize}
-\item Understand how the resulting predictive uncertainty is divided between the three uncertainty terms. % what parts of the decomposition is informed by the observed labels and what part reflects model assumptions.
+% \item Understand how the resulting predictive uncertainty is divided between the three uncertainty terms. % what parts of the decomposition is informed by the observed labels and what part reflects model assumptions.
 \end{itemize}
 \end{frame}

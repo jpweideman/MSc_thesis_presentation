@@ -35,7 +35,7 @@
 \begin{itemize}
 \setlength{\itemsep}{2mm}
 \item CIFAR-10H example with 52 human labels.
-\item A single selected label hides this \textbf{observed disagreement}. % Retaining all their labels preserves disagreement that one selected label would hide.
+\item A single selected label \textbf{hides observed disagreement}. % Retaining all their labels preserves disagreement that one selected label would hide.
 %“These labels reveal disagreement that one selected label would hide. Can this additional information inform total concentration?”
 \end{itemize}
 \end{frame}
@@ -63,8 +63,8 @@ $, with $R=\sum_c n_c$.
 p(\pi\mid x,w)&=\mathrm{Dir}\bigl(\pi\mid\alpha(x;w)\bigr),\\[1mm]
 p(n\mid\pi,R)&=\mathrm{Mult}(n\mid R,\pi). %“Instead of modelling one label, we model the class counts from repeated labels. Given the shared class probabilities, these counts follow a multinomial distribution.”
 \end{align*}
-\item Marginalising $\pi$ gives observation model $p(n\mid x,w)=\mathrm{DM}\bigl(n\mid R,\alpha(x;w)\bigr)$.
-\item For count data $D_{\mathrm{count}}=\{(x_i,n_i)\}_{i=1}^{N}$, the \textbf{likelihood} is
+\item<2-> Marginalising $\pi$ gives observation model $p(n\mid x,w)=\mathrm{DM}\bigl(n\mid R,\alpha(x;w)\bigr)$.
+\item<3-> For count data $D_{\mathrm{count}}=\{(x_i,n_i)\}_{i=1}^{N}$, the \textbf{likelihood} is
 % Thesis eq:dm-ebnn-dataset-likelihood, with conditionally independent count vectors given inputs and weights.
 \[
 p(D_{\mathrm{count}}\mid w)
@@ -101,9 +101,8 @@ p(D_{\mathrm{count}}\mid w)
 \label{frm:count-concentration-information}
 \setlength{\abovedisplayskip}{3pt}
 \setlength{\belowdisplayskip}{3pt}
-\begin{itemize}
 \setlength{\itemsep}{5mm}
-\item Count likelihood \textbf{depends on total concentration}, % at fixed mean vectors
+%\item Count likelihood \textbf{depends on total concentration}, % at fixed mean vectors
 % “Even at fixed mean vectors, changing total concentration changes the likelihood of the observed counts. Some values of total concentration explain these counts better than others. The count data can therefore inform total concentration.”
 {\small
 \[
@@ -114,16 +113,17 @@ p(D_{\mathrm{count}}\mid w)
 \frac{R_i!}{\prod_{c=1}^{C}n_{ic}!}\,
 \frac{\Gamma\bigl(\alpha_0(x_i;w)\bigr)}{\Gamma\bigl(\alpha_0(x_i;w)+R_i\bigr)}
 \prod_{c=1}^{C}
-\frac{\Gamma\bigl(\alpha_0(x_i;w)m_c(x_i;w)+n_{ic}\bigr)}
-{\Gamma\bigl(\alpha_0(x_i;w)m_c(x_i;w)\bigr)}
+\frac{\Gamma\bigl(\alpha_c(x_i;w)+n_{ic}\bigr)}
+{\Gamma\bigl(\alpha_c(x_i;w)\bigr)}
 \right].
 \end{aligned}
 \]
 }
-\item Likelihood \textbf{can inform total concentration} because
-observed counts provide evidence favouring some total concentrations over others,
-at fixed mean vectors.
 \begin{itemize}
+\item Likelihood \textbf{can inform total concentration} 
+\begin{itemize}
+\item Does favour one total concentration over another,
+at fixed mean vectors.
 \item Count data can therefore inform aleatoric–distributional allocation.
 \end{itemize}
 \end{itemize}
@@ -187,7 +187,7 @@ p(D_{\mathrm{count}}\mid w)
 \setlength{\partopsep}{0pt}
 \setlength{\parsep}{0pt}
 \setlength{\itemsep}{0pt}
-\item Given $x,w$,  class probability vector $f(x;w)$ fixed.
+\item Network outputs class probability vector $f(x;w)$.
 \end{itemize}
 \end{itemize}
 \par\vspace{5mm}
@@ -199,9 +199,9 @@ p(D_{\mathrm{count}}\mid w)
 \vspace{3mm}
 \begin{itemize}
 \setlength{\itemsep}{1mm}
-\item DM-eBNN can decompose into all \textbf{three uncertainty terms}.
-\item Counts \textbf{can inform} the aleatoric--distributional split.
-\item Does data driven decomposition support \textbf{better decisions?}
+\item<2-> DM-eBNN can decompose into all \textbf{three uncertainty terms}.
+\item<2-> Counts \textbf{can inform} the aleatoric--distributional allocation.
+\item<2-> Does data driven decomposition support \textbf{better decisions?}
 \end{itemize}
 \end{frame}
 
@@ -242,8 +242,8 @@ p(D_{\mathrm{count}}\mid w)
 \vspace{3mm}
 \begin{itemize}
 \setlength{\itemsep}{3mm}
-\item DM-eBNN \textbf{improves predictive fit.} % to observed counts.
-\item Why?
+\item<2-> DM-eBNN \textbf{improves predictive fit.} % to observed counts.
+\item<2-> Why?
 \end{itemize}
 \end{frame}
 
@@ -385,9 +385,9 @@ $\operatorname{Var}_{\mathrm{DM}}[n_c]
 \item DM-eBNN represents all three uncertainty terms.
 \item At fixed means, count labels \textbf{can} inform total concentration.
 \begin{itemize}
-\item Hence the aleatoric--distributional allocation.
+\item Data informed uncertainty allocation.
 \end{itemize}
-\item DM-eBNN improves held out count prediction in experiments.
+\item Improves held out count prediction in experiments.
 \item Better decisions from the uncertainty decomposition remain untested.
 \end{itemize}
 \end{frame}
